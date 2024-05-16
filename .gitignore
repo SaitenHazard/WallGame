@@ -73,3 +73,5 @@ crashlytics-build.properties
 
 # Jetbrains IDE stuff
 /.idea
+Assets/Mini First Person Controller*
+.vscode
