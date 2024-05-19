@@ -29,10 +29,11 @@ public class MockupCrossbowmanAnimator : MonoBehaviour
 
     public void AnimEvent_ShotFired()
     {
-        Invoke("boltArrives", 1);
+        Invoke("boltArrives", 2);
 
-        GameObject boltGO = Instantiate(bolt, transform.position + new Vector3(0,2,0.5f), Quaternion.identity);
-        Destroy(boltGO, 1);
+        GameObject boltGO = Instantiate(bolt, transform.position + new Vector3(0,-36.5f,15f), Quaternion.identity);
+        boltGO.transform.Rotate(-20.0f, Random.Range(-1.0f,1.0f), 0);
+        Destroy(boltGO, 2);
         randomizeSpeed(0.95f, 1.05f); // Each shot is done with a little bit of different speed
     }
 
