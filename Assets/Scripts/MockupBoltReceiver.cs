@@ -12,12 +12,8 @@ public class MockupBoltReceiver : MonoBehaviour
 
     private int armyRemaining = 300;
 
-
-
     private Text text;
 
-    private float springStiffnes = 1.0f;
-    private float restingSize = 1.0f;
     private float currentScale = 1.0f;
 
     void Start()

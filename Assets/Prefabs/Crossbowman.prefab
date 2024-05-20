@@ -62,13 +62,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3914921849054718684, guid: a2ca09885ed02664681bad8cf688b00a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a85e4e41530efac4c82711c0dc0bc9ed, type: 2}
+    - target: {fileID: -2924224581695130465, guid: a2ca09885ed02664681bad8cf688b00a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a2ca09885ed02664681bad8cf688b00a,
         type: 3}
       propertyPath: m_Name
       value: Crossbowman
       objectReference: {fileID: 0}
+    - target: {fileID: 4289365334257111371, guid: a2ca09885ed02664681bad8cf688b00a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7877120469896149769, guid: a2ca09885ed02664681bad8cf688b00a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a85e4e41530efac4c82711c0dc0bc9ed, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2ca09885ed02664681bad8cf688b00a, type: 3}
+--- !u!1 &2318358595410146495 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -2924224581695130465, guid: a2ca09885ed02664681bad8cf688b00a,
+    type: 3}
+  m_PrefabInstance: {fileID: 8594952658010079264}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5530847967301898603 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4289365334257111371, guid: a2ca09885ed02664681bad8cf688b00a,
+    type: 3}
+  m_PrefabInstance: {fileID: 8594952658010079264}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8900817340479880561 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a2ca09885ed02664681bad8cf688b00a,
@@ -110,3 +142,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shotsFired: 0
   bolt: {fileID: 8974700097618711580, guid: 3ef386af783afce49ba49cfe439d9cbe, type: 3}
+  helmetVariants:
+  - {fileID: 5530847967301898603}
+  - {fileID: 2318358595410146495}

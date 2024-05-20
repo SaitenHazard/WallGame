@@ -3,7 +3,12 @@ guid: a2ca09885ed02664681bad8cf688b00a
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Crossbowman Diffuse
+    second: {fileID: 2100000, guid: a85e4e41530efac4c82711c0dc0bc9ed, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

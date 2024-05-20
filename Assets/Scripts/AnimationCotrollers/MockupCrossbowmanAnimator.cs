@@ -14,6 +14,9 @@ public class MockupCrossbowmanAnimator : MonoBehaviour
 
     public GameObject bolt;
 
+    [SerializeField]
+    private List<GameObject> helmetVariants;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -70,7 +73,13 @@ public class MockupCrossbowmanAnimator : MonoBehaviour
     private void randomizeLook()
     {
         bool leftHanded = Random.Range(0.0f, 1.0f) < 0.3f;
-        transform.localScale = new Vector3(leftHanded? -1 : 1, 1, 1) * Random.Range(0.99f, 1.01f);
+        transform.localScale = new Vector3(leftHanded? -1 : 1, 1, 1) * Random.Range(0.95f, 1.05f);
+        int helmet = Random.Range(0, helmetVariants.Count);
+        Debug.Log("Helmet " + helmet);
+        for (int i = 0; i < helmetVariants.Count; i++)
+        {
+            helmetVariants[i].SetActive(i == helmet);
+        }
     }
 
     private void randomizeSpeed(float minSpeed, float maxSpeed)
