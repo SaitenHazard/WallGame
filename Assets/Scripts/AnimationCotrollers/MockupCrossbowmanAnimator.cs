@@ -73,7 +73,7 @@ public class MockupCrossbowmanAnimator : MonoBehaviour
     private void randomizeLook()
     {
         bool leftHanded = Random.Range(0.0f, 1.0f) < 0.3f;
-        transform.localScale = new Vector3(leftHanded? -1 : 1, 1, 1) * Random.Range(0.95f, 1.05f);
+        transform.localScale = new Vector3(leftHanded? -1 : 1, Random.Range(0.9f, 1.1f), 1);
         int helmet = Random.Range(0, helmetVariants.Count);
         Debug.Log("Helmet " + helmet);
         for (int i = 0; i < helmetVariants.Count; i++)
