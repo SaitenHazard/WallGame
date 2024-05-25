@@ -40,15 +40,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Interact",
-                    "type": "Button",
-                    "id": "b7c83d22-6702-46a6-9ae7-eabf0e0e93be",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -225,17 +216,6 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Sprint",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6bad949c-8e71-496f-a3cd-07ad9768db93",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
