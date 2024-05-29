@@ -38,7 +38,7 @@ namespace StarterAssets
 
         [Space(10)]
         [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
-        public float JumpTimeout = 0;
+        public float JumpTimeout = 0.1f;
 
         [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
         public float FallTimeout = 0.15f;
@@ -307,6 +307,7 @@ namespace StarterAssets
                     {
                         _animController.SetJump();
                     }
+                    _input.jump = false;
                 }
 
                 // jump timeout
@@ -335,8 +336,6 @@ namespace StarterAssets
                     }
                 }
 
-                // if we are not grounded, do not jump
-                _input.jump = false;
             }
 
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
