@@ -2,7 +2,7 @@
     "name": "StarterAssets",
     "maps": [
         {
-            "name": "Player",
+            "name": "Normal",
             "id": "f62a4b92-ef5e-4175-8f4c-c9075429d32c",
             "actions": [
                 {
@@ -216,6 +216,45 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Catapult",
+            "id": "c5fe0631-f76c-4fdd-a434-189e9d4c3101",
+            "actions": [
+                {
+                    "name": "Exit",
+                    "type": "Button",
+                    "id": "ba44ce0a-67e7-4eee-b71e-139bce9dc1e7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "dc13381b-e073-4ed3-9e11-8c296c00be5b",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Exit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aa37a5d3-60a6-4de7-aa6f-f2824510f077",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad;Xbox Controller;PS4 Controller",
+                    "action": "Exit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
