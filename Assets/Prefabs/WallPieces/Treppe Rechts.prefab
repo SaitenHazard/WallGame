@@ -15,7 +15,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 5c18146e839209b48aff4537acac7abf,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5c18146e839209b48aff4537acac7abf,
         type: 3}
@@ -25,7 +25,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 5c18146e839209b48aff4537acac7abf,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5c18146e839209b48aff4537acac7abf,
         type: 3}
@@ -70,7 +70,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 5c18146e839209b48aff4537acac7abf,
         type: 3}
       propertyPath: m_Name
-      value: Treppe Rechts Variant
+      value: Treppe Rechts
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5c18146e839209b48aff4537acac7abf,
         type: 3}

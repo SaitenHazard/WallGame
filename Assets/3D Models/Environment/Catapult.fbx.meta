@@ -149,35 +149,6 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|TurnRight
-      takeName: Armature|TurnRight
-      internalID: -1180041773398129697
-      firstFrame: 0
-      lastFrame: 20
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 1
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
       name: Armature|Waiting
       takeName: Armature|Waiting
       internalID: -8903901632051216501
@@ -211,7 +182,7 @@ ModelImporter:
       takeName: Armature|Windup
       internalID: -4435252492879038639
       firstFrame: 0
-      lastFrame: 243
+      lastFrame: 200
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
