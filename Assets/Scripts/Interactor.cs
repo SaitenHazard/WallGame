@@ -12,6 +12,11 @@ delegate void Interaction();
 
 public class Interactor : MonoBehaviour
 {
+    private void OnEnable()
+    {
+        Inputs.Interact += Interact;
+    }
+
     private Interaction _interact;    
     // Start is called before the first frame update
     
@@ -33,8 +38,9 @@ public class Interactor : MonoBehaviour
         _interact = () => { print("No interactable nearby"); };
     }
 
-    void OnInteract()
+    void Interact()
     {
+        print("INTERACTOR");
         _interact.Invoke();
     }
 }

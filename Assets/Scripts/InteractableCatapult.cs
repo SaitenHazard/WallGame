@@ -7,10 +7,12 @@ using Random = UnityEngine.Random;
 
 public class InteractableCatapult : MonoBehaviour, IInteractable
 {
-    private bool inCatapult = false;
+    private bool _inCatapult = false;
     public void Interact()
     {
-        if (inCatapult)
+        print("TEST");
+        EventManager.RaisePlayerStunned(1f);
+        if (_inCatapult)
         {
             EventManager.RaiseExitCatapult();
         }

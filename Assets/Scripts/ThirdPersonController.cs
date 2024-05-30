@@ -1,19 +1,13 @@
-﻿using System;
-using StarterAssets;
+﻿using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
-#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-#endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
 
 [RequireComponent(typeof(CharacterController))]
-#if ENABLE_INPUT_SYSTEM
 [RequireComponent(typeof(PlayerInput))]
-#endif
 public class ThirdPersonController : MonoBehaviour
 {
     [Tooltip("Move speed of the character in m/s")]
@@ -79,6 +73,7 @@ public class ThirdPersonController : MonoBehaviour
     private float _rotationVelocity;
     private float _verticalVelocity;
     private float _terminalVelocity = 53.0f;
+    private bool _stunned = false;
 
     // timeout deltatime
     private float _jumpTimeoutDelta;
@@ -91,12 +86,10 @@ public class ThirdPersonController : MonoBehaviour
     private int _animIDFreeFall;
     private int _animIDMotionSpeed;
 
-#if ENABLE_INPUT_SYSTEM
     private PlayerInput _playerInput;
-#endif
     private GameObject _walther;
     private CharacterController _controller;
-    private StarterAssetsInputs _input;
+    private Inputs _input;
     
     private GameObject _mainCamera;
 
@@ -105,17 +98,7 @@ public class ThirdPersonController : MonoBehaviour
     private WalltherAnimationController _animController;
     private bool _hasAnimController;
 
-    private bool IsCurrentDeviceMouse
-    {
-        get
-        {
-#if ENABLE_INPUT_SYSTEM
-            return _playerInput.currentControlScheme == "KeyboardMouse";
-#else
-				return false;
-#endif
-        }
-    }
+    private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
 
 
     private enum PlayerState
@@ -134,12 +117,11 @@ public class ThirdPersonController : MonoBehaviour
         {
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
-    }
-
-    private void OnEnable()
-    {
         EventManager.OnEnterCatapult += EnterCatapult;
         EventManager.OnExitCatapult += ExitCatapult;
+        EventManager.OnPlayerStunned += PauseMovement;
+        Inputs.Jump += Jump;
+
     }
 
     private void Start()
@@ -148,12 +130,8 @@ public class ThirdPersonController : MonoBehaviour
         _hasAnimController = _animController != null;
         _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
         _controller = GetComponent<CharacterController>();
-        _input = GetComponent<StarterAssetsInputs>();
-#if ENABLE_INPUT_SYSTEM
+        _input = GetComponent<Inputs>();
         _playerInput = GetComponent<PlayerInput>();
-#else
-			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
-#endif
 
         AssignAnimationIDs();
 
@@ -164,6 +142,7 @@ public class ThirdPersonController : MonoBehaviour
 
     private void Update()
     {
+        if (_stunned) return;
         JumpAndGravity();
         GroundedCheck();
         Move();
@@ -308,21 +287,6 @@ public class ThirdPersonController : MonoBehaviour
                 _verticalVelocity = -2f;
             }
 
-            // Jump
-            if (_input.jump && _jumpTimeoutDelta <= 0.0f)
-            {
-                // the square root of H * -2 * G = how much velocity needed to reach desired height
-                _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-
-                // update animator if using character
-                if (_hasAnimController)
-                {
-                    _animController.SetJump();
-                }
-
-                _input.jump = false;
-            }
-
             // jump timeout
             if (_jumpTimeoutDelta >= 0.0f)
             {
@@ -357,6 +321,21 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
 
+    private void Jump()
+    {
+        if (_jumpTimeoutDelta <= 0.0f)
+        {
+            // the square root of H * -2 * G = how much velocity needed to reach desired height
+            _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+
+            // update animator if using character
+            if (_hasAnimController)
+            {
+                _animController.SetJump();
+            }
+        }
+    }
+
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
     {
         if (lfAngle < -360f) lfAngle += 360f;
@@ -388,5 +367,20 @@ public class ThirdPersonController : MonoBehaviour
     {
         //Switch to action map Normal
         currentState = PlayerState.Normal;
+    }
+
+    private void PauseMovement(float duration)
+    {
+        _speed = 0;
+        _animController.SetSpeed(0);
+        print(this);
+        // StartCoroutine(StunCoroutine(duration));
+    }
+
+    private IEnumerator StunCoroutine(float duration)
+    {
+        _stunned = true;
+        yield return new WaitForSeconds(duration);
+        _stunned = false;
     }
 }

@@ -33,10 +33,10 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Sprint",
-                    "type": "PassThrough",
-                    "id": "980e881e-182c-404c-8cbf-3d09fdb48fef",
-                    "expectedControlType": "",
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "fa092628-a776-437b-becd-27d61c6eed4f",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -199,23 +199,23 @@
                 },
                 {
                     "name": "",
-                    "id": "dc65b89f-9bd3-43fb-92af-d0d87ba5faa4",
-                    "path": "<Keyboard>/leftShift",
+                    "id": "c1270e91-ab5e-4480-ae04-a33674c4c2aa",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "Sprint",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "c8fcd86e-dcfd-4f88-8e93-b638cdbf3320",
-                    "path": "<Gamepad>/leftTrigger",
+                    "id": "bf673eb8-98ac-49c5-bdb9-47da01abd8c4",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Sprint",
+                    "groups": "Gamepad;Xbox Controller;PS4 Controller",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
