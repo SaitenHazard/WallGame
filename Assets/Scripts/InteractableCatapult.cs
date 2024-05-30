@@ -8,17 +8,19 @@ using Random = UnityEngine.Random;
 public class InteractableCatapult : MonoBehaviour, IInteractable
 {
     private bool _inCatapult = false;
+    public Transform dropInPoint;
+    public Transform dropOffPoint;
     public void Interact()
     {
-        print("TEST");
-        EventManager.RaisePlayerStunned(1f);
         if (_inCatapult)
         {
-            EventManager.RaiseExitCatapult();
+            _inCatapult = false;
+            EventManager.RaiseExitCatapult(dropOffPoint.position);
         }
         else
         {
-            EventManager.RaiseEnterCatapult();
+            _inCatapult = true;
+            EventManager.RaiseEnterCatapult(dropInPoint.position);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -38,7 +39,8 @@ public class ThirdPersonController : MonoBehaviour
     [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
     public bool Grounded = true;
 
-    [Tooltip("Useful for rough ground")] public float GroundedOffset = -0.14f;
+    [Tooltip("Useful for rough ground")] 
+    public float GroundedOffset = -0.14f;
 
     [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
     public float GroundedRadius = 0.28f;
@@ -73,7 +75,6 @@ public class ThirdPersonController : MonoBehaviour
     private float _rotationVelocity;
     private float _verticalVelocity;
     private float _terminalVelocity = 53.0f;
-    private bool _stunned = false;
 
     // timeout deltatime
     private float _jumpTimeoutDelta;
@@ -93,7 +94,7 @@ public class ThirdPersonController : MonoBehaviour
     
     private GameObject _mainCamera;
 
-    private const float _threshold = 0.01f;
+    private const float Threshold = 0.01f;
 
     private WalltherAnimationController _animController;
     private bool _hasAnimController;
@@ -105,10 +106,11 @@ public class ThirdPersonController : MonoBehaviour
     {
         Normal,
         InCatapult,
-        Launched
+        Launched,
+        Stunned
     }
 
-    private PlayerState currentState = PlayerState.Normal;
+    private PlayerState _currentState = PlayerState.Normal;
 
     private void Awake()
     {
@@ -122,6 +124,14 @@ public class ThirdPersonController : MonoBehaviour
         EventManager.OnPlayerStunned += PauseMovement;
         Inputs.Jump += Jump;
 
+    }
+
+    private void OnDestroy()
+    {
+        EventManager.OnEnterCatapult -= EnterCatapult;
+        EventManager.OnExitCatapult -= ExitCatapult;
+        EventManager.OnPlayerStunned -= PauseMovement;
+        Inputs.Jump -= Jump;
     }
 
     private void Start()
@@ -142,9 +152,9 @@ public class ThirdPersonController : MonoBehaviour
 
     private void Update()
     {
-        if (_stunned) return;
-        JumpAndGravity();
+        if (_currentState != PlayerState.Normal) return;
         GroundedCheck();
+        Falling();
         Move();
     }
 
@@ -180,7 +190,7 @@ public class ThirdPersonController : MonoBehaviour
     private void CameraRotation()
     {
         // if there is an input and camera position is not fixed
-        if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
+        if (_input.look.sqrMagnitude >= Threshold && !LockCameraPosition)
         {
             //Don't multiply mouse input by Time.deltaTime;
             float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
@@ -254,8 +264,7 @@ public class ThirdPersonController : MonoBehaviour
         Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
         // move the player
-        _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                         new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
         // update animator if using character
         if (_hasAnimController)
@@ -266,7 +275,7 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
 
-    private void JumpAndGravity()
+    private void Falling()
     {
         if (Grounded)
         {
@@ -323,7 +332,7 @@ public class ThirdPersonController : MonoBehaviour
 
     private void Jump()
     {
-        if (_jumpTimeoutDelta <= 0.0f)
+        if (_currentState == PlayerState.Normal && _jumpTimeoutDelta <= 0.0f)
         {
             // the square root of H * -2 * G = how much velocity needed to reach desired height
             _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -357,30 +366,43 @@ public class ThirdPersonController : MonoBehaviour
             GroundedRadius);
     }
 
-    private void EnterCatapult()
+    private void EnterCatapult(Vector3 position)
     {
+        CancelVelocity();
         //Switch to Action map Catapult
-        currentState = PlayerState.InCatapult;
+        _controller.enabled = false;
+        _currentState = PlayerState.InCatapult;
+        transform.position = position;
     }
 
-    private void ExitCatapult()
+    private void ExitCatapult(Vector3 position)
     {
+        CancelVelocity();
         //Switch to action map Normal
-        currentState = PlayerState.Normal;
+        _controller.enabled = false;
+        _currentState = PlayerState.Normal;
+        transform.position = position;
+        _controller.enabled = true;
     }
 
     private void PauseMovement(float duration)
     {
-        _speed = 0;
-        _animController.SetSpeed(0);
+        CancelVelocity();
         print(this);
         // StartCoroutine(StunCoroutine(duration));
     }
 
+    private void CancelVelocity()
+    {
+        _controller.SimpleMove(Vector3.zero);
+        _speed = 0;
+        _animController.SetSpeed(0);
+    }
+
     private IEnumerator StunCoroutine(float duration)
     {
-        _stunned = true;
+        _currentState = PlayerState.Stunned;
         yield return new WaitForSeconds(duration);
-        _stunned = false;
+        _currentState = PlayerState.Normal;
     }
 }

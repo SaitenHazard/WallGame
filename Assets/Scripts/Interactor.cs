@@ -12,9 +12,14 @@ delegate void Interaction();
 
 public class Interactor : MonoBehaviour
 {
-    private void OnEnable()
+    private void Awake()
     {
         Inputs.Interact += Interact;
+    }
+
+    private void OnDestroy()
+    {
+        Inputs.Interact -= Interact;
     }
 
     private Interaction _interact;    
