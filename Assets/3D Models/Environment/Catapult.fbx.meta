@@ -201,7 +201,15 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.99574465
+        functionName: ActionEvent_FullyRewound
+        data: 
+        objectReferenceParameter: {fileID: 9100000, guid: e599a4f797dcea8408d396a32fb4ccba,
+          type: 2}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

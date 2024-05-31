@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -122,6 +123,7 @@ public class ThirdPersonController : MonoBehaviour
         EventManager.OnEnterCatapult += EnterCatapult;
         EventManager.OnExitCatapult += ExitCatapult;
         EventManager.OnPlayerStunned += PauseMovement;
+        EventManager.OnCatapultFire += GetLaunched;
         Inputs.Jump += Jump;
 
     }
@@ -131,6 +133,7 @@ public class ThirdPersonController : MonoBehaviour
         EventManager.OnEnterCatapult -= EnterCatapult;
         EventManager.OnExitCatapult -= ExitCatapult;
         EventManager.OnPlayerStunned -= PauseMovement;
+        EventManager.OnCatapultFire -= GetLaunched;
         Inputs.Jump -= Jump;
     }
 
@@ -144,6 +147,7 @@ public class ThirdPersonController : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
 
         AssignAnimationIDs();
+        AssignActionMapIDs();
 
         // reset our timeouts on start
         _jumpTimeoutDelta = JumpTimeout;
@@ -152,6 +156,12 @@ public class ThirdPersonController : MonoBehaviour
 
     private void Update()
     {
+        if (_currentState == PlayerState.Launched)
+        {
+            Fly();
+            return;
+        }
+
         if (_currentState != PlayerState.Normal) return;
         GroundedCheck();
         Falling();
@@ -161,6 +171,11 @@ public class ThirdPersonController : MonoBehaviour
     private void LateUpdate()
     {
         CameraRotation();
+    }
+
+    private void AssignActionMapIDs()
+    {
+        // TODO
     }
 
     private void AssignAnimationIDs()
@@ -366,23 +381,71 @@ public class ThirdPersonController : MonoBehaviour
             GroundedRadius);
     }
 
-    private void EnterCatapult(Vector3 position)
+    private void EnterCatapult(Transform catapultBowl)
     {
         CancelVelocity();
         //Switch to Action map Catapult
+        _playerInput.actions.FindActionMap("Catapult", true).Enable();
+        _playerInput.actions.FindActionMap("Normal", true).Disable();
         _controller.enabled = false;
         _currentState = PlayerState.InCatapult;
-        transform.position = position;
+        transform.position = catapultBowl.position;
+        transform.parent = catapultBowl;
+        transform.rotation = catapultBowl.parent.rotation;
+        _animController.EnterCatap();
     }
 
-    private void ExitCatapult(Vector3 position)
+    private void ExitCatapult(Transform dropOffPoint)
     {
         CancelVelocity();
         //Switch to action map Normal
-        _controller.enabled = false;
+        _playerInput.actions.FindActionMap("Normal", true).Enable();
+        _playerInput.actions.FindActionMap("Catapult", true).Disable();
         _currentState = PlayerState.Normal;
-        transform.position = position;
+        transform.position = dropOffPoint.position;
+        transform.parent = null;
         _controller.enabled = true;
+    }
+
+    private float launchTime = 0.0f;
+    private Vector3[] launchPath;
+    private int launchPathLength = 0;
+    public float launchDuration = 1.0f;
+    private void GetLaunched(Vector3[] path, int vertexCount)
+    {
+        CancelVelocity();
+        EventManager.RaisePlayerStunned(launchDuration);
+        //Switch to action map Normal
+        launchTime = Time.time;
+        _playerInput.actions.FindActionMap("Normal", true).Enable();
+        _playerInput.actions.FindActionMap("Catapult", true).Disable();
+        _currentState = PlayerState.Launched;
+        launchPath = path;
+        launchPathLength = vertexCount;
+        Invoke("DoneLaunching", launchDuration);
+        transform.parent = null;
+        _controller.enabled = true;
+        _animController.Launching(true);
+    }
+
+    private void Fly()
+    {
+        float currentProgress = (Time.time - launchTime) / launchDuration;
+        //The Mid-Air Movement is divided into y and xz because in a normal flying object, horizontal and vertical speed are also disconnected.
+
+        Vector3 horiz = Vector3.Lerp(launchPath[0], launchPath[launchPathLength - 1], currentProgress);
+
+        Vector3 lastPoint = launchPath[Mathf.FloorToInt(Mathf.Clamp(currentProgress * launchPathLength, 0, launchPathLength - 1))];
+        Vector3 nextPoint = launchPath[Mathf.CeilToInt(Mathf.Clamp(currentProgress * launchPathLength, 0, launchPathLength - 1))];
+        float uber = currentProgress * launchPathLength - Mathf.FloorToInt(currentProgress * launchPathLength);
+        transform.position = new Vector3(horiz.x, Mathf.Lerp(lastPoint.y, nextPoint.y, uber), horiz.z);
+    }
+
+    private void DoneLaunching()
+    {
+        _currentState = PlayerState.Normal;
+        _controller.SimpleMove(launchPath[launchPathLength - 1] - launchPath[launchPathLength - 2]);
+        _animController.Launching(false);
     }
 
     private void PauseMovement(float duration)

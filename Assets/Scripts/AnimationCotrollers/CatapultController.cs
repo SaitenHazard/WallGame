@@ -16,11 +16,6 @@ public class CatapultController : MonoBehaviour
             Debug.LogWarning("CatapultController.cs could not find a Catapult.cs script in the scene and is now deactivated. Make sure to include a Catapult prefab in the scene and activate its Catapult.cs component!");
             this.enabled = false;
         }
-        
-    }
-    void Update()
-    {
-        
     }
 
     public void OnAim(InputValue input)
@@ -29,6 +24,5 @@ public class CatapultController : MonoBehaviour
         {
             catapult.Aim(input.Get<Vector2>());
         }
-        Debug.Log("AIMING");
     }
 }
