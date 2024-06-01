@@ -39,23 +39,6 @@ public class WalltherAnimationController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /* For Tobi's debugging pleasure
-
-        if (Input.GetKeyUp(KeyCode.Space) && !locked)
-        {
-            Jump();
-        }
-        speed = Mathf.Abs(Input.GetAxis("Vertical"));
-        if (Input.GetKey(KeyCode.F))
-        {
-            falling = true;
-        }
-        else
-        {
-            falling = false;
-        }*/
-
-
         if (falling)
         {
             _airTime += Time.deltaTime;
@@ -76,9 +59,19 @@ public class WalltherAnimationController : MonoBehaviour
         AnimEvent_DoneAnimating();
     }
 
+    public void Launching(bool launching)
+    {
+        anim.SetTrigger(launching? "Launching" : "DoneLaunching");
+    }
+
     public void AnimEvent_DontInterrupt()
     {
         locked = true;
+    }
+
+    public void EnterCatap()
+    {
+        anim.SetTrigger("EnterCatap");
     }
 
     public void AnimEvent_DoneAnimating()
