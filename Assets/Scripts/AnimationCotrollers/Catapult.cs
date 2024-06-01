@@ -9,17 +9,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Animator))]
 public class Catapult : MonoBehaviour, IInteractable
 {
-    private bool _inCatapult = false;
-    public Transform dropInPoint;
-    public Transform dropOffPoint;
-    public Transform targetPos;
-
-    [SerializeField]
-    [Tooltip("How far the mangonel will shoot wallther on the z axis")]
-    public float maxZ = 10.0f;
-
-    public bool ready = false;
-
+    [Header("AimingSpeed")]
     [SerializeField]
     [Tooltip("How many degrees per second can you rotate the Mangonel")]
     private float rotSpeed;
@@ -27,6 +17,30 @@ public class Catapult : MonoBehaviour, IInteractable
     [SerializeField]
     [Tooltip("How many meters per second can you change the Mangonel vertically")]
     private float aimUpDownSpeed;
+
+    [Header("Important Transforms")]
+    public Transform dropInPoint;
+    public Transform dropOffPoint;
+    public Transform targetPos;
+
+    [Header("Wall Configuration")]
+    [SerializeField]
+    [Tooltip("How far the mangonel will shoot wallther on the z axis depending on the row")]
+    public List<float> wallDepths;
+
+    [Tooltip("The height of the lowest Row Wallther can be fired onto.")]
+    public float firstRowY = 3.0f;
+
+    [Tooltip("The unit height of each row.")]
+    public float rowHeight = 1.5f;
+
+    [Tooltip("The vertical offset of the target positions from the floor of the row")]
+    public float vertOffset = 1.2f;
+    
+
+    private bool ready = false;
+
+    private bool _inCatapult = false;
 
     private Animator anim;
 
@@ -36,9 +50,6 @@ public class Catapult : MonoBehaviour, IInteractable
     {
         anim = GetComponent<Animator>();
         lineRenderer = GetComponentInChildren<LineRenderer>();
-        //lineRenderer.transform.SetParent(null);
-        //lineRenderer.transform.localScale = Vector3.one;
-        //lineRenderer.transform.position = Vector3.zero;
         EventManager.OnEnterCatapult += StartAiming;
         EventManager.OnExitCatapult += StopAiming;
         EventManager.OnCatapultFire += OnFire;
@@ -56,6 +67,7 @@ public class Catapult : MonoBehaviour, IInteractable
         if (_inCatapult)
         {
             _inCatapult = false;
+            ready = false;
             Vector3[] path = new Vector3[lineRenderer.positionCount];
             lineRenderer.GetPositions(path);
             
@@ -90,27 +102,28 @@ public class Catapult : MonoBehaviour, IInteractable
 
     private bool currentlyAiming = false;
 
-    public float magicNum = 0.1f;
+    private float magicNum = -0.011f;
 
     public int bezierSmoothness = 5;
-
-    public float minTargetY = 3.0f;
-    public float maxTargetY = 6.0f;
 
     // Update is called once per frame
     void Update()
     {
         if (!currentlyAiming) return;
 
-        //if (desiredAltitudeChange != 0)
-        {
-            desiredAltitude += desiredAltitudeChange * Time.deltaTime * aimUpDownSpeed;
-            desiredAltitude = Mathf.Clamp(desiredAltitude, minTargetY, maxTargetY);
+        
+        
+        { // Vertical Aiming
+            contAltitude += desiredAltitudeChange * Time.deltaTime * aimUpDownSpeed;
+            contAltitude = Mathf.Clamp(contAltitude, firstRowY, firstRowY+(wallDepths.Count-1)*rowHeight);
             targetPos.position = new Vector3(targetPos.position.x, 
-                Mathf.Round(desiredAltitude / 1.5f) * 1.5f + 1.1f, 
+                Mathf.Round(contAltitude / rowHeight) * rowHeight + vertOffset, 
                 targetPos.position.z);
 
         }
+        int aimingAtRow = Mathf.RoundToInt((contAltitude - firstRowY) / rowHeight);
+        Debug.Log("Aiming at Row " + aimingAtRow);
+
 
         if (desiredRotationChange != 0)
         {
@@ -119,12 +132,14 @@ public class Catapult : MonoBehaviour, IInteractable
             transform.Rotate(new Vector3(0, rotSpeed * desiredRotationChange * Time.deltaTime, 0));
             float unclampedRot = transform.rotation.eulerAngles.y;
             if (unclampedRot > 180) unclampedRot -= 360;
+            
+            
             unclampedRot = Mathf.Clamp(unclampedRot, -60, 60);
             transform.rotation = Quaternion.Euler(0, unclampedRot, 0);
         }
         float alpha = transform.rotation.eulerAngles.y;
         if (alpha > 180) alpha -= 360;
-        targetPos.position = new Vector3(Mathf.Tan(alpha*magicNum) * maxZ , targetPos.position.y, maxZ);
+        targetPos.position = new Vector3(Mathf.Tan(alpha*magicNum) * wallDepths[aimingAtRow] , targetPos.position.y, wallDepths[aimingAtRow]);
         lineRenderer.SetPositions(new Vector3[] { dropInPoint.position, targetPos.position });
         SmoothBezier();
     }
@@ -184,6 +199,6 @@ public class Catapult : MonoBehaviour, IInteractable
     }
 
     public float desiredAltitudeChange = 0;
-    public float desiredAltitude = 3f;
+    public float contAltitude = 3f;
     public float desiredRotationChange = 0;
 }
