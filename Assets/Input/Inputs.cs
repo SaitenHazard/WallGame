@@ -20,6 +20,18 @@ public class Inputs : MonoBehaviour
     public static event OnInputNoParams Jump;
     public static event OnInputNoParams Interact;
 
+    private Catapult catapult;
+
+    void Start()
+    {
+        catapult = FindObjectOfType<Catapult>();
+        if (catapult == null)
+        {
+            Debug.LogWarning("Inputs.cs could not find a Catapult.cs script in the scene and is now deactivated. Make sure to include a Catapult prefab in the scene and activate its Catapult.cs component!");
+            this.enabled = false;
+        }
+    }
+
     public void OnMove(InputValue value)
     {
         move = value.Get<Vector2>();
@@ -46,6 +58,14 @@ public class Inputs : MonoBehaviour
         if (value.isPressed)
         {
             Interact?.Invoke();
+        }
+    }
+
+    public void OnAim(InputValue input)
+    {
+        if (input != null)
+        {
+            catapult.Aim(input.Get<Vector2>());
         }
     }
 

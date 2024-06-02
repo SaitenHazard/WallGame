@@ -46,6 +46,6 @@ public class Interactor : MonoBehaviour
     void Interact()
     {
         print("INTERACTOR");
-        _interact.Invoke();
+        _interact?.Invoke();
     }
 }
