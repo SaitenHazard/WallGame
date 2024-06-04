@@ -12,10 +12,10 @@ public class DoorAnimationController : MonoBehaviour
 
     public void Update ()
     {
-        if(Input.GetKeyUp(KeyCode.Space))
+        /*if(Input.GetKeyUp(KeyCode.Space))
         {
             Open();
-        }
+        }*/
     }
 
     public void Open()

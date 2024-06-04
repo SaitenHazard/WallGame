@@ -4,6 +4,6 @@ public class BoltController : MonoBehaviour
 {
     private void Update()
     {
-        transform.Rotate(0.2f, 0, 0);
+        transform.Rotate(0.4f, 0, 0);
     }
 }

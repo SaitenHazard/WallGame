@@ -5,21 +5,27 @@ public class EventManager : MonoBehaviour
 {
 
     public delegate void FloatEvent(float value);
-    public delegate void TransformEvent(Vector3 value);
+    public delegate void TransformEvent(Transform value);
+    public delegate void PathEvent(Vector3[] path, int vertexCount);
+
     public static event TransformEvent OnEnterCatapult;
     public static event TransformEvent OnExitCatapult;
-
+    public static event PathEvent OnCatapultFire;
     public static event FloatEvent OnPlayerStunned;
     
-
-    public static void RaiseEnterCatapult(Vector3 position)
+    public static void RaiseCatapultFire(Vector3[] path, int vertexCount)
     {
-        OnEnterCatapult?.Invoke(position);
+        OnCatapultFire?.Invoke(path, vertexCount);
+    }
+
+    public static void RaiseEnterCatapult(Transform catapultBowl)
+    {
+        OnEnterCatapult?.Invoke(catapultBowl);
     }
     
-    public static void RaiseExitCatapult(Vector3 position)
+    public static void RaiseExitCatapult(Transform exitPoint)
     {
-        OnExitCatapult?.Invoke(position);
+        OnExitCatapult?.Invoke(exitPoint);
     }
 
     public static void RaisePlayerStunned(float duration)
