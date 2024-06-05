@@ -1,14 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Input;
 using UnityEngine;
 
 interface IInteractable
 {
-    public void Interact();
+    public void Interact(GameObject self);
 }
 
-delegate void Interaction();
+delegate void Interaction(GameObject self);
 
 public class Interactor : MonoBehaviour
 {
@@ -40,12 +41,12 @@ public class Interactor : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        _interact = () => { print("No interactable nearby"); };
+        _interact = _ => { print("No interactable nearby"); };
     }
 
-    void Interact()
+    private void Interact()
     {
         print("INTERACTOR");
-        _interact?.Invoke();
+        _interact?.Invoke(gameObject);
     }
 }
