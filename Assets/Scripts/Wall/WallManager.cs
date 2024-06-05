@@ -31,7 +31,7 @@ namespace Wall
         private bool _nearWall;
         private WallSegment _closestSegment;
         private Vector3 _closestGizmo;
-        private Queue<Vector3> _requestedSoldierPositions;
+        private Queue<WallSegment> _requestedSoldierPositions;
     
 
         private void Awake()
@@ -39,7 +39,6 @@ namespace Wall
             if (instance == null)
             {
                 instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -53,7 +52,7 @@ namespace Wall
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
             if (_playerTransform == null) throw new MissingFieldException("The player transform is needed ");
             InitializeWallSegments();
-            _requestedSoldierPositions = new Queue<Vector3>();
+            _requestedSoldierPositions = new Queue<WallSegment>();
             RequestSoldier(_wallSegments[0]);
         }
 
@@ -144,14 +143,14 @@ namespace Wall
             }
         }
 
-        private void SpawnSoldier(Vector3 position)
+        private void SpawnSoldier(WallSegment segment)
         {
             if (!soldierPrefab) return;
             var newSoldier = Instantiate(soldierPrefab, spawnPoint.transform.position, Quaternion.identity);
             var soldierController = newSoldier.GetComponent<FriendlySoldier>();
             if (soldierController)
             {
-                soldierController.MoveTo(position);
+                soldierController.MoveTo(segment);
             }
         }
         private void OnDrawGizmos()
@@ -179,12 +178,13 @@ namespace Wall
 
         public void RequestSoldier(WallSegment segment)
         {
-            _requestedSoldierPositions.Enqueue(segment.transform.position);
+            if (segment.soldierRequested || segment.isSoldierPresent) return;
+            _requestedSoldierPositions.Enqueue(segment);
             print("Requested; remaining: " + _requestedSoldierPositions.Count);
         }
         public void RepairWallSegment(WallSegment segment)
         {
-            if (segment != null)
+            if (segment != null && segment.wallPiece.activeSelf)
             {
                 segment.RepairWall();
             }
@@ -192,7 +192,7 @@ namespace Wall
 
         public void DamageWallSegment(WallSegment segment)
         {
-            if (segment != null)
+            if (segment != null && segment.wallPiece.activeSelf)
             {
                 segment.DamageWall();
             }
@@ -200,7 +200,7 @@ namespace Wall
 
         public void RepairScaffoldingSegment(WallSegment segment)
         {
-            if (segment != null)
+            if (segment != null && segment.scaffoldingPiece.activeSelf)
             {
                 segment.RepairScaffolding();
             }
@@ -208,7 +208,7 @@ namespace Wall
 
         public void DamageScaffoldingSegment(WallSegment segment)
         {
-            if (segment != null)
+            if (segment != null && segment.scaffoldingPiece.activeSelf)
             {
                 segment.DamageScaffolding();
             }

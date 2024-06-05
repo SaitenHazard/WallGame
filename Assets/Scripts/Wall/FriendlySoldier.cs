@@ -22,9 +22,10 @@ namespace Wall
             RandomizeSpeed(0.95f, 1.05f);
         }
         
-        public void MoveTo(Vector3 destination)
+        public void MoveTo(WallSegment destination)
         {
-            _targetPosition = destination;
+            _targetSegment = destination;
+            _targetPosition = _targetSegment.transform.position;
             _isMoving = true;
         }
 
@@ -36,10 +37,7 @@ namespace Wall
 
             if (!WallManager.instance.IsWalkable(transform.position))
             {
-                Destroy(gameObject); // Destroy the soldier if the scaffolding is not walkable
-                print("I dieded");
-                _isMoving = false;
-                return;
+                Die();
             }
             if (Vector3.Distance(transform.position, _targetPosition) < 0.001f)
             {
@@ -47,8 +45,21 @@ namespace Wall
                 _anim.SetTrigger("StopRunning");
                 _anim.SetBool("RightPlace", true);
                 transform.rotation = Quaternion.Euler(Vector3.zero);
+                _targetSegment.AssignSoldier(this);
                 print("Reached my target");
             }
+        }
+
+        public void Die()
+        {
+            _anim.SetTrigger("Death");
+            _isMoving = false;
+        }
+        private void FriendlySoldierDeath()
+        {
+            Destroy(gameObject); // Destroy the soldier if the scaffolding is not walkable
+            print("I dieded");
+            _isMoving = false;
         }
         
         private void RandomizeLook()

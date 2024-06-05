@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Wall
 {
@@ -6,11 +7,12 @@ namespace Wall
     {
         public GameObject wallPiece;
         public GameObject scaffoldingPiece;
-        public GameObject soldier;
+        public FriendlySoldier soldier;
 
         public int health = 100;
         public bool isScaffoldingIntact = true;
-        public bool isSoldierPresent = false;
+        public bool soldierRequested = false;
+        public bool isSoldierPresent;
 
         private void Start()
         {
@@ -41,19 +43,14 @@ namespace Wall
         {
             isScaffoldingIntact = false;
             scaffoldingPiece.SetActive(false);
+            if (isSoldierPresent) soldier.Die();
             Invoke("RepairScaffolding", 1);
-            // UpdateSoldierState();
-        }
-
-        public void SetSoldierPresent(bool present)
-        {
-            isSoldierPresent = present;
             // UpdateSoldierState();
         }
 
         // private void UpdateSoldierState()
         // {
-        //     if (isScaffoldingIntact && isSoldierPresent)
+        //     if (isScaffoldingIntact && _isSoldierPresent)
         //     {
         //         soldier.SetActive(true);
         //     }
@@ -63,10 +60,11 @@ namespace Wall
         //     }
         // }
 
-        private void AssignSoldier(GameObject incomingSoldier)
+        public void AssignSoldier(FriendlySoldier incomingSoldier)
         {
             soldier = incomingSoldier;
             isSoldierPresent = true;
+            soldier.transform.SetParent(transform);
         }
     }
 }
