@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// This functionality has been merged with FriendlySoldier.cs
+/// </summary>
 [RequireComponent(typeof(Animator))]
 public class Crossbowman : MonoBehaviour
 {

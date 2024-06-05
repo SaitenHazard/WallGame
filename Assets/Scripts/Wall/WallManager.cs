@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Input;
 using Unity.VisualScripting;
@@ -18,24 +19,26 @@ namespace Wall
         }
 
         public Selection _selection;
-        
         public Transform segmentsParent;
+        public GameObject soldierPrefab;
+        public GameObject spawnPoint;
+        public static WallManager instance;
+        public float spawnDelay = 3f;
 
+        private float _spawnTimer;
         private List<WallSegment> _wallSegments;
         private Transform _playerTransform;
         private bool _nearWall;
-        private static WallManager _instance;
         private WallSegment _closestSegment;
-        private int _width = 5;
         private Vector3 _closestGizmo;
+        private Queue<Vector3> _requestedSoldierPositions;
     
-
 
         private void Awake()
         {
-            if (_instance == null)
+            if (instance == null)
             {
-                _instance = this;
+                instance = this;
                 DontDestroyOnLoad(gameObject);
             }
             else
@@ -50,6 +53,8 @@ namespace Wall
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
             if (_playerTransform == null) throw new MissingFieldException("The player transform is needed ");
             InitializeWallSegments();
+            _requestedSoldierPositions = new Queue<Vector3>();
+            RequestSoldier(_wallSegments[0]);
         }
 
         private void OnDestroy()
@@ -59,12 +64,13 @@ namespace Wall
 
         private void Update()
         {
-            if (!_nearWall)
+            if (_nearWall)
             {
-                return;
+                _closestSegment = _wallSegments[GetClosestWallSegment(_playerTransform.position)];
+                _closestGizmo = _closestSegment.transform.position;
             }
-            _closestSegment = _wallSegments[GetClosestWallSegment(_playerTransform.position)];
-            _closestGizmo = _closestSegment.transform.position;
+            TrySpawnSoldier();
+            _spawnTimer -= Time.deltaTime;
         }
 
         private void SetSelection(InputValue value)
@@ -79,7 +85,7 @@ namespace Wall
         private void InitializeWallSegments()
         {
             // Clear the existing list
-            _wallSegments.Clear();
+            _wallSegments = new List<WallSegment>();
 
             // Iterate through all children and add their WallSegment component to the list
             foreach (Transform child in segmentsParent)
@@ -93,7 +99,18 @@ namespace Wall
         }
     
     
-        public int GetClosestWallSegment(Vector3 position)
+        private int GetClosestWallSegment(Vector3 position)
+        {
+            return _selection switch
+            {
+                Selection.OverheadScaffolding => GetClosestWallSegmentDirect(position) + 5,
+                Selection.Wall => GetClosestWallSegmentDirect(position),
+                Selection.Scaffolding => GetClosestWallSegmentDirect(position),
+                _ => GetClosestWallSegmentDirect(position)
+            };
+        }
+
+        private int GetClosestWallSegmentDirect(Vector3 position)
         {
             var closestSegment = -1;
             var closestDistance = Mathf.Infinity;
@@ -108,15 +125,35 @@ namespace Wall
                 }
             }
 
-            return _selection switch
-            {
-                Selection.OverheadScaffolding => closestSegment + 5,
-                Selection.Wall => closestSegment,
-                Selection.Scaffolding => closestSegment,
-                _ => closestSegment
-            };
+            return closestSegment;
         }
 
+        public bool IsWalkable(Vector3 position)
+        {
+           return _wallSegments[GetClosestWallSegmentDirect(position)].isScaffoldingIntact;
+        }
+
+        private void TrySpawnSoldier()
+        {
+            if (_requestedSoldierPositions.Count <= 0) return;
+            if (_spawnTimer <= 0)
+            {
+                SpawnSoldier(_requestedSoldierPositions.Dequeue());
+                _spawnTimer = spawnDelay; // Reset the spawn timer
+                print("Dequeued and spawned; remaining: " + _requestedSoldierPositions.Count);
+            }
+        }
+
+        private void SpawnSoldier(Vector3 position)
+        {
+            if (!soldierPrefab) return;
+            var newSoldier = Instantiate(soldierPrefab, spawnPoint.transform.position, Quaternion.identity);
+            var soldierController = newSoldier.GetComponent<FriendlySoldier>();
+            if (soldierController)
+            {
+                soldierController.MoveTo(position);
+            }
+        }
         private void OnDrawGizmos()
         {
             Gizmos.DrawSphere(_closestGizmo, 0.5f);
@@ -140,6 +177,11 @@ namespace Wall
             }
         }
 
+        public void RequestSoldier(WallSegment segment)
+        {
+            _requestedSoldierPositions.Enqueue(segment.transform.position);
+            print("Requested; remaining: " + _requestedSoldierPositions.Count);
+        }
         public void RepairWallSegment(WallSegment segment)
         {
             if (segment != null)
@@ -169,14 +211,6 @@ namespace Wall
             if (segment != null)
             {
                 segment.DamageScaffolding();
-            }
-        }
-
-        public void SetSoldierPresent(int index, bool present)
-        {
-            if (index >= 0 && index < _wallSegments.Count)
-            {
-                _wallSegments[index].SetSoldierPresent(present);
             }
         }
 

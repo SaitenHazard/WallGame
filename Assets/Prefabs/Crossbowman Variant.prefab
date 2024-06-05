@@ -106,7 +106,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a2ca09885ed02664681bad8cf688b00a,
         type: 3}
       propertyPath: m_Name
-      value: Crossbowman
+      value: Crossbowman Variant
       objectReference: {fileID: 0}
     - target: {fileID: 4289365334257111371, guid: a2ca09885ed02664681bad8cf688b00a,
         type: 3}
@@ -165,7 +165,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1742157358
+--- !u!114 &-6937374833625484107
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -174,12 +174,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8900817340479880561}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8f3862d06379b64b82ebed27fc68689, type: 3}
+  m_Script: {fileID: 11500000, guid: 47aa2fa3dd788b14abf54d243376121f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boltPrefab: {fileID: 5389204621949537239, guid: d71adfc458043864185bf726505c5cac,
-    type: 3}
-  releasePoint: {fileID: 1060913806599392314}
+  moveSpeed: 4
   helmetVariants:
   - {fileID: 5530847967301898603}
   - {fileID: 2318358595410146495}

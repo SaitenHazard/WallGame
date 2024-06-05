@@ -1089,6 +1089,37 @@ MonoBehaviour:
   health: 100
   isScaffoldingIntact: 1
   isSoldierPresent: 0
+--- !u!1 &949081593
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 949081594}
+  m_Layer: 0
+  m_Name: Spawn Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &949081594
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949081593}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.32, y: 0, z: -7.14}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2115681489}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1127993264
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2653,7 +2684,7 @@ PrefabInstance:
     - target: {fileID: 1261531023039261191, guid: 0d0fc9e96d3d7564f9536361df977ada,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.44
+      value: 0.97
       objectReference: {fileID: 0}
     - target: {fileID: 1261531023039261191, guid: 0d0fc9e96d3d7564f9536361df977ada,
         type: 3}
@@ -2663,7 +2694,7 @@ PrefabInstance:
     - target: {fileID: 1261531023039261191, guid: 0d0fc9e96d3d7564f9536361df977ada,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.57
+      value: -5.1
       objectReference: {fileID: 0}
     - target: {fileID: 1261531023039261191, guid: 0d0fc9e96d3d7564f9536361df977ada,
         type: 3}
@@ -2719,6 +2750,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 1261531023890419997, guid: 0d0fc9e96d3d7564f9536361df977ada,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d0fc9e96d3d7564f9536361df977ada, type: 3}
@@ -2823,11 +2859,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2115681488}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.41559505, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: -1.8031, y: -0.047675, z: 0.091244}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1368935031}
+  - {fileID: 949081594}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2845,6 +2882,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selection: 0
   segmentsParent: {fileID: 1368935031}
+  soldierPrefab: {fileID: 8900817340479880561, guid: b1c08aa7253799e4bae0aae528b86947,
+    type: 3}
+  spawnPoint: {fileID: 949081593}
+  spawnDelay: 3
 --- !u!65 &2115681491
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3095,11 +3136,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2136499104}
-  m_LocalRotation: {x: 0.25977302, y: -0, z: -0, w: 0.96566975}
-  m_LocalPosition: {x: 0, y: 3.7900002, z: -4.04}
+  m_LocalRotation: {x: 0.383501, y: -0, z: -0, w: 0.9235405}
+  m_LocalPosition: {x: 0, y: 7.95, z: -7.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2097797845}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 30.113, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 45.101, y: 0, z: 0}

@@ -33,32 +33,40 @@ namespace Wall
         {
             isScaffoldingIntact = true;
             scaffoldingPiece.SetActive(true);
-            UpdateSoldierState();
+            WallManager.instance.RequestSoldier(this);
+            // UpdateSoldierState();
         }
 
         public void DamageScaffolding()
         {
             isScaffoldingIntact = false;
             scaffoldingPiece.SetActive(false);
-            UpdateSoldierState();
+            Invoke("RepairScaffolding", 1);
+            // UpdateSoldierState();
         }
 
         public void SetSoldierPresent(bool present)
         {
             isSoldierPresent = present;
-            UpdateSoldierState();
+            // UpdateSoldierState();
         }
 
-        private void UpdateSoldierState()
+        // private void UpdateSoldierState()
+        // {
+        //     if (isScaffoldingIntact && isSoldierPresent)
+        //     {
+        //         soldier.SetActive(true);
+        //     }
+        //     else
+        //     {
+        //         soldier.SetActive(false);
+        //     }
+        // }
+
+        private void AssignSoldier(GameObject incomingSoldier)
         {
-            if (isScaffoldingIntact && isSoldierPresent)
-            {
-                soldier.SetActive(true);
-            }
-            else
-            {
-                soldier.SetActive(false);
-            }
+            soldier = incomingSoldier;
+            isSoldierPresent = true;
         }
     }
 }
