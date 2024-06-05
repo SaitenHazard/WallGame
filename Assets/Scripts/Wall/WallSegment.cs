@@ -9,26 +9,45 @@ namespace Wall
         public GameObject scaffoldingPiece;
         public FriendlySoldier soldier;
 
-        public int health = 100;
+        public int health = 2;
         public bool isScaffoldingIntact = true;
         public bool soldierRequested = false;
         public bool isSoldierPresent;
+        public Mesh normalWall;
+        public Mesh damagedWall;
+        public Mesh destroyedWall;
+        public int level; //To be used to request soldier at the correct level
 
+        private MeshFilter _meshFilter;
         private void Start()
         {
+            _meshFilter = GetComponentInChildren<MeshFilter>();
+            normalWall = _meshFilter.mesh;
             // UpdateSoldierState();
         }
 
         public void RepairWall()
         {
-            health = 100;
+            health += 1;
+            ChangeWallState();
             // Additional logic for repairing the wall piece
         }
 
         public void DamageWall()
         {
-            health = Mathf.Max(0, health - 10); // Example damage logic
-            // Additional logic for damaging the wall piece
+            health = Mathf.Max(0, health - 1);
+            ChangeWallState();
+        }
+
+        private void ChangeWallState()
+        {
+            _meshFilter.mesh = health switch
+            {
+                0 => destroyedWall,
+                1 => damagedWall,
+                2 => normalWall, 
+                _ => _meshFilter.mesh
+            };
         }
 
         public void RepairScaffolding()
