@@ -1,10 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Net;
-using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Animator))]
 public class Catapult : MonoBehaviour, IInteractable
@@ -62,7 +57,7 @@ public class Catapult : MonoBehaviour, IInteractable
         EventManager.OnCatapultFire -= OnFire;
     }
 
-    public void Interact()
+    public void Interact(GameObject interactor)
     {
         if (_inCatapult)
         {

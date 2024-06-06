@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using Input;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -63,7 +64,7 @@ public class ThirdPersonController : MonoBehaviour
     public float CameraAngleOverride = 0.0f;
 
     [Tooltip("For locking the camera position on all axis")]
-    public bool LockCameraPosition = false;
+    public bool LockCameraPosition = true;
 
     // cinemachine
     private float _cinemachineTargetYaw;
@@ -80,13 +81,6 @@ public class ThirdPersonController : MonoBehaviour
     // timeout deltatime
     private float _jumpTimeoutDelta;
     private float _fallTimeoutDelta;
-
-    // animation IDs
-    private int _animIDSpeed;
-    private int _animIDGrounded;
-    private int _animIDJump;
-    private int _animIDFreeFall;
-    private int _animIDMotionSpeed;
 
     private PlayerInput _playerInput;
     private GameObject _walther;
@@ -146,7 +140,6 @@ public class ThirdPersonController : MonoBehaviour
         _input = GetComponent<Inputs>();
         _playerInput = GetComponent<PlayerInput>();
 
-        AssignAnimationIDs();
         AssignActionMapIDs();
 
         // reset our timeouts on start
@@ -177,15 +170,7 @@ public class ThirdPersonController : MonoBehaviour
     {
         // TODO
     }
-
-    private void AssignAnimationIDs()
-    {
-        _animIDSpeed = Animator.StringToHash("Speed");
-        _animIDGrounded = Animator.StringToHash("Falling");
-        _animIDJump = Animator.StringToHash("Jump");
-        _animIDFreeFall = Animator.StringToHash("FreeFall");
-        _animIDMotionSpeed = Animator.StringToHash("Speed");
-    }
+    
 
     private void GroundedCheck()
     {
@@ -204,23 +189,7 @@ public class ThirdPersonController : MonoBehaviour
 
     private void CameraRotation()
     {
-        // if there is an input and camera position is not fixed
-        if (_input.look.sqrMagnitude >= Threshold && !LockCameraPosition)
-        {
-            //Don't multiply mouse input by Time.deltaTime;
-            float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-
-            _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-            _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
-        }
-
-        // clamp our rotations so our values are limited 360 degrees
-        _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-        _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
-
-        // Cinemachine will follow this target
-        CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-            _cinemachineTargetYaw, 0.0f);
+        CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,_cinemachineTargetYaw, 0.0f);
     }
 
     private void Move()
