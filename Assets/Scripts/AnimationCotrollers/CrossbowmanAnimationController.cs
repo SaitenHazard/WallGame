@@ -8,7 +8,7 @@ using UnityEngine;
 /// This functionality has been merged with FriendlySoldier.cs
 /// </summary>
 [RequireComponent(typeof(Animator))]
-public class Crossbowman : MonoBehaviour
+public class CrossbowmanAnimationController : MonoBehaviour
 {
     private void Update()
     {

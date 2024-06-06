@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CrossbowmenSpawnPoint : MonoBehaviour
 {
-    [SerializeField] Queue<Crossbowman_towsif> reviveQueue = new();
+    [SerializeField] Queue<Crossbowman> reviveQueue = new();
 
     private bool lockDoRevive = false;
 
@@ -30,21 +30,21 @@ public class CrossbowmenSpawnPoint : MonoBehaviour
 
         while (reviveQueue.Count > 0)
         {
-            Crossbowman_towsif Crossbowman_towsif = reviveQueue.Dequeue();
-            Crossbowman_towsif.SetState(CrossbowmanState.walk);
+            Crossbowman crossbowman = reviveQueue.Dequeue();
+            crossbowman.SetState(CrossbowmanState.walk);
             yield return new WaitForSeconds(1);
         }
 
         lockDoRevive = false;
      }
 
-    public void AddToReviveQueue(Crossbowman_towsif crossbowman)
+    public void AddToReviveQueue(Crossbowman crossbowman)
     {
         HideAndRelocateCrossbowman(crossbowman);
         reviveQueue.Enqueue(crossbowman);
     }
 
-    private void HideAndRelocateCrossbowman(Crossbowman_towsif crossbowman)
+    private void HideAndRelocateCrossbowman(Crossbowman crossbowman)
     {
         crossbowman.transform.transform.position = transform.position;
         crossbowman.transform.GetComponent<MeshRenderer>().enabled = true;

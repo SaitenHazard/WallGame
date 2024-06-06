@@ -188,7 +188,7 @@ ModelImporter:
       - time: 0.102325454
         functionName: AnimEvent_ShotFired
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: f8f3862d06379b64b82ebed27fc68689,
+        objectReferenceParameter: {fileID: 11500000, guid: 47aa2fa3dd788b14abf54d243376121f,
           type: 3}
         floatParameter: 0
         intParameter: 0

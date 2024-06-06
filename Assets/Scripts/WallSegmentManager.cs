@@ -103,7 +103,7 @@ public class WallSegmentManager : MonoBehaviour
                 spawnPoint = spawnPointRow2Right;
         }
 
-        wallSegmentTransform.GetChild(0).GetComponent<Crossbowman_towsif>().SetSpawnPoint(spawnPoint);
+        wallSegmentTransform.GetChild(0).GetComponent<Crossbowman>().SetSpawnPoint(spawnPoint);
         //Debug.Log(spawnPoint);
         //Debug.Log(wallSegmentTransform.name);
     }

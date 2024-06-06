@@ -15,7 +15,7 @@ public enum CrossbowmanState
     NULL
 }
 
-public class Crossbowman_towsif : MonoBehaviour
+public class Crossbowman : MonoBehaviour
 {
     [SerializeField] private CrossbowmanState _state;
     private CrossbowmenSpawnPoint _crossbowmenSpawnPoints;

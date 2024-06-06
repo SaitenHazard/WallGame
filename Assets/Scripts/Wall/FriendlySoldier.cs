@@ -61,7 +61,19 @@ namespace Wall
             print("I dieded");
             _isMoving = false;
         }
-        
+
+        public void AnimEvent_ShotFired()
+        {
+            Debug.Log("NEEDAD TO BE FIZED!");
+           //Invoke("boltArrives", 2);
+        //
+          // TargetProjectile boltGO = Instantiate(boltPrefab, releasePoint.position, releasePoint.rotation);
+        //   boltGO.SetDestination(boltReceiver.GetFootsoldierPosition());
+          // boltGO.SetFlightTime(2.0f);
+        //
+        //   RandomizeSpeed(0.95f, 1.05f); // Each shot is done with a little bit of different speed
+        }
+
         private void RandomizeLook()
         {
             var leftHanded = Random.Range(0.0f, 1.0f) < 0.3f;
