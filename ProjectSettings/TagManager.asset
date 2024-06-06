@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - CinemachineTarget
+  - 2_1
+  - scaffolding
+  - ball
   layers:
   - Default
   - TransparentFX
