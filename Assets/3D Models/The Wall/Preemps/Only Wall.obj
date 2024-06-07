@@ -1,4 +1,4 @@
-# Blender 4.1.0
+# Blender 4.1.1
 # www.blender.org
 mtllib Only Wall.mtl
 o Einzelne_Wand.001
@@ -247,7 +247,7 @@ vt 0.243267 0.874892
 vt 0.392681 0.874892
 vt 0.392681 0.999315
 s 0
-usemtl Mockup
+usemtl Mockup.001
 f 2/1/1 4/2/1 3/3/1 1/4/1
 f 4/5/2 2/6/2 6/7/2 8/8/2
 f 3/9/3 4/10/3 8/11/3 7/12/3
