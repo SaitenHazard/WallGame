@@ -7,19 +7,37 @@ namespace Wall
     {
         public float moveSpeed = 5f; // Speed at which the soldier moves
         private Vector3 _targetPosition;
-        private bool _isMoving = false;
+        private bool _isMoving;
         private WallSegment _targetSegment;
         private Animator _anim;
         [SerializeField]
         private List<GameObject> helmetVariants;
+        
+        // Animation IDs
+        private int _animIDStartRunning;
+        private int _animIDStopRunning;
+        private int _animIDRightPlace;
+        private int _animIDDeath;
+        private int _animIDInherentSpeedup;
 
-        void Start()
+
+        private void Start()
         {
+            AssignAnimationIDs();
             _anim = GetComponent<Animator>();
-            _anim.SetTrigger("StartRunning");
+            _anim.SetTrigger(_animIDStartRunning);
 
             RandomizeLook();
             RandomizeSpeed(0.95f, 1.05f);
+        }
+
+        private void AssignAnimationIDs()
+        {
+            _animIDStartRunning = Animator.StringToHash("StartRunning");
+            _animIDStopRunning = Animator.StringToHash("StopRunning");
+            _animIDRightPlace = Animator.StringToHash("RightPlace");
+            _animIDDeath = Animator.StringToHash("Death");
+            _animIDInherentSpeedup = Animator.StringToHash("InherentSpeedup");
         }
         
         public void MoveTo(WallSegment destination)
@@ -42,8 +60,8 @@ namespace Wall
             if (Vector3.Distance(transform.position, _targetPosition) < 0.001f)
             {
                 _isMoving = false;
-                _anim.SetTrigger("StopRunning");
-                _anim.SetBool("RightPlace", true);
+                _anim.SetTrigger(_animIDStopRunning);
+                _anim.SetBool(_animIDRightPlace, true);
                 transform.rotation = Quaternion.Euler(Vector3.zero);
                 _targetSegment.AssignSoldier(this);
                 print("Reached my target");
@@ -52,9 +70,11 @@ namespace Wall
 
         public void Die()
         {
-            _anim.SetTrigger("Death");
+            _anim.SetTrigger(_animIDDeath);
             _isMoving = false;
         }
+        
+        // Invoked by Soldier Animator after Death Animation has finished
         private void FriendlySoldierDeath()
         {
             Destroy(gameObject); // Destroy the soldier if the scaffolding is not walkable
@@ -87,7 +107,7 @@ namespace Wall
         
         private void RandomizeSpeed(float minSpeed, float maxSpeed)
         {
-            _anim.SetFloat("InherentSpeedup", Random.Range(minSpeed, maxSpeed));
+            _anim.SetFloat(_animIDInherentSpeedup, Random.Range(minSpeed, maxSpeed));
         }
     }
 }

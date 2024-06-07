@@ -1,37 +1,40 @@
 using UnityEngine;
 
-[RequireComponent (typeof(Animator))]
-public class DoorAnimationController : MonoBehaviour
+namespace AnimationCotrollers
 {
-    private Animator anim;
-
-    public void Start()
+    [RequireComponent (typeof(Animator))]
+    public class DoorAnimationController : MonoBehaviour
     {
-        anim = GetComponent<Animator> ();
-    }
+        private Animator anim;
 
-    public void Update ()
-    {
-        /*if(Input.GetKeyUp(KeyCode.Space))
+        public void Start()
+        {
+            anim = GetComponent<Animator> ();
+        }
+
+        public void Update ()
+        {
+            /*if(Input.GetKeyUp(KeyCode.Space))
         {
             Open();
         }*/
-    }
+        }
 
-    public void Open()
-    {
-        progress = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
+        public void Open()
+        {
+            progress = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
 
-        Debug.Log(anim.GetCurrentAnimatorClipInfo(0)[0].clip.name);
+            Debug.Log(anim.GetCurrentAnimatorClipInfo(0)[0].clip.name);
 
-        if (anim.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Tür Armature|DoorClose") 
-            anim.Play("DoorOpen", 0, 1 - progress);
-        else
-            anim.SetTrigger("Open");
+            if (anim.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Tür Armature|DoorClose") 
+                anim.Play("DoorOpen", 0, 1 - progress);
+            else
+                anim.SetTrigger("Open");
         
-        Debug.Log("Progress: " + progress);
-    }
+            Debug.Log("Progress: " + progress);
+        }
 
-    float progress = 0;
+        float progress = 0;
     
+    }
 }
