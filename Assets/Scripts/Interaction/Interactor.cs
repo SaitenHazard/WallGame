@@ -45,7 +45,6 @@ namespace Interaction
 
         private void Interact()
         {
-            print("INTERACTOR");
             _interact?.Invoke(gameObject);
         }
     }

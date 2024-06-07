@@ -81,6 +81,10 @@ namespace Player
         private float _rotationVelocity;
         private float _verticalVelocity;
         private readonly float _terminalVelocity = 53.0f;
+        
+        // inventory
+        public int _stone = 1;
+        public int _wood = 1;
 
         // timeout
         private float _jumpTimeoutDelta;
@@ -117,6 +121,7 @@ namespace Player
             EventManager.OnExitCatapult += ExitCatapult;
             EventManager.OnPlayerStunned += PauseMovement;
             EventManager.OnCatapultFire += GetLaunched;
+            EventManager.OnReplenishResource += FillWood;
             Inputs.Jump += Jump;
 
         }
@@ -127,6 +132,7 @@ namespace Player
             EventManager.OnExitCatapult -= ExitCatapult;
             EventManager.OnPlayerStunned -= PauseMovement;
             EventManager.OnCatapultFire -= GetLaunched;
+            EventManager.OnReplenishResource -= FillWood;
             Inputs.Jump -= Jump;
         }
 
@@ -427,6 +433,16 @@ namespace Player
             _currentState = PlayerState.Stunned;
             yield return new WaitForSeconds(duration);
             _currentState = PlayerState.Normal;
+        }
+
+        public void FillWood(int amount = 3)
+        {
+            _wood = 3;
+        }
+
+        public void FillStone(int amount = 3)
+        {
+            _stone = 3;
         }
     }
 }

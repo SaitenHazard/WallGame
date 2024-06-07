@@ -55,6 +55,7 @@ namespace Wall
             InitializeWallSegments();
             _requestedSoldierPositions = new Queue<WallSegment>();
             RequestSoldier(_wallSegments[0]);
+            InvokeRepeating(nameof(DamageRandomSegment), 0, 3f);
         }
 
         private void OnDestroy()
@@ -167,7 +168,7 @@ namespace Wall
                     DamageScaffoldingSegment(_closestSegment);
                     break;
                 case Selection.Wall:
-                    DamageWallSegment(_closestSegment);
+                    RepairWallSegment(_closestSegment);
                     break;
                 case Selection.Scaffolding:
                     DamageScaffoldingSegment(_closestSegment);
@@ -182,6 +183,11 @@ namespace Wall
             if (segment.soldierRequested || segment.isSoldierPresent) return;
             _requestedSoldierPositions.Enqueue(segment);
             print("Requested; remaining: " + _requestedSoldierPositions.Count);
+        }
+
+        private void DamageRandomSegment()
+        {
+            DamageWallSegment(_wallSegments[4]);
         }
         public void RepairWallSegment(WallSegment segment)
         {

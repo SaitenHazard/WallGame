@@ -5,6 +5,7 @@ public class EventManager : MonoBehaviour
 {
 
     public delegate void FloatEvent(float value);
+    public delegate void IntEvent(int value);
     public delegate void TransformEvent(Transform value);
     public delegate void PathEvent(Vector3[] path, int vertexCount);
 
@@ -12,6 +13,8 @@ public class EventManager : MonoBehaviour
     public static event TransformEvent OnExitCatapult;
     public static event PathEvent OnCatapultFire;
     public static event FloatEvent OnPlayerStunned;
+
+    public static event IntEvent OnReplenishResource;
     
     public static void RaiseCatapultFire(Vector3[] path, int vertexCount)
     {
@@ -31,5 +34,10 @@ public class EventManager : MonoBehaviour
     public static void RaisePlayerStunned(float duration)
     {
         OnPlayerStunned?.Invoke(duration);
+    }
+
+    public static void RaiseOnReplenishResource(int amount)
+    {
+        OnReplenishResource?.Invoke(amount);
     }
 }

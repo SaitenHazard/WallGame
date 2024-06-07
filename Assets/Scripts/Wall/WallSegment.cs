@@ -1,3 +1,5 @@
+using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -17,6 +19,7 @@ namespace Wall
         public Mesh damagedWall;
         public Mesh destroyedWall;
         public int level; //To be used to request soldier at the correct level
+        public bool chosenOne;
 
         private MeshFilter _meshFilter;
         private void Start()
@@ -28,9 +31,8 @@ namespace Wall
 
         public void RepairWall()
         {
-            health += 1;
+            health = Mathf.Min(2, health + 1);
             ChangeWallState();
-            // Additional logic for repairing the wall piece
         }
 
         public void DamageWall()
@@ -56,6 +58,13 @@ namespace Wall
             scaffoldingPiece.SetActive(true);
             WallManager.instance.RequestSoldier(this);
             // UpdateSoldierState();
+        }
+
+        private GUIStyle _style = new GUIStyle();
+        private void OnDrawGizmos()
+        {
+            _style.fontSize = 32;
+            if (chosenOne) Handles.Label(transform.position + new Vector3(0, 3, 0), "Wall Health: " + health, _style);
         }
 
         public void DamageScaffolding()
