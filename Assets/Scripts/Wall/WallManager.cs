@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Input;
+using Interaction;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
