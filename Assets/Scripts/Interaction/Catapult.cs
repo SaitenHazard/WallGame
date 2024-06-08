@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Player;
 using UnityEngine;
 
 namespace Interaction
@@ -59,7 +60,7 @@ namespace Interaction
             EventManager.OnCatapultFire -= OnFire;
         }
 
-        public void Interact(GameObject interactor)
+        public void Interact(ThirdPersonController interactor)
         {
             if (_inCatapult)
             {

@@ -1,9 +1,13 @@
+using Player;
 using UnityEngine;
 
 namespace Interaction
 {
     public class ResourceReplenisher : MonoBehaviour, IInteractable
     {
+        [SerializeField] private int replenishAmountWood = 3;
+        [SerializeField] private int replenishAmountStone = 3;
+        
         public enum Resource
         {
             Wood,
@@ -11,11 +15,15 @@ namespace Interaction
         }
 
         public Resource resource;
-        public void Interact(GameObject interactor)
+        public void Interact(ThirdPersonController interactor)
         {
             if (resource == Resource.Wood)
             {
-                EventManager.RaiseOnReplenishResource(3);
+                EventManager.RaiseOnReplenishWood(replenishAmountWood);
+            }
+            else
+            {
+                EventManager.RaiseOnReplenishStone(replenishAmountStone);
             }
         }
     }

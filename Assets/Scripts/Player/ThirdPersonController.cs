@@ -2,6 +2,7 @@
 using AnimationCotrollers;
 using Input;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -121,7 +122,8 @@ namespace Player
             EventManager.OnExitCatapult += ExitCatapult;
             EventManager.OnPlayerStunned += PauseMovement;
             EventManager.OnCatapultFire += GetLaunched;
-            EventManager.OnReplenishResource += FillWood;
+            EventManager.OnReplenishWood += FillWood;
+            EventManager.OnReplenishStone += FillStone;
             Inputs.Jump += Jump;
 
         }
@@ -132,7 +134,8 @@ namespace Player
             EventManager.OnExitCatapult -= ExitCatapult;
             EventManager.OnPlayerStunned -= PauseMovement;
             EventManager.OnCatapultFire -= GetLaunched;
-            EventManager.OnReplenishResource -= FillWood;
+            EventManager.OnReplenishWood -= FillWood;
+            EventManager.OnReplenishStone -= FillStone;
             Inputs.Jump -= Jump;
         }
 
@@ -435,14 +438,43 @@ namespace Player
             _currentState = PlayerState.Normal;
         }
 
-        public void FillWood(int amount = 3)
+        private void FillWood(int amount = 3)
         {
             _wood = 3;
         }
-
-        public void FillStone(int amount = 3)
+        
+        public void IncrementWood(int amount = 1)
+        {
+            _wood += amount;
+        }
+        
+        public void IncrementStone(int amount = 1)
+        {
+            _stone += amount;
+        }
+        private void FillStone(int amount = 3)
         {
             _stone = 3;
+        }
+
+        public bool CanRepairWood()
+        {
+            return _wood > 0;
+        }
+        
+        public bool CanRepairStone()
+        {
+            return _stone > 0;
+        }
+
+        
+        
+        private GUIStyle _style = new GUIStyle();
+        private void OnDrawGizmos()
+        {
+            _style.fontSize = 32;
+            // if (chosenOne) Handles.Label(transform.position + new Vector3(0, 3, 0), "Wall Health: " + health, _style);
+            Handles.Label(transform.position + new Vector3(0, 5, 0), "Wood: " + _wood + "\nStone: " + _stone, _style);
         }
     }
 }

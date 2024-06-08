@@ -14,7 +14,8 @@ public class EventManager : MonoBehaviour
     public static event PathEvent OnCatapultFire;
     public static event FloatEvent OnPlayerStunned;
 
-    public static event IntEvent OnReplenishResource;
+    public static event IntEvent OnReplenishWood;
+    public static event IntEvent OnReplenishStone;
     
     public static void RaiseCatapultFire(Vector3[] path, int vertexCount)
     {
@@ -36,8 +37,12 @@ public class EventManager : MonoBehaviour
         OnPlayerStunned?.Invoke(duration);
     }
 
-    public static void RaiseOnReplenishResource(int amount)
+    public static void RaiseOnReplenishWood(int amount)
     {
-        OnReplenishResource?.Invoke(amount);
+        OnReplenishWood?.Invoke(amount);
+    }
+    public static void RaiseOnReplenishStone(int amount)
+    {
+        OnReplenishStone?.Invoke(amount);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Input;
 using Interaction;
+using Player;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -80,7 +81,6 @@ namespace Wall
             _selection += (int) input.y;
             if ((int)_selection == -1) _selection = Selection.Scaffolding;
             if ((int)_selection == 3) _selection = Selection.OverheadScaffolding;
-            print("Current selection: " + _selection);
         }
 
         private void InitializeWallSegments()
@@ -102,13 +102,20 @@ namespace Wall
     
         private int GetClosestWallSegment(Vector3 position)
         {
-            return _selection switch
+            var closestIndex = GetClosestWallSegmentDirect(position);
+            switch (_selection)
             {
-                Selection.OverheadScaffolding => GetClosestWallSegmentDirect(position) + 5,
-                Selection.Wall => GetClosestWallSegmentDirect(position),
-                Selection.Scaffolding => GetClosestWallSegmentDirect(position),
-                _ => GetClosestWallSegmentDirect(position)
-            };
+                case Selection.OverheadScaffolding:
+                    if (closestIndex + 5 < _wallSegments.Count) return closestIndex + 5;
+                    _selection = Selection.Wall;
+                    return closestIndex;
+                case Selection.Wall:
+                    return closestIndex;
+                case Selection.Scaffolding:
+                    return closestIndex;
+                default:
+                    return closestIndex;
+            }
         }
 
         private int GetClosestWallSegmentDirect(Vector3 position)
@@ -160,23 +167,36 @@ namespace Wall
             Gizmos.DrawSphere(_closestGizmo, 0.5f);
         }
     
-        public void Interact(GameObject interactor)
+        public void Interact(ThirdPersonController player)
         {
             switch (_selection)
             {
                 case Selection.OverheadScaffolding:
-                    DamageScaffoldingSegment(_closestSegment);
+                    if (player.CanRepairWood())
+                    {
+                        DamageScaffoldingSegment(_closestSegment);
+                        player.IncrementWood(-1);
+                    }
                     break;
                 case Selection.Wall:
-                    RepairWallSegment(_closestSegment);
+                    if (player.CanRepairStone())
+                    {
+                        RepairWallSegment(_closestSegment);
+                        player.IncrementStone(-1);
+                    }
                     break;
                 case Selection.Scaffolding:
-                    DamageScaffoldingSegment(_closestSegment);
+                    if (player.CanRepairWood())
+                    {
+                        DamageScaffoldingSegment(_closestSegment);
+                        player.IncrementWood(-1);
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
+        
 
         public void RequestSoldier(WallSegment segment)
         {
