@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using AnimationCotrollers;
 using Input;
-using UnityMathematics;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
