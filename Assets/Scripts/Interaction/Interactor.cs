@@ -1,5 +1,7 @@
 using Input;
+
 using Player;
+
 using UnityEngine;
 
 namespace Interaction
@@ -18,6 +20,7 @@ namespace Interaction
         private void Awake()
         {
             _controller = GetComponent<ThirdPersonController>();
+
             Inputs.Interact += Interact;
         }
 
@@ -32,6 +35,7 @@ namespace Interaction
         private void OnTriggerEnter(Collider other)
         {
             var interactable = other.gameObject.GetComponent<IInteractable>();
+
             if (interactable != null)
             {
                 _interact = interactable.Interact;

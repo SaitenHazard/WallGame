@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using AnimationCotrollers;
 using Input;
-using Unity.Mathematics;
+using UnityMathematics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -82,7 +82,6 @@ namespace Player
         private float _rotationVelocity;
         private float _verticalVelocity;
         private readonly float _terminalVelocity = 53.0f;
-        
         // inventory
         public int _stone = 1;
         public int _wood = 1;
@@ -124,6 +123,7 @@ namespace Player
             EventManager.OnCatapultFire += GetLaunched;
             EventManager.OnReplenishWood += FillWood;
             EventManager.OnReplenishStone += FillStone;
+
             Inputs.Jump += Jump;
 
         }

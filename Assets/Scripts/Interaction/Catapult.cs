@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+
 using Player;
+
 using UnityEngine;
 
 namespace Interaction
@@ -61,6 +63,7 @@ namespace Interaction
         }
 
         public void Interact(ThirdPersonController interactor)
+
         {
             if (_inCatapult)
             {
