@@ -25,8 +25,8 @@ namespace Wall
         {
             AssignAnimationIDs();
             _anim = GetComponent<Animator>();
-            _anim.SetTrigger(_animIDStartRunning);
-
+            _anim.SetTrigger(_animIDStopRunning);
+            _anim.SetBool(_animIDRightPlace, true);
             RandomizeLook();
             RandomizeSpeed(0.95f, 1.05f);
         }
@@ -43,7 +43,7 @@ namespace Wall
         public void MoveTo(WallSegment destination)
         {
             _targetSegment = destination;
-            _targetPosition = _targetSegment.transform.position;
+            _targetPosition = _targetSegment.transform.position + new Vector3(0, 0, -0.5f);
             _isMoving = true;
         }
 
@@ -77,9 +77,8 @@ namespace Wall
         // Invoked by Soldier Animator after Death Animation has finished
         private void FriendlySoldierDeath()
         {
-            Destroy(gameObject); // Destroy the soldier if the scaffolding is not walkable
             print("I dieded");
-            _isMoving = false;
+            gameObject.SetActive(false); // Destroy the soldier if the scaffolding is not walkable
         }
 
         public void AnimEvent_ShotFired()
