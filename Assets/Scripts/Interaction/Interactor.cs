@@ -1,19 +1,26 @@
 using Input;
+
+using Player;
+
 using UnityEngine;
 
 namespace Interaction
 {
-    interface IInteractable
+    internal interface IInteractable
     {
-        public void Interact(GameObject self);
+        public void Interact(ThirdPersonController player);
     }
 
-    delegate void Interaction(GameObject self);
+    internal delegate void Interaction(ThirdPersonController player);
 
+    [RequireComponent(typeof(ThirdPersonController))]
     public class Interactor : MonoBehaviour
     {
+        private ThirdPersonController _controller;
         private void Awake()
         {
+            _controller = GetComponent<ThirdPersonController>();
+
             Inputs.Interact += Interact;
         }
 
@@ -27,7 +34,8 @@ namespace Interaction
     
         private void OnTriggerEnter(Collider other)
         {
-            IInteractable interactable = other.gameObject.GetComponent<IInteractable>();
+            var interactable = other.gameObject.GetComponent<IInteractable>();
+
             if (interactable != null)
             {
                 _interact = interactable.Interact;
@@ -45,8 +53,7 @@ namespace Interaction
 
         private void Interact()
         {
-            print("INTERACTOR");
-            _interact?.Invoke(gameObject);
+            _interact?.Invoke(_controller);
         }
     }
 }
