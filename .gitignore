@@ -73,3 +73,6 @@ crashlytics-build.properties
 
 # Jetbrains IDE stuff
 /.idea
+
+/.vscode
+/Assets/UnityTechnologies
