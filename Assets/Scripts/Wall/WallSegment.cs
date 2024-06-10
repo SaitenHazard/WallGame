@@ -59,6 +59,7 @@ namespace Wall
             isScaffoldingIntact = true;
             scaffoldingPiece.SetActive(true);
             RequestSoldier();
+            return true;
         }
 
         public void DamageWall()
@@ -78,6 +79,7 @@ namespace Wall
             health = Mathf.Min(2, health + 1);
             ChangeWallState();
             RequestSoldier();
+            return true;
         }
 
         private void RequestSoldier()

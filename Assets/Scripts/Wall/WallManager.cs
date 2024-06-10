@@ -253,12 +253,14 @@ namespace Wall
             DamageWallSegment(_wallSegments[Random.Range(0, 4)]);
         }
 
-        public void RepairWallSegment(WallSegment segment)
+        public bool RepairWallSegment(WallSegment segment)
         {
             if (segment != null && segment.wallPiece.activeSelf)
             {
-                segment.RepairWall();
+                return segment.RepairWall();
             }
+
+            return false;
         }
 
         public void DamageWallSegment(WallSegment segment)
@@ -269,12 +271,14 @@ namespace Wall
             }
         }
 
-        public void RepairScaffoldingSegment(WallSegment segment)
+        public bool RepairScaffoldingSegment(WallSegment segment)
         {
             if (segment != null && segment.scaffoldingPiece.activeSelf)
             {
-                segment.RepairScaffolding();
+                return segment.RepairScaffolding();
             }
+
+            return false;
         }
 
         public void DamageScaffoldingSegment(WallSegment segment)
