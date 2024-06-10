@@ -1,9 +1,12 @@
 using UnityEngine;
 
-public class BoltController : MonoBehaviour
+namespace AnimationCotrollers
 {
-    private void Update()
+    public class BoltController : MonoBehaviour
     {
-        transform.Rotate(0.2f, 0, 0);
+        private void Update()
+        {
+            transform.Rotate(0.4f, 0, 0);
+        }
     }
 }

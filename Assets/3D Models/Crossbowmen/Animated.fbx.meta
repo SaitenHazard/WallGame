@@ -148,7 +148,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.9923954
+        functionName: FriendlySoldierDeath
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -181,7 +188,7 @@ ModelImporter:
       - time: 0.102325454
         functionName: AnimEvent_ShotFired
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: f8f3862d06379b64b82ebed27fc68689,
+        objectReferenceParameter: {fileID: 11500000, guid: 47aa2fa3dd788b14abf54d243376121f,
           type: 3}
         floatParameter: 0
         intParameter: 0
