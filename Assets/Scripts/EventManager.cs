@@ -16,6 +16,8 @@ public class EventManager : MonoBehaviour
 
     public static event IntEvent OnReplenishWood;
     public static event IntEvent OnReplenishStone;
+
+    public static event IntEvent OnWallPieceHit;
     
     public static void RaiseCatapultFire(Vector3[] path, int vertexCount)
     {
@@ -44,5 +46,10 @@ public class EventManager : MonoBehaviour
     public static void RaiseOnReplenishStone(int amount)
     {
         OnReplenishStone?.Invoke(amount);
+    }
+
+    public static void RaiseOnWallPieceHit(int index)
+    {
+        OnWallPieceHit?.Invoke(index);
     }
 }
