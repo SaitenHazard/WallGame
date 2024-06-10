@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 5533686896719534021}
   - component: {fileID: 2529088511995973569}
   m_Layer: 0
-  m_Name: "Fu\xDFsoldat"
+  m_Name: Footsoldier Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

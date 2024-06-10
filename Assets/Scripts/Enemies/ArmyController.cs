@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Enemies
@@ -5,20 +6,33 @@ namespace Enemies
     public class ArmyController : MonoBehaviour
     {
         // Start is called before the first frame update
-        public GameObject soldierPrefab;
 
+
+        [Header("_______________ Trebuchet Settings _______________")]
+        public Trebuchet trebuchetPrefab;
+        public Vector2 trebuchetSpawnAreaLowerLeft;
+        public Vector2 trebuchetSpawnAreaUpperRight;
+        [Tooltip("Numbers of trebuchets spawned at startup")]
+        public int trebuchetCount = 5;
+
+        private List<float> trebuchetPositions; // vertical positions [0..1] relative to avaliable space
+
+        [Tooltip("Fligth Time of the trebuchet rounds in seconds")]
+        public float projectileFlightTime;
+
+        private int lastCount = 0;
+        private Vector2 lastLowerLeft = Vector2.zero;
+        private Vector2 lastUpperRight = Vector2.zero;
+        private bool SomethingChanged() {
+            return lastCount != trebuchetCount || lastLowerLeft != trebuchetSpawnAreaLowerLeft || lastUpperRight != trebuchetSpawnAreaUpperRight;
+        }
+
+   
+        [Header("_______________ Footsoldier Settings _______________")]
+        public Footsoldier soldierPrefab;
+        public Vector2 spawnAreaLowerLeft;
+        public Vector2 spawnAreaUpperRight;
         public int enemyCount = 100;
-
-        public Vector2 spawnMin;
-        public Vector2 spawnMax;
-
-        [Header("Footsoldier Settings")]
-
-        /*public Formation formation = Formation.Scattered;
-
-    public int ROWS_SoldiersPerRow = 50;
-
-    public Vector3 LEGIONS_columns_rows_legions = new Vector3(5, 8, 5);*/
 
         [Tooltip("How far up and down the footsoldiers oscillate")]
         public float vibing = 0.05f;
@@ -32,6 +46,7 @@ namespace Enemies
         void Start()
         {
             SpawnArmy();
+            SpawnTrebuchets();
         }
 
         public bool DEBUG_KillOne = false;
@@ -55,9 +70,29 @@ namespace Enemies
         {
             for (int i = 0; i < enemyCount; i++)
             {
-                GameObject soldier = Instantiate(soldierPrefab, transform.position + new Vector3(Random.Range(spawnMin.x, spawnMax.x), 0, Random.Range(spawnMin.y, spawnMax.y)), Quaternion.identity, transform);
-                soldier.GetComponent<Footsoldier>().SetUp(vibing, ecstasy, hatred);
+                Footsoldier soldier = Instantiate(soldierPrefab, transform.position + new Vector3(Random.Range(spawnAreaLowerLeft.x, spawnAreaUpperRight.x), 0, Random.Range(spawnAreaLowerLeft.y, spawnAreaUpperRight.y)), Quaternion.identity, transform.GetChild(0));
+                soldier.SetUp(vibing, ecstasy, hatred);
             }
+        }
+
+        public void SpawnTrebuchets()
+        {
+            AssignNewTrebuchetPositions();
+            float horizSpacing = (trebuchetSpawnAreaUpperRight.x - trebuchetSpawnAreaLowerLeft.x) / Mathf.Max(1, trebuchetCount - 1);
+            float vertSpace = trebuchetSpawnAreaUpperRight.y - trebuchetSpawnAreaLowerLeft.y;
+            for (int i = 0; i < trebuchetCount; i++)
+            {
+                Trebuchet trebuchet = Instantiate(trebuchetPrefab, transform.position
+                                                                     + new Vector3(trebuchetSpawnAreaLowerLeft.x, 0, trebuchetSpawnAreaLowerLeft.y)
+                                                                     + new Vector3(i * horizSpacing, 0, trebuchetPositions[i] * vertSpace), Quaternion.identity, transform.GetChild(1));
+            }
+        }
+
+        private void AssignNewTrebuchetPositions()
+        {
+            trebuchetPositions = new List<float>();
+            for (int i = 0; i < trebuchetCount; i++)
+                trebuchetPositions.Add(Random.Range(0.0f, 1.0f));
         }
 
         public void Kill(int count)
@@ -73,13 +108,39 @@ namespace Enemies
         public void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position + new Vector3(spawnMin.x, 0, spawnMin.y), transform.position + new Vector3(spawnMin.x, 0, spawnMax.y));
-            Gizmos.DrawLine(transform.position + new Vector3(spawnMin.x, 0, spawnMin.y), transform.position + new Vector3(spawnMax.x, 0, spawnMin.y));
+            Gizmos.DrawLine(transform.position + new Vector3(spawnAreaLowerLeft.x, 0, spawnAreaLowerLeft.y), transform.position + new Vector3(spawnAreaLowerLeft.x, 0, spawnAreaUpperRight.y));
+            Gizmos.DrawLine(transform.position + new Vector3(spawnAreaLowerLeft.x, 0, spawnAreaLowerLeft.y), transform.position + new Vector3(spawnAreaUpperRight.x, 0, spawnAreaLowerLeft.y));
 
-            Gizmos.DrawLine(transform.position + new Vector3(spawnMax.x, 0, spawnMax.y), transform.position + new Vector3(spawnMin.x, 0, spawnMax.y));
-            Gizmos.DrawLine(transform.position + new Vector3(spawnMax.x, 0, spawnMax.y), transform.position + new Vector3(spawnMax.x, 0, spawnMin.y));
+            Gizmos.DrawLine(transform.position + new Vector3(spawnAreaUpperRight.x, 0, spawnAreaUpperRight.y), transform.position + new Vector3(spawnAreaLowerLeft.x, 0, spawnAreaUpperRight.y));
+            Gizmos.DrawLine(transform.position + new Vector3(spawnAreaUpperRight.x, 0, spawnAreaUpperRight.y), transform.position + new Vector3(spawnAreaUpperRight.x, 0, spawnAreaLowerLeft.y));
+
+            // Drawing TrebuchetPositions
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(transform.position + new Vector3(trebuchetSpawnAreaLowerLeft.x, 0, trebuchetSpawnAreaLowerLeft.y), transform.position + new Vector3(trebuchetSpawnAreaLowerLeft.x, 0, trebuchetSpawnAreaUpperRight.y));
+            Gizmos.DrawLine(transform.position + new Vector3(trebuchetSpawnAreaLowerLeft.x, 0, trebuchetSpawnAreaLowerLeft.y), transform.position + new Vector3(trebuchetSpawnAreaUpperRight.x, 0, trebuchetSpawnAreaLowerLeft.y));
+
+            Gizmos.DrawLine(transform.position + new Vector3(trebuchetSpawnAreaUpperRight.x, 0, trebuchetSpawnAreaUpperRight.y), transform.position + new Vector3(trebuchetSpawnAreaLowerLeft.x, 0, trebuchetSpawnAreaUpperRight.y));
+            Gizmos.DrawLine(transform.position + new Vector3(trebuchetSpawnAreaUpperRight.x, 0, trebuchetSpawnAreaUpperRight.y), transform.position + new Vector3(trebuchetSpawnAreaUpperRight.x, 0, trebuchetSpawnAreaLowerLeft.y));
+
+            bool updatePositions = SomethingChanged();
+            if (updatePositions)
+            {
+                lastCount = trebuchetCount;
+                lastLowerLeft = trebuchetSpawnAreaLowerLeft;
+                lastUpperRight = trebuchetSpawnAreaUpperRight;
+                AssignNewTrebuchetPositions();
+            }
+            float horizSpacing = (trebuchetSpawnAreaUpperRight.x - trebuchetSpawnAreaLowerLeft.x) / Mathf.Max(1, trebuchetCount-1);
+            float vertSpace = trebuchetSpawnAreaUpperRight.y - trebuchetSpawnAreaLowerLeft.y;
+            for (int i = 0; i < trebuchetCount; i++)
+            {
+                Gizmos.DrawCube(transform.position
+                    + new Vector3(trebuchetSpawnAreaLowerLeft.x, 0, trebuchetSpawnAreaLowerLeft.y)
+                    + new Vector3(i * horizSpacing, 2.5f, trebuchetPositions[i] * vertSpace), new Vector3(1.5f, 5f, 2.6f));
+            }
         }
     }
+    
 
     public enum Formation
     {
