@@ -51,9 +51,10 @@ namespace Enemies
         {
             anim.SetFloat(_animIDRewindSpeed, Random.Range(0.8f, 1.2f));
         }
-
+        
         public void AnimEvent_Launch()
         {
+            print("Launching");
             GameObject gO = Instantiate(projectilePrefab, releasePoint.position, Quaternion.identity);
             projectile = gO.GetComponent<TargetProjectile>();
             lastSelected = SelectWallPiece();
@@ -65,6 +66,7 @@ namespace Enemies
         private void WallPieceHit()
         {
             Debug.Log("Wall piece " + lastSelected + " hit!");
+            EventManager.RaiseOnWallPieceHit(lastSelected);
         }
 
         int lastSelected = -1;

@@ -52,17 +52,19 @@ namespace Wall
         private void Start()
         {
             Inputs.Select += SetSelection;
+            EventManager.OnWallPieceHit += DamageWallSegment;
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
             if (_playerTransform == null) throw new MissingFieldException("The player transform is needed ");
             InitializeWallSegments();
             InitializeDoorControllers();
             _requestedSoldierPositions = new Queue<WallSegment>();
-            InvokeRepeating(nameof(DamageRandomSegment), 1f, 5f);
+            // InvokeRepeating(nameof(DamageRandomSegment), 1f, 5f);
         }
 
         private void OnDestroy()
         {
             Inputs.Select -= SetSelection;
+            EventManager.OnWallPieceHit -= DamageWallSegment;
         }
 
         private void Update()
@@ -281,6 +283,39 @@ namespace Wall
             {
                 segment.DamageScaffolding();
             }
+        }
+        public void RepairWallSegment(int index) 
+        {
+            if (_wallSegments.Count > index)
+            {
+                RepairWallSegment(_wallSegments[index]);
+            }
+        }
+
+        public void DamageWallSegment(int index)
+        {
+            if (_wallSegments.Count > index)
+            {
+                DamageWallSegment(_wallSegments[index]);
+            }
+            
+        }
+
+        public void RepairScaffoldingSegment(int index)
+        {
+            if (_wallSegments.Count > index)
+            {
+                RepairScaffoldingSegment(_wallSegments[index]);
+            }
+            
+        }
+
+        public void DamageScaffoldingSegment(int index)
+        {
+            if (_wallSegments.Count > index)
+            {
+                DamageScaffoldingSegment(_wallSegments[index]);
+            } 
         }
 
         private void OnTriggerEnter(Collider other)
