@@ -53,8 +53,9 @@ namespace Wall
             }
         }
 
-        public void RepairScaffolding()
+        public bool RepairScaffolding()
         {
+            if (isScaffoldingIntact) return false;
             isScaffoldingIntact = true;
             scaffoldingPiece.SetActive(true);
             RequestSoldier();
@@ -71,8 +72,9 @@ namespace Wall
             }
         }
 
-        public void RepairWall()
+        public bool RepairWall()
         {
+            if (health == 2) return false;
             health = Mathf.Min(2, health + 1);
             ChangeWallState();
             RequestSoldier();
