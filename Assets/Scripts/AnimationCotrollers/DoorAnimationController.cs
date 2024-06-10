@@ -6,7 +6,7 @@ namespace AnimationCotrollers
     public class DoorAnimationController : MonoBehaviour
     {
         private Animator anim;
-
+        public GameObject spawnpoint;
         public void Start()
         {
             anim = GetComponent<Animator> ();
