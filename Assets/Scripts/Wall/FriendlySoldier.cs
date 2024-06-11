@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Wall
 {
@@ -20,11 +22,11 @@ namespace Wall
         private int _animIDDeath;
         private int _animIDInherentSpeedup;
 
-
-        private void Start()
+        private void Awake()
         {
             AssignAnimationIDs();
             _anim = GetComponent<Animator>();
+            print(_anim + "I: " + this + " got my Controller");
             _anim.SetTrigger(_animIDStopRunning);
             _anim.SetBool(_animIDRightPlace, true);
             RandomizeLook();
@@ -42,6 +44,7 @@ namespace Wall
         
         public void MoveTo(WallSegment destination)
         {
+            _anim.SetTrigger(_animIDStartRunning);
             _targetSegment = destination;
             _targetPosition = _targetSegment.transform.position + new Vector3(0, 0, -0.5f);
             _isMoving = true;
@@ -50,6 +53,7 @@ namespace Wall
         private void Update()
         {
             if (!_isMoving) return;
+            if (!_targetSegment.IsIntact()) Die();
             transform.position = Vector3.MoveTowards(transform.position, _targetPosition, moveSpeed * Time.deltaTime);
             transform.LookAt(_targetPosition);
 
@@ -79,6 +83,7 @@ namespace Wall
         {
             print("I dieded");
             gameObject.SetActive(false); // Destroy the soldier if the scaffolding is not walkable
+            WallManager.instance.RecycleSoldier(this);
         }
 
         public void AnimEvent_ShotFired()

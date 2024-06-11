@@ -22,14 +22,16 @@ namespace Wall
         public Selection _selection;
         public Transform segmentsParent;
         public Transform doorsParent;
-        public GameObject soldierPrefab;
-        public GameObject spawnPoint;
+        public Transform soldiersParent;
         public static WallManager instance;
         public float spawnDelay = 3f;
+        public int soldierBuffer;
+        public FriendlySoldier soldierPrefab;
 
         private float _spawnTimer;
         private List<WallSegment> _wallSegments;
         private List<DoorAnimationController> _doorControllers;
+        private Queue<FriendlySoldier> _availableSoldiers;
         private Transform _playerTransform;
         private bool _nearWall;
         private WallSegment _closestSegment;
@@ -58,6 +60,14 @@ namespace Wall
             InitializeWallSegments();
             InitializeDoorControllers();
             _requestedSoldierPositions = new Queue<WallSegment>();
+            _availableSoldiers = new Queue<FriendlySoldier>();
+
+            for (var i = 0; i < soldierBuffer; i++)
+            {
+                var soldier = Instantiate(soldierPrefab, soldiersParent);
+                soldier.gameObject.SetActive(false);
+                _availableSoldiers.Enqueue(soldier);
+            }
             // InvokeRepeating(nameof(DamageRandomSegment), 1f, 5f);
         }
 
@@ -182,24 +192,28 @@ namespace Wall
         private void TrySpawnSoldier()
         {
             if (_requestedSoldierPositions.Count <= 0) return;
-            if (_spawnTimer <= 0)
-            {
-                SpawnSoldier(_requestedSoldierPositions.Dequeue());
-                _spawnTimer = spawnDelay; // Reset the spawn timer
-                print("Dequeued and spawned; remaining: " + _requestedSoldierPositions.Count);
-            }
+            if (!(_spawnTimer <= 0)) return;
+            SpawnSoldier(_requestedSoldierPositions.Dequeue());
+            _spawnTimer = spawnDelay; // Reset the spawn timer
+            print("Dequeued and spawned; remaining: " + _requestedSoldierPositions.Count);
         }
 
         
-        // TODO Select correct door/spawn point
         private void SpawnSoldier(WallSegment segment)
         {
             var door = GetClosestDoor(segment.transform.position);
-            segment.soldier.gameObject.SetActive(true);
-            segment.soldier.transform.position = _doorControllers[door].spawnpoint.transform.position;
+            var soldier = _availableSoldiers.Dequeue();
+            soldier.transform.position = _doorControllers[door].spawnpoint.transform.position;
+            soldier.gameObject.SetActive(true);
+            print(soldier.isActiveAndEnabled);
             _doorControllers[door].Open();
-            segment.soldier.MoveTo(segment);
-            
+            soldier.MoveTo(segment);
+        }
+
+        public void RecycleSoldier(FriendlySoldier soldier)
+        {
+            soldier.transform.SetParent(soldiersParent);
+            _availableSoldiers.Enqueue(soldier);
         }
 
         private void OnDrawGizmos()
