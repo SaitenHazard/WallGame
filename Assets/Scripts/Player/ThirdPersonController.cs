@@ -127,7 +127,6 @@ namespace Player
             EventManager.OnReplenishStone += FillStone;
 
             Inputs.Jump += Jump;
-
         }
 
         private void OnDestroy()
