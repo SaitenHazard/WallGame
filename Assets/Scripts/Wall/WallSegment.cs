@@ -101,5 +101,10 @@ namespace Wall
             isSoldierPresent = true;
             soldier.transform.SetParent(transform);
         }
+
+        public bool IsIntact()
+        {
+            return isScaffoldingIntact && health == 2;
+        }
     }
 }
