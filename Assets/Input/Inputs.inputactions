@@ -270,15 +270,6 @@
             "id": "c5fe0631-f76c-4fdd-a434-189e9d4c3101",
             "actions": [
                 {
-                    "name": "Fire",
-                    "type": "Button",
-                    "id": "ba44ce0a-67e7-4eee-b71e-139bce9dc1e7",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Aim",
                     "type": "Value",
                     "id": "860da43a-70cd-496f-8ca9-89c72a6fca19",
@@ -298,28 +289,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "dc13381b-e073-4ed3-9e11-8c296c00be5b",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Fire",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "aa37a5d3-60a6-4de7-aa6f-f2824510f077",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad;Xbox Controller;PS4 Controller",
-                    "action": "Fire",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "aa68f6c6-cf64-4e2b-95a6-cc0faff63966",

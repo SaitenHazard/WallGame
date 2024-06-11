@@ -94,6 +94,8 @@ namespace Player
         private GameObject _walther;
         private CharacterController _controller;
         private Inputs _input;
+        private InputActionMap _actionMapNormal;
+        private InputActionMap _actionMapCatapult;
     
         private GameObject _mainCamera;
 
@@ -125,7 +127,6 @@ namespace Player
             EventManager.OnReplenishStone += FillStone;
 
             Inputs.Jump += Jump;
-
         }
 
         private void OnDestroy()
@@ -147,6 +148,8 @@ namespace Player
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<Inputs>();
             _playerInput = GetComponent<PlayerInput>();
+            _actionMapNormal = _playerInput.actions.FindActionMap("Normal", true);
+            _actionMapCatapult= _playerInput.actions.FindActionMap("Catapult", true);
 
             AssignActionMapIDs();
 
@@ -354,9 +357,9 @@ namespace Player
         {
             CancelVelocity();
             //Switch to Action map Catapult
-            _playerInput.actions.FindActionMap("Catapult", true).Enable();
-            _playerInput.actions.FindActionMap("Normal", true).Disable();
-            _controller.enabled = false;
+            // _controller.enabled = false;
+            _actionMapNormal.Disable();
+            _actionMapCatapult.Enable();
             _currentState = PlayerState.InCatapult;
             transform.position = catapultBowl.position;
             transform.parent = catapultBowl;
@@ -368,12 +371,12 @@ namespace Player
         {
             CancelVelocity();
             //Switch to action map Normal
-            _playerInput.actions.FindActionMap("Normal", true).Enable();
-            _playerInput.actions.FindActionMap("Catapult", true).Disable();
+            _actionMapNormal.Enable();
+            _actionMapCatapult.Disable();
             _currentState = PlayerState.Normal;
             transform.position = dropOffPoint.position;
             transform.parent = null;
-            _controller.enabled = true;
+            // _controller.enabled = true;
         }
 
         private float _launchTime;
@@ -386,14 +389,14 @@ namespace Player
             EventManager.RaisePlayerStunned(launchDuration);
             //Switch to action map Normal
             _launchTime = Time.time;
-            _playerInput.actions.FindActionMap("Normal", true).Enable();
-            _playerInput.actions.FindActionMap("Catapult", true).Disable();
+            _actionMapNormal.Enable();
+            _actionMapCatapult.Disable();
             _currentState = PlayerState.Launched;
             _launchPath = path;
             _launchPathLength = vertexCount;
             Invoke(nameof(DoneLaunching), launchDuration);
             transform.parent = null;
-            _controller.enabled = true;
+            // _controller.enabled = true;
             _animController.Launching(true);
         }
 
