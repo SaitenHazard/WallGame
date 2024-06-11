@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using Wall;
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
@@ -85,6 +86,8 @@ namespace Player
         // inventory
         public int _stone = 1;
         public int _wood = 1;
+        // Input
+        private Vector2 _move;
 
         // timeout
         private float _jumpTimeoutDelta;
@@ -124,8 +127,6 @@ namespace Player
             EventManager.OnReplenishWood += FillWood;
             EventManager.OnReplenishStone += FillStone;
 
-            Inputs.Jump += Jump;
-
         }
 
         private void OnDestroy()
@@ -136,7 +137,6 @@ namespace Player
             EventManager.OnCatapultFire -= GetLaunched;
             EventManager.OnReplenishWood -= FillWood;
             EventManager.OnReplenishStone -= FillStone;
-            Inputs.Jump -= Jump;
         }
 
         private void Start()
@@ -178,6 +178,11 @@ namespace Player
         {
             // TODO
         }
+        
+        private void OnMove(InputValue value)
+        {
+            _move = value.Get<Vector2>();
+        }
     
 
         private void GroundedCheck()
@@ -208,13 +213,13 @@ namespace Player
 
             // note: Vector2's == operator uses approximation so is not floating point error-prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
-            if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+            if (_move == Vector2.zero) targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
             float speedOffset = 0.1f;
-            float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+            float inputMagnitude = _input.analogMovement ? _move.magnitude : 1f;
 
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset ||
@@ -237,11 +242,11 @@ namespace Player
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
             // normalise input direction
-            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+            Vector3 inputDirection = new Vector3(_move.x, 0.0f, _move.y).normalized;
 
             // note: Vector2's != operator uses approximation so is not floating point error-prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (_input.move != Vector2.zero)
+            if (_move != Vector2.zero)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   _mainCamera.transform.eulerAngles.y;
@@ -322,9 +327,9 @@ namespace Player
             }
         }
 
-        private void Jump()
+        private void OnJump(InputValue value)
         {
-            if (_currentState == PlayerState.Normal && _jumpTimeoutDelta <= 0.0f)
+            if (value.isPressed && _currentState == PlayerState.Normal && _jumpTimeoutDelta <= 0.0f)
             {
                 // the square root of H * -2 * G = how much velocity needed to reach desired height
                 _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -466,6 +471,12 @@ namespace Player
         {
             return _stone > 0;
         }
+
+        // private bool RepairWood()
+        // {
+            // if (_wood <= 0) return false;
+            // WallManager.
+        // }
 
         
         

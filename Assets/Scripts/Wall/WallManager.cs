@@ -14,9 +14,10 @@ namespace Wall
     {
         public enum Selection
         {
-            Scaffolding,
-            Wall,
-            OverheadScaffolding
+            None,
+            Left,
+            Right,
+            Up
         }
 
         public Selection _selection;
@@ -53,7 +54,6 @@ namespace Wall
 
         private void Start()
         {
-            Inputs.Select += SetSelection;
             EventManager.OnWallPieceHit += DamageWallSegment;
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
             if (_playerTransform == null) throw new MissingFieldException("The player transform is needed ");
@@ -73,28 +73,39 @@ namespace Wall
 
         private void OnDestroy()
         {
-            Inputs.Select -= SetSelection;
             EventManager.OnWallPieceHit -= DamageWallSegment;
         }
 
         private void Update()
         {
-            if (_nearWall)
-            {
-                _closestSegment = _wallSegments[GetClosestWallSegment(_playerTransform.position)];
-                _closestGizmo = _closestSegment.transform.position;
-            }
+            // if (_nearWall)
+            // {
+            //     _closestSegment = _wallSegments[GetClosestWallSegment(_playerTransform.position)];
+            //     _closestGizmo = _closestSegment.transform.position;
+            // }
 
             TrySpawnSoldier();
             _spawnTimer -= Time.deltaTime;
         }
 
-        private void SetSelection(InputValue value)
+        private void OnSelect(InputValue value)
         {
             var input = value.Get<Vector2>();
-            _selection += (int)input.y;
-            if ((int)_selection == -1) _selection = Selection.Scaffolding;
-            if ((int)_selection == 3) _selection = Selection.OverheadScaffolding;
+            print(input);
+            // _selection += (int)input.y;
+            // if ((int)_selection == -1) _selection = Selection.Scaffolding;
+            // if ((int)_selection == 3) _selection = Selection.OverheadScaffolding;
+            _selection = (input.x, input.y) switch
+            {
+                // Left
+                (-1, 0) => Selection.Left,
+                // Right
+                (1, 0) => Selection.Right,
+                // Up
+                (0, 1) => Selection.Up,
+                // None
+                _ => Selection.None
+            };
         }
 
         private void InitializeWallSegments()
@@ -129,23 +140,23 @@ namespace Wall
         }
 
 
-        private int GetClosestWallSegment(Vector3 position)
-        {
-            var closestIndex = GetClosestWallSegmentDirect(position);
-            switch (_selection)
-            {
-                case Selection.OverheadScaffolding:
-                    if (closestIndex + 5 < _wallSegments.Count) return closestIndex + 5;
-                    _selection = Selection.Wall;
-                    return closestIndex;
-                case Selection.Wall:
-                    return closestIndex;
-                case Selection.Scaffolding:
-                    return closestIndex;
-                default:
-                    return closestIndex;
-            }
-        }
+        // private int GetClosestWallSegment(Vector3 position)
+        // {
+        //     var closestIndex = GetClosestWallSegmentDirect(position);
+        //     switch (_selection)
+        //     {
+        //         case Selection.OverheadScaffolding:
+        //             if (closestIndex + 5 < _wallSegments.Count) return closestIndex + 5;
+        //             _selection = Selection.Wall;
+        //             return closestIndex;
+        //         case Selection.Wall:
+        //             return closestIndex;
+        //         case Selection.Scaffolding:
+        //             return closestIndex;
+        //         default:
+        //             return closestIndex;
+        //     }
+        // }
 
         private int GetClosestWallSegmentDirect(Vector3 position)
         {
@@ -225,30 +236,31 @@ namespace Wall
         {
             switch (_selection)
             {
-                case Selection.OverheadScaffolding:
+                case Selection.Left:
                     if (player.CanRepairWood())
-                    {
+                    {   
                         DamageScaffoldingSegment(_closestSegment);
                         player.IncrementWood(-1);
                     }
-
+            
                     break;
-                case Selection.Wall:
+                case Selection.Right:
                     if (player.CanRepairStone())
                     {
                         RepairWallSegment(_closestSegment);
                         player.IncrementStone(-1);
                     }
-
+            
                     break;
-                case Selection.Scaffolding:
+                case Selection.Up:
                     if (player.CanRepairWood())
                     {
                         DamageScaffoldingSegment(_closestSegment);
                         player.IncrementWood(-1);
                     }
-
                     break;
+                case Selection.None:
+                    
                 default:
                     throw new ArgumentOutOfRangeException();
             }

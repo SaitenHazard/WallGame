@@ -40,6 +40,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "RepairWood",
+                    "type": "Button",
+                    "id": "e2e32805-4e09-44b6-a673-6afe870db354",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RepairStone",
+                    "type": "Button",
+                    "id": "49274acb-fa06-4d63-a8ce-f510ce89afe7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -212,7 +230,7 @@
                     "name": "Gamepad",
                     "id": "599ba77d-1b34-4971-826a-64ecb1bf4694",
                     "path": "2DVector",
-                    "interactions": "Press",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Select",
@@ -262,6 +280,28 @@
                     "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "334add75-50b3-46c0-84a0-8d7d70af141f",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad;Xbox Controller;PS4 Controller",
+                    "action": "RepairWood",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "be6eddea-5dcd-442d-85e2-028c1b435302",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad;Xbox Controller;PS4 Controller",
+                    "action": "RepairStone",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

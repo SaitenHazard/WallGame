@@ -3,6 +3,7 @@ using Input;
 using Player;
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Interaction
 {
@@ -20,13 +21,6 @@ namespace Interaction
         private void Awake()
         {
             _controller = GetComponent<ThirdPersonController>();
-
-            Inputs.Interact += Interact;
-        }
-
-        private void OnDestroy()
-        {
-            Inputs.Interact -= Interact;
         }
 
         private Interaction _interact;    
@@ -51,9 +45,9 @@ namespace Interaction
             _interact = _ => { print("No interactable nearby"); };
         }
 
-        private void Interact()
+        private void OnInteract(InputValue value)
         {
-            _interact?.Invoke(_controller);
+            if (value.isPressed) _interact?.Invoke(_controller);
         }
     }
 }

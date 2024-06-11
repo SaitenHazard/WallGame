@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Player;
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Interaction
 {
@@ -178,8 +179,10 @@ namespace Interaction
 
         }
 
-        public void Aim(Vector2 input)
+        public void OnAim(InputValue value)
         {
+            if (value == null) return;
+            var input = value.Get<Vector2>();
             //Debug.Log("Aiming!" + input);
             float clamped = Mathf.Abs(input.x) > 0.1 ? input.x : 0;
             anim.SetFloat("Rotation", -1 * clamped);
