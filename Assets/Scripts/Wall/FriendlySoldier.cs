@@ -26,7 +26,6 @@ namespace Wall
         {
             AssignAnimationIDs();
             _anim = GetComponent<Animator>();
-            print(_anim + "I: " + this + " got my Controller");
             _anim.SetTrigger(_animIDStopRunning);
             _anim.SetBool(_animIDRightPlace, true);
             RandomizeLook();

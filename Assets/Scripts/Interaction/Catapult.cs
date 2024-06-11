@@ -48,6 +48,7 @@ namespace Interaction
 
         void Start()
         {
+            // Why is the Catapult subscribing to the event it invokes itself?
             anim = GetComponent<Animator>();
             lineRenderer = GetComponentInChildren<LineRenderer>();
             EventManager.OnEnterCatapult += StartAiming;
@@ -67,6 +68,7 @@ namespace Interaction
         {
             if (_inCatapult)
             {
+                print("Invoking");
                 _inCatapult = false;
                 ready = false;
                 Vector3[] path = new Vector3[lineRenderer.positionCount];

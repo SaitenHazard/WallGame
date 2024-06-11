@@ -16,14 +16,14 @@ namespace Input
         [Header("Mouse Cursor Settings")] public bool cursorLocked = true;
         public bool cursorInputForLook = true;
 
-        public delegate void OnInput(InputValue value);
+        public delegate void OnInputVector2(Vector2 value);
 
         public delegate void OnInputNoParams();
 
         public static event OnInputNoParams Jump;
         public static event OnInputNoParams Interact;
 
-        public static event OnInput Select;
+        public static event OnInputVector2 Select;
 
         private Catapult catapult;
 
@@ -33,41 +33,41 @@ namespace Input
             if (catapult == null)
             {
                 Debug.LogWarning("Inputs.cs could not find a Catapult.cs script in the scene and is now deactivated. Make sure to include a Catapult prefab in the scene and activate its Catapult.cs component!");
-                this.enabled = false;
+                enabled = false;
             }
         }
 
-        public void OnMove(InputValue value)
+        public void OnMove(InputAction.CallbackContext context)
         {
-            move = value.Get<Vector2>();
+            move = context.ReadValue<Vector2>();
         }
 
-        public void OnJump(InputValue value)
+        public void OnJump(InputAction.CallbackContext context)
         {
-            if (value.isPressed)
+            if (context.started)
             {
                 Jump?.Invoke();
             }
         }
 
-        public void OnInteract(InputValue value)
+        public void OnInteract(InputAction.CallbackContext context)
         {
-            if (value.isPressed)
+            if (context.started)
             {
                 Interact?.Invoke();
             }
         }
 
-        public void OnSelect(InputValue value)
+        public void OnSelect(InputAction.CallbackContext context)
         {
-            Select?.Invoke(value);
+            Select?.Invoke(context.ReadValue<Vector2>());
         }
 
-        public void OnAim(InputValue input)
+        public void OnAim(InputAction.CallbackContext context)
         {
-            if (input != null)
+            if (context.started)
             {
-                catapult.Aim(input.Get<Vector2>());
+                catapult.Aim(context.ReadValue<Vector2>());
             }
         }
 

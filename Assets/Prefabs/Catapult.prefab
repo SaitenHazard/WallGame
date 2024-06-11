@@ -407,7 +407,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3073be19bd523894fbcdc822bc76df7c,
         type: 3}
       propertyPath: m_Name
-      value: Catapult Interactable Variant (1)
+      value: Catapult
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3073be19bd523894fbcdc822bc76df7c, type: 3}
@@ -417,6 +417,19 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 979190146792443406}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &3448319576107628856
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 96723564495729503}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.7350245, y: 0.27000004, z: 2.8176174}
+  m_Center: {x: -0.002717813, y: 0.18, z: 0.043232284}
 --- !u!95 &2319105587769940932
 Animator:
   serializedVersion: 5
@@ -438,19 +451,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!65 &3448319576107628856
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 96723564495729503}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.7350245, y: 0.27000004, z: 2.8176174}
-  m_Center: {x: -0.002717813, y: 0.18, z: 0.043232284}
 --- !u!114 &3448319576107628860
 MonoBehaviour:
   m_ObjectHideFlags: 0
