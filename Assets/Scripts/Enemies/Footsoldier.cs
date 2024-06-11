@@ -15,15 +15,18 @@ namespace Enemies
 
         public float _moveSpeed = 0.1f;
 
+        private float drift = 0.0f;
+
         private void Start()
         {
             offsetMove = Random.Range(0, 6.28f);
             startPosition = transform.position;
+            drift = Random.Range(-0.05f, 0.05f);
         }
 
         private void Update()
         {
-            transform.position = startPosition + new Vector3(0, _vibing+_vibing * Mathf.Sin(_ecstasy * (offsetMove + Time.time)), -Time.time * _moveSpeed);
+            transform.position = startPosition + new Vector3(drift*3, _vibing+_vibing * Mathf.Sin(_ecstasy * (offsetMove + Time.time)), -Time.time * _moveSpeed*3);
         }
 
         public void SetUp(float vibing, float ecstasy, float moveSpeed)

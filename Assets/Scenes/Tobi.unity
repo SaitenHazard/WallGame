@@ -918,6 +918,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7494733541605876550, guid: 9d3d102869b4ce34bb2e17848722d2c3,
+        type: 3}
+      propertyPath: m_Name
+      value: Trebuchet Parent
+      objectReference: {fileID: 0}
     - target: {fileID: 7494733541712630480, guid: 9d3d102869b4ce34bb2e17848722d2c3,
         type: 3}
       propertyPath: m_RootOrder
@@ -977,6 +982,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ArmeeController
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494733541712630487, guid: 9d3d102869b4ce34bb2e17848722d2c3,
+        type: 3}
+      propertyPath: trebuchetSpawnAreaLowerLeft.x
+      value: -25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494733541712630487, guid: 9d3d102869b4ce34bb2e17848722d2c3,
+        type: 3}
+      propertyPath: trebuchetSpawnAreaUpperRight.x
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494733542117577529, guid: 9d3d102869b4ce34bb2e17848722d2c3,
+        type: 3}
+      propertyPath: m_Name
+      value: Footsoldier Parent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d3d102869b4ce34bb2e17848722d2c3, type: 3}

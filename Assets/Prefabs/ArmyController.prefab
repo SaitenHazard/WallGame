@@ -78,14 +78,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trebuchetPrefab: {fileID: 1694601126, guid: e695a6378d5f57449acbff51b1519928, type: 3}
-  trebuchetSpawnAreaLowerLeft: {x: -27.95, y: -2.07}
-  trebuchetSpawnAreaUpperRight: {x: 38.4, y: 13.6}
+  trebuchetSpawnAreaLowerLeft: {x: -50, y: 20}
+  trebuchetSpawnAreaUpperRight: {x: 50, y: 10}
   trebuchetCount: 5
-  projectileFlightTime: 0
+  projectileFlightTime: 2.5
+  _reloadSpeed: 1
   soldierPrefab: {fileID: 2529088511995973569, guid: 235057aedc7268647abc97ceb6972cac,
     type: 3}
-  spawnAreaLowerLeft: {x: -24.95, y: -19.47}
-  spawnAreaUpperRight: {x: 33.93, y: 20.35}
+  spawnAreaLowerLeft: {x: -30, y: -20}
+  spawnAreaUpperRight: {x: 30, y: 15}
   enemyCount: 300
   vibing: 0.05
   ecstasy: 6

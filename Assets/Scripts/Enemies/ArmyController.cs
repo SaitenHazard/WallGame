@@ -14,11 +14,12 @@ namespace Enemies
         public Vector2 trebuchetSpawnAreaUpperRight;
         [Tooltip("Numbers of trebuchets spawned at startup")]
         public int trebuchetCount = 5;
-
-        private List<float> trebuchetPositions; // vertical positions [0..1] relative to avaliable space
-
         [Tooltip("Fligth Time of the trebuchet rounds in seconds")]
         public float projectileFlightTime;
+        [Range(0.01f, 5f)]
+        public float _reloadSpeed = 1;
+
+        private List<float> trebuchetPositions; // vertical positions [0..1] relative to avaliable space
 
         private int lastCount = 0;
         private Vector2 lastLowerLeft = Vector2.zero;
@@ -85,6 +86,7 @@ namespace Enemies
                 Trebuchet trebuchet = Instantiate(trebuchetPrefab, transform.position
                                                                      + new Vector3(trebuchetSpawnAreaLowerLeft.x, 0, trebuchetSpawnAreaLowerLeft.y)
                                                                      + new Vector3(i * horizSpacing, 0, trebuchetPositions[i] * vertSpace), Quaternion.identity, transform.GetChild(1));
+                trebuchet.SetUp(projectileFlightTime, _reloadSpeed);
             }
         }
 
@@ -130,6 +132,7 @@ namespace Enemies
                 lastUpperRight = trebuchetSpawnAreaUpperRight;
                 AssignNewTrebuchetPositions();
             }
+#if UNITY_EDITOR
             float horizSpacing = (trebuchetSpawnAreaUpperRight.x - trebuchetSpawnAreaLowerLeft.x) / Mathf.Max(1, trebuchetCount-1);
             float vertSpace = trebuchetSpawnAreaUpperRight.y - trebuchetSpawnAreaLowerLeft.y;
             for (int i = 0; i < trebuchetCount; i++)
@@ -138,6 +141,7 @@ namespace Enemies
                     + new Vector3(trebuchetSpawnAreaLowerLeft.x, 0, trebuchetSpawnAreaLowerLeft.y)
                     + new Vector3(i * horizSpacing, 2.5f, trebuchetPositions[i] * vertSpace), new Vector3(1.5f, 5f, 2.6f));
             }
+#endif
         }
     }
     
