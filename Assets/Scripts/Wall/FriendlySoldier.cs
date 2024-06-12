@@ -1,3 +1,4 @@
+using Enemies;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,9 +13,21 @@ namespace Wall
         private bool _isMoving;
         private WallSegment _targetSegment;
         private Animator _anim;
+
+        [SerializeField]
+        private float _boltFlightTime = 2;
+
+        [SerializeField]
+        private TargetProjectile boltPrefab;
+
+        [SerializeField]
+        private Transform releasePoint;
+
         [SerializeField]
         private List<GameObject> helmetVariants;
         
+        private ArmyController armyController;
+
         // Animation IDs
         private int _animIDStartRunning;
         private int _animIDStopRunning;
@@ -26,11 +39,12 @@ namespace Wall
         {
             AssignAnimationIDs();
             _anim = GetComponent<Animator>();
-            print(_anim + "I: " + this + " got my Controller");
+            //print(_anim + "I: " + this + " got my Controller");
             _anim.SetTrigger(_animIDStopRunning);
             _anim.SetBool(_animIDRightPlace, true);
             RandomizeLook();
             RandomizeSpeed(0.95f, 1.05f);
+            armyController = FindObjectOfType<ArmyController>();
         }
 
         private void AssignAnimationIDs()
@@ -81,21 +95,21 @@ namespace Wall
         // Invoked by Soldier Animator after Death Animation has finished
         private void FriendlySoldierDeath()
         {
-            print("I dieded");
+            //print("I dieded");
             gameObject.SetActive(false); // Destroy the soldier if the scaffolding is not walkable
             WallManager.instance.RecycleSoldier(this);
         }
 
         public void AnimEvent_ShotFired()
         {
-            Debug.Log("NEEDAD TO BE FIZED!");
-           //Invoke("boltArrives", 2);
-        //
-          // TargetProjectile boltGO = Instantiate(boltPrefab, releasePoint.position, releasePoint.rotation);
-        //   boltGO.SetDestination(boltReceiver.GetFootsoldierPosition());
-          // boltGO.SetFlightTime(2.0f);
-        //
-        //   RandomizeSpeed(0.95f, 1.05f); // Each shot is done with a little bit of different speed
+            armyController.Invoke("BoltArrives", _boltFlightTime);
+        
+            TargetProjectile bolt = Instantiate(boltPrefab, releasePoint.position, releasePoint.rotation);
+            Vector3 nextVictim = armyController.GetFootsoldierPosition();
+            bolt.SetDestination(nextVictim);
+            bolt.SetFlightTime(_boltFlightTime);
+        
+            RandomizeSpeed(0.95f, 1.05f); // Each shot is done with a little bit of different speed
         }
 
         private void RandomizeLook()

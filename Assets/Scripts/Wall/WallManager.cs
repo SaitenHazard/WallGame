@@ -19,6 +19,9 @@ namespace Wall
             OverheadScaffolding
         }
 
+        public int wallRows;
+        public int wallColumns;
+
         public Selection _selection;
         public Transform segmentsParent;
         public Transform doorsParent;
@@ -182,6 +185,11 @@ namespace Wall
 
             return closestDoor;
 
+        }
+
+        public Vector3 GetWallSegmentPosition(int index)
+        {
+            return _wallSegments[index].transform.position; 
         }
             
         public bool IsWalkable(Vector3 position)
