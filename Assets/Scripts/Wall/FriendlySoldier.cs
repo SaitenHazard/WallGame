@@ -87,7 +87,7 @@ namespace Wall
 
         public void AnimEvent_ShotFired()
         {
-            Debug.Log("NEEDAD TO BE FIZED!");
+            // Debug.Log("NEEDAD TO BE FIZED!");
            //Invoke("boltArrives", 2);
         //
           // TargetProjectile boltGO = Instantiate(boltPrefab, releasePoint.position, releasePoint.rotation);

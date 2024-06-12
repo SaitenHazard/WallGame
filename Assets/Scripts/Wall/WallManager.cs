@@ -2,22 +2,31 @@ using System;
 using System.Collections.Generic;
 using AnimationCotrollers;
 using Input;
-using Interaction;
 using Player;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 namespace Wall
 {
-    public class WallManager : MonoBehaviour, IInteractable
+    public class WallManager : MonoBehaviour
     {
         public enum Selection
         {
-            Scaffolding,
-            Wall,
-            OverheadScaffolding
+            None,
+            Left,
+            Right,
+            Up
         }
+
+        public enum HighlightingMode
+        {
+            Always,
+            OnAdjacent,
+            Never
+        }
+
+        public HighlightingMode highlightingMode;
 
         public Selection _selection;
         public Transform segmentsParent;
@@ -27,6 +36,8 @@ namespace Wall
         public float spawnDelay = 3f;
         public int soldierBuffer;
         public FriendlySoldier soldierPrefab;
+        public ThirdPersonController player;
+        public int width = 5;
 
         private float _spawnTimer;
         private List<WallSegment> _wallSegments;
@@ -35,6 +46,7 @@ namespace Wall
         private Transform _playerTransform;
         private bool _nearWall;
         private WallSegment _closestSegment;
+        private WallSegment _previousClosestSegment;
         private Vector3 _closestGizmo;
         private Queue<WallSegment> _requestedSoldierPositions;
 
@@ -49,18 +61,22 @@ namespace Wall
             {
                 Destroy(gameObject);
             }
+
+            _requestedSoldierPositions = new Queue<WallSegment>();
+            _availableSoldiers = new Queue<FriendlySoldier>();
         }
 
         private void Start()
         {
             Inputs.Select += SetSelection;
+            Inputs.RepairWood += RepairScaffoldingSegment;
+            Inputs.RepairStone += RepairWallSegment;
             EventManager.OnWallPieceHit += DamageWallSegment;
-            _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonController>();
+            _playerTransform = player.transform;
             if (_playerTransform == null) throw new MissingFieldException("The player transform is needed ");
             InitializeWallSegments();
             InitializeDoorControllers();
-            _requestedSoldierPositions = new Queue<WallSegment>();
-            _availableSoldiers = new Queue<FriendlySoldier>();
 
             for (var i = 0; i < soldierBuffer; i++)
             {
@@ -68,21 +84,44 @@ namespace Wall
                 soldier.gameObject.SetActive(false);
                 _availableSoldiers.Enqueue(soldier);
             }
+
+            foreach (var se in _wallSegments)
+            {
+                DamageWallSegment(se);
+            }
             // InvokeRepeating(nameof(DamageRandomSegment), 1f, 5f);
         }
 
         private void OnDestroy()
         {
             Inputs.Select -= SetSelection;
+            Inputs.RepairWood -= RepairScaffoldingSegment;
+            Inputs.RepairStone -= RepairWallSegment;
             EventManager.OnWallPieceHit -= DamageWallSegment;
         }
 
         private void Update()
         {
-            if (_nearWall)
+            if (highlightingMode == HighlightingMode.Always && _nearWall)
             {
-                _closestSegment = _wallSegments[GetClosestWallSegment(_playerTransform.position)];
-                _closestGizmo = _closestSegment.transform.position;
+                var closestSegmentDirect = GetClosestSegmentDirect(_playerTransform.position);
+                var indexSelection = IndexToSelection(closestSegmentDirect);
+                _closestSegment = indexSelection == -1 || !_wallSegments[indexSelection].WallDamaged() ? _wallSegments[closestSegmentDirect] : _wallSegments[indexSelection];
+
+                if (!_previousClosestSegment || !_previousClosestSegment.Equals(_closestSegment))
+                {
+                    if (_previousClosestSegment)
+                    {
+                        _previousClosestSegment.SetPreview(false);
+                    }
+                    print(_closestSegment);
+                    foreach (var segm in _wallSegments)
+                    {
+                        print(segm);
+                    }
+                    _closestSegment.SetPreview(true);
+                    _previousClosestSegment = _closestSegment;
+                }
             }
 
             TrySpawnSoldier();
@@ -91,9 +130,14 @@ namespace Wall
 
         private void SetSelection(Vector2 value)
         {
-            _selection += (int)value.y;
-            if ((int)_selection == -1) _selection = Selection.Scaffolding;
-            if ((int)_selection == 3) _selection = Selection.OverheadScaffolding;
+            _selection = (value.x, value.y) switch
+            {
+                (-1, 0) => Selection.Left,
+                (1, 0) => Selection.Right,
+                (0, 1) => Selection.Up,
+                _ => Selection.None
+            };
+            print(_selection);
         }
 
         private void InitializeWallSegments()
@@ -111,6 +155,7 @@ namespace Wall
                 }
             }
         }
+
         private void InitializeDoorControllers()
         {
             // Clear the existing list
@@ -127,26 +172,25 @@ namespace Wall
             }
         }
 
-
-        private int GetClosestWallSegment(Vector3 position)
+        private int GetClosestSegmentSelection(Vector3 position)
         {
-            var closestIndex = GetClosestWallSegmentDirect(position);
-            switch (_selection)
-            {
-                case Selection.OverheadScaffolding:
-                    if (closestIndex + 5 < _wallSegments.Count) return closestIndex + 5;
-                    _selection = Selection.Wall;
-                    return closestIndex;
-                case Selection.Wall:
-                    return closestIndex;
-                case Selection.Scaffolding:
-                    return closestIndex;
-                default:
-                    return closestIndex;
-            }
+            return IndexToSelection(GetClosestSegmentDirect(position));
+            
         }
 
-        private int GetClosestWallSegmentDirect(Vector3 position)
+        private int IndexToSelection(int index)
+        {
+            return _selection switch
+            {
+                Selection.Left => index - 1 < 0 || (index - 1) % width > index % width ? -1 : index - 1,
+                Selection.Right => index + 1 > _wallSegments.Count || (index + 1) % width < index % width ? -1 : index + 1,
+                Selection.Up => index + width > _wallSegments.Count ? -1 : index + width,
+                Selection.None => index,
+                _ => index
+            };
+        }
+
+        public int GetClosestSegmentDirect(Vector3 position)
         {
             var closestSegment = -1;
             var closestDistance = Mathf.Infinity;
@@ -168,7 +212,7 @@ namespace Wall
         {
             var closestDoor = -1;
             var closestDistance = Mathf.Infinity;
-            
+
             for (var index = 0; index < _doorControllers.Count; index++)
             {
                 var distance = Vector3.Distance(position, _doorControllers[index].transform.position);
@@ -180,12 +224,11 @@ namespace Wall
             }
 
             return closestDoor;
-
         }
-            
+
         public bool IsWalkable(Vector3 position)
         {
-            return _wallSegments[GetClosestWallSegmentDirect(position)].isScaffoldingIntact;
+            return _wallSegments[GetClosestSegmentDirect(position)].isScaffoldingIntact;
         }
 
         private void TrySpawnSoldier()
@@ -197,14 +240,13 @@ namespace Wall
             print("Dequeued and spawned; remaining: " + _requestedSoldierPositions.Count);
         }
 
-        
+
         private void SpawnSoldier(WallSegment segment)
         {
             var door = GetClosestDoor(segment.transform.position);
             var soldier = _availableSoldiers.Dequeue();
             soldier.transform.position = _doorControllers[door].spawnpoint.transform.position;
             soldier.gameObject.SetActive(true);
-            print(soldier.isActiveAndEnabled);
             _doorControllers[door].Open();
             soldier.MoveTo(segment);
         }
@@ -213,44 +255,6 @@ namespace Wall
         {
             soldier.transform.SetParent(soldiersParent);
             _availableSoldiers.Enqueue(soldier);
-        }
-
-        private void OnDrawGizmos()
-        {
-            Gizmos.DrawSphere(_closestGizmo, 0.5f);
-        }
-
-        public void Interact(ThirdPersonController player)
-        {
-            switch (_selection)
-            {
-                case Selection.OverheadScaffolding:
-                    if (player.CanRepairWood())
-                    {
-                        DamageScaffoldingSegment(_closestSegment);
-                        player.IncrementWood(-1);
-                    }
-
-                    break;
-                case Selection.Wall:
-                    if (player.CanRepairStone())
-                    {
-                        RepairWallSegment(_closestSegment);
-                        player.IncrementStone(-1);
-                    }
-
-                    break;
-                case Selection.Scaffolding:
-                    if (player.CanRepairWood())
-                    {
-                        DamageScaffoldingSegment(_closestSegment);
-                        player.IncrementWood(-1);
-                    }
-
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
         }
 
 
@@ -266,17 +270,28 @@ namespace Wall
             DamageWallSegment(_wallSegments[Random.Range(0, 4)]);
         }
 
-        public bool RepairWallSegment(WallSegment segment)
+        // If Closest Segment is not updated every frame, replace with _playerTransform.position
+        private void RepairWallSegment()
         {
-            if (segment != null && segment.wallPiece.activeSelf)
-            {
-                return segment.RepairWall();
-            }
-
-            return false;
+            var closest = GetClosestSegmentSelection(_playerTransform.position);
+            if (closest == -1) print("Can't repair that");
+            else RepairWallSegment(closest);
         }
 
-        public void DamageWallSegment(WallSegment segment)
+        private bool RepairWallSegment(int index)
+        {
+            return RepairWallSegment(_wallSegments[index]);
+        }
+
+        private bool RepairWallSegment(WallSegment segment)
+        {
+            if (segment == null || !segment.wallPiece.activeSelf || !player.CanRepairStone()) return false;
+            if (!segment.RepairWall()) return false;
+            player.IncrementStone(-1);
+            return true;
+        }
+
+        private void DamageWallSegment(WallSegment segment)
         {
             if (segment != null && segment.wallPiece.activeSelf)
             {
@@ -284,14 +299,32 @@ namespace Wall
             }
         }
 
-        public bool RepairScaffoldingSegment(WallSegment segment)
+        private void DamageWallSegment(int index)
         {
-            if (segment != null && segment.scaffoldingPiece.activeSelf)
+            if (_wallSegments.Count > index)
             {
-                return segment.RepairScaffolding();
+                DamageWallSegment(_wallSegments[index]);
             }
+        }
 
-            return false;
+        private void RepairScaffoldingSegment()
+        {
+            var closest = GetClosestSegmentSelection(_playerTransform.position);
+            if (closest == -1) print("Can't repair that");
+            else RepairScaffoldingSegment(closest);
+        }
+
+        private bool RepairScaffoldingSegment(int index)
+        {
+            return RepairScaffoldingSegment(_wallSegments[index]);
+        }
+
+        private bool RepairScaffoldingSegment(WallSegment segment)
+        {
+            if (segment == null || !segment.scaffoldingPiece.activeSelf || !player.CanRepairWood()) return false;
+            if (!segment.RepairScaffolding()) return false;
+            player.IncrementWood(-1);
+            return true;
         }
 
         public void DamageScaffoldingSegment(WallSegment segment)
@@ -301,38 +334,13 @@ namespace Wall
                 segment.DamageScaffolding();
             }
         }
-        public void RepairWallSegment(int index) 
-        {
-            if (_wallSegments.Count > index)
-            {
-                RepairWallSegment(_wallSegments[index]);
-            }
-        }
-
-        public void DamageWallSegment(int index)
-        {
-            if (_wallSegments.Count > index)
-            {
-                DamageWallSegment(_wallSegments[index]);
-            }
-            
-        }
-
-        public void RepairScaffoldingSegment(int index)
-        {
-            if (_wallSegments.Count > index)
-            {
-                RepairScaffoldingSegment(_wallSegments[index]);
-            }
-            
-        }
 
         public void DamageScaffoldingSegment(int index)
         {
             if (_wallSegments.Count > index)
             {
                 DamageScaffoldingSegment(_wallSegments[index]);
-            } 
+            }
         }
 
         private void OnTriggerEnter(Collider other)
@@ -348,7 +356,14 @@ namespace Wall
             if (other.gameObject.CompareTag("Player"))
             {
                 _nearWall = false;
+                _previousClosestSegment.SetPreview(false);
+                _previousClosestSegment = null;
             }
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawSphere(_closestGizmo, 0.5f);
         }
     }
 }

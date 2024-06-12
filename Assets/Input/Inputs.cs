@@ -22,7 +22,8 @@ namespace Input
 
         public static event OnInputNoParams Jump;
         public static event OnInputNoParams Interact;
-        public static event OnInputNoParams Fire;
+        public static event OnInputNoParams RepairWood;
+        public static event OnInputNoParams RepairStone;
 
         public static event OnInputVector2 Select;
 
@@ -56,7 +57,6 @@ namespace Input
         {
             if (context.started)
             {
-                print("Interacting" + context);
                 Interact?.Invoke();
             }
         }
@@ -66,14 +66,19 @@ namespace Input
             Select?.Invoke(context.ReadValue<Vector2>());
         }
 
+        public void OnRepairWood(InputAction.CallbackContext context)
+        {
+            if (context.started) RepairWood?.Invoke();
+        }
+
+        public void OnRepairStone(InputAction.CallbackContext context)
+        {
+            if (context.started) RepairStone?.Invoke();
+        }
+
         public void OnAim(InputAction.CallbackContext context)
         {
             catapult.Aim(context.ReadValue<Vector2>());
-        }
-
-        public void OnFire(InputAction.CallbackContext context)
-        {
-            Fire?.Invoke();
         }
 
         private void OnApplicationFocus(bool hasFocus)
