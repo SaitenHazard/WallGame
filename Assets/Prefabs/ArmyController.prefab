@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7494733541605876550
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7494733541605876549}
-  m_Layer: 0
-  m_Name: Trebuchets
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7494733541605876549
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7494733541605876550}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7494733541712630480}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7494733541712630481
 GameObject:
   m_ObjectHideFlags: 0
@@ -59,9 +28,7 @@ Transform:
   m_LocalPosition: {x: 0.570606, y: 0, z: 95.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7494733542117577528}
-  - {fileID: 7494733541605876549}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -77,50 +44,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d8bfe6b831eb4143bae5c828ab38a57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trebuchetPrefab: {fileID: 1694601126, guid: e695a6378d5f57449acbff51b1519928, type: 3}
-  trebuchetSpawnAreaLowerLeft: {x: -50, y: 20}
-  trebuchetSpawnAreaUpperRight: {x: 50, y: 10}
-  trebuchetCount: 5
-  projectileFlightTime: 2.5
-  _reloadSpeed: 1
-  soldierPrefab: {fileID: 2529088511995973569, guid: 235057aedc7268647abc97ceb6972cac,
-    type: 3}
-  spawnAreaLowerLeft: {x: -30, y: -20}
-  spawnAreaUpperRight: {x: 30, y: 15}
-  enemyCount: 300
-  vibing: 0.05
-  ecstasy: 6
-  hatred: 0.1
-  DEBUG_KillOne: 0
-  footsoldiersForefeit: 0
---- !u!1 &7494733542117577529
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7494733542117577528}
-  m_Layer: 0
-  m_Name: Footsoldiers
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7494733542117577528
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7494733542117577529}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7494733541712630480}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  enemyCount: 100
+  _trebuchetCooldown: 3
+  _targetingScheme: 4
+  _trebuchetRandomness: 0
+  fireArrowsCooldown: 19
+  fireArrowsDestruction: 0.8
+  _bowmen:
+    spawnAreaLowerLeft: {x: -27.17, y: -14.79}
+    spawnAreaUpperRight: {x: 26.3, y: -12.49}
+    prefab: {fileID: 8574338274363194620, guid: 5c6e32c0581ab554a9b663daefa469dc,
+      type: 3}
+    fireArrowPrefab: {fileID: -7798448794434159932, guid: 54999c6870a373d4b9a0c739b517a19c,
+      type: 3}
+    count: 100
+  _trebuchets:
+    spawnAreaLowerLeft: {x: -25.09, y: 9.86}
+    spawnAreaUpperRight: {x: 25.2, y: 19.18}
+    prefab: {fileID: 1694601126, guid: e695a6378d5f57449acbff51b1519928, type: 3}
+    reloadSpeed: 3
+    projectile:
+      prefab: {fileID: -6403147066047381681, guid: c3ae024c823c9884fa88310c92374b80,
+        type: 3}
+      flightTime: 2.5
+      parabolaHeight: 30
+  _footsoldiers:
+    spawnAreaLowerLeft: {x: -29.62, y: -31.7}
+    spawnAreaUpperRight: {x: 30, y: -17}
+    prefab: {fileID: 2529088511995973569, guid: 235057aedc7268647abc97ceb6972cac,
+      type: 3}
+    vibing: 0.015
+    ecstasy: 8
+    hatred: 0.05
+  consoleOutput: 0
+  DEBUG_FireArrows: 0
+  DEBUG_TrebuchetLaunch: 0
+  DEBUG_KillTrebuchet: 0
+  columnsHit: 

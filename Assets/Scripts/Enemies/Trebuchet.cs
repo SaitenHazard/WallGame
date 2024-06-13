@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Enemies
@@ -6,12 +5,11 @@ namespace Enemies
     [RequireComponent(typeof(Animator))]
     public class Trebuchet : MonoBehaviour
     {
-        public float _flightTime = 2;
+        
         [Range(0.01f, 2f)]
         public float _reloadSpeed = 1;
-        public List<GameObject> wallPieces;
 
-        public GameObject projectilePrefab;
+        public ProjectileSettings _projectileSettings;
 
         public Transform releasePoint;
 
@@ -21,8 +19,14 @@ namespace Enemies
 
         private Animator anim;
 
+        public bool ready = true;
+
         private int _animIDReadyWait;
         private int _animIDReloadSpeed;
+        private int _animIDDeath;
+
+        private Vector3 lastTarget;
+        private int lastSelectedID;
 
         void Start()
         {
@@ -30,15 +34,31 @@ namespace Enemies
         
             _animIDReadyWait = Animator.StringToHash("ReadySpeed");
             _animIDReloadSpeed = Animator.StringToHash("RewindSpeed");
+            _animIDDeath = Animator.StringToHash("Death");
 
             anim.SetFloat(_animIDReadyWait, Random.Range(0.5f, 1.5f));
         }
 
-        public void SetUp(float flightTime, float reloadTime)
+        public void SetUp(ProjectileSettings projectileSettings, float reloadAnimSpeed)
         {
-            _flightTime = flightTime;
-            _reloadSpeed = reloadTime;
+            _projectileSettings = projectileSettings;
+            _reloadSpeed = reloadAnimSpeed;
             Invoke("SetReloadSpeed", 0.1f);
+        }
+
+        public void SetFlightTime(float flightTime)
+        {
+            _projectileSettings.flightTime = flightTime;
+        }
+
+        public void SetParabolaHeight(float parabolaHeight)
+        {
+            _projectileSettings.parabolaHeight = parabolaHeight;
+        }
+
+        public void Kill()
+        {
+            anim.SetTrigger(_animIDDeath);
         }
 
         private void SetReloadSpeed()
@@ -46,41 +66,46 @@ namespace Enemies
             anim.SetFloat(_animIDReloadSpeed, _reloadSpeed);
         }
 
+        public void SetSelection(Vector3 target, int index)
+        {
+            lastTarget = target;
+            lastSelectedID = index;
+        }
+
         public void AnimEvent_DoneReloading()
         {
-            // nop
+            ready = true;
         }
         
+        public bool Launch()
+        {
+            if (lastSelectedID == -1 || lastTarget == Vector3.zero)
+            {
+                Debug.LogWarning("A Trebuchet was instructed to launch without a call to SetSelection first! This should not happen! Check Behaviour in ArmyController.cs!");
+                return false;
+            } else { 
+                anim.SetTrigger("Launch");
+                ready = false;
+                return true;
+            }
+        }
+
         public void AnimEvent_Launch()
         {
-            print("Launching");
-            GameObject gO = Instantiate(projectilePrefab, releasePoint.position, Quaternion.identity);
-            projectile = gO.GetComponent<TargetProjectile>();
-            lastSelected = SelectWallPiece();
-            if (wallPieces == null || wallPieces.Count == 0)
-            {
-                Debug.LogWarning("WallPieces Not Set! Launching towards world origin...");
-                projectile.SetDestination(Vector3.zero);
-            } else
-            {
-                projectile.SetDestination(wallPieces[lastSelected].transform.position);
-            }
+            TargetProjectile projectile = Instantiate(_projectileSettings.prefab, releasePoint.position, Quaternion.identity);
             
-            projectile.SetFlightTime(_flightTime);
-            Invoke("WallPieceHit", _flightTime);
+            projectile.SetDestination(lastTarget);
+
+            projectile.SetSettings(_projectileSettings);
+            Invoke("WallPieceHit", _projectileSettings.flightTime);
         }
 
         private void WallPieceHit()
         {
-            Debug.Log("Wall piece " + lastSelected + " hit!");
-            EventManager.RaiseOnWallPieceHit(lastSelected);
-        }
-
-        int lastSelected = -1;
-
-        private int SelectWallPiece()
-        {
-            return Random.Range(0, wallPieces.Count);
+            //Debug.Log("Wall piece " + lastSelected + " hit!");
+            EventManager.RaiseOnWallPieceHit(lastSelectedID);
+            lastTarget = Vector3.zero;
+            lastSelectedID = -1;
         }
     }
 }

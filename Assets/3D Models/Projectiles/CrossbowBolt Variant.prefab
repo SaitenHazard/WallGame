@@ -208,6 +208,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 79f060dd3b38b29488efdfd32e8437c2,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9a635d774d3b02040a726cb488ab58bd, type: 2}
     - target: {fileID: 919132149155446097, guid: 79f060dd3b38b29488efdfd32e8437c2,
         type: 3}
       propertyPath: m_Name
@@ -240,6 +245,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79f060dd3b38b29488efdfd32e8437c2, type: 3}
+--- !u!23 &3436553177663186038 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7635826562936255635, guid: 79f060dd3b38b29488efdfd32e8437c2,
+    type: 3}
+  m_PrefabInstance: {fileID: 4159372063740260123}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3852942778961416778 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 79f060dd3b38b29488efdfd32e8437c2,
@@ -258,7 +269,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23a39dd904f3131419b2e573825c9713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parabolaHeight: 5
+  _parabolaHeight: 10
+  meshRenderer: {fileID: 3436553177663186038}
 --- !u!4 &4482127985093544176 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 79f060dd3b38b29488efdfd32e8437c2,
