@@ -17,9 +17,9 @@
 - [ ] Make Damage() look nice _Karl_
 
 ### Enemies
-- [ ] Centralize Trebuchet Control into ArmyController _Tobi_
+- [x] Centralize Trebuchet Control into ArmyController _Tobi_
 - [ ] Implement Win Condition _Tobi_
-- [ ] Implement Firing Fire arrows _Tobias_
+- [x] Implement Firing Fire arrows _Tobias_
 
 ### 3D Assets
 - [ ] Place to pick up stones
