@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class EnemyHealthBar : MonoBehaviour
 {
+    
     [SerializeField] private GameObject bar;
 
     private Vector2 fullSizeDelta;
