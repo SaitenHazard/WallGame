@@ -1,4 +1,5 @@
 using System;
+using Input;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -20,19 +21,49 @@ namespace Wall
         public Mesh destroyedWall;
         public int level; //To be used to request soldier at the correct level
         public bool chosenOne;
+        public Material translucent;
 
         private MeshFilter _meshFilter;
-
+        private MeshRenderer _meshRenderer;
+        private Material _wallMaterial;
+        
         private void Start()
         {
             _meshFilter = GetComponentInChildren<MeshFilter>();
+            _meshRenderer = GetComponentInChildren<MeshRenderer>();
+            _wallMaterial = _meshRenderer.material;
             normalWall = _meshFilter.mesh;
             // UpdateSoldierState();
         }
 
-        private void ChangeWallState()
+        public bool WallDamaged()
         {
-            _meshFilter.mesh = health switch
+            return health < 2;
+        }
+        public bool ScaffoldingDamaged()
+        {
+            return isScaffoldingIntact;
+        }
+
+        public bool SetPreview(bool enabled)
+        {
+            if (enabled && health < 2)
+            {
+                ChangeWallState(health + 1);
+                _meshRenderer.material = translucent;
+                return true;
+            }
+            else
+            {
+                ChangeWallState(health);
+                _meshRenderer.material = _wallMaterial;
+                return false;
+            }
+        }
+
+        private void ChangeWallState(int state)
+        {
+            _meshFilter.mesh = state switch
             {
                 0 => destroyedWall,
                 1 => damagedWall,
@@ -65,7 +96,7 @@ namespace Wall
         public void DamageWall()
         {
             health = Mathf.Max(0, health - 1);
-            ChangeWallState();
+            ChangeWallState(health);
             if (isSoldierPresent)
             {
                 soldier.Die();
@@ -77,7 +108,7 @@ namespace Wall
         {
             if (health == 2) return false;
             health = Mathf.Min(2, health + 1);
-            ChangeWallState();
+            ChangeWallState(health);
             RequestSoldier();
             return true;
         }

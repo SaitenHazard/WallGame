@@ -15,15 +15,21 @@ namespace Enemies
 
         public float _moveSpeed = 0.1f;
 
+        private float drift = 0.0f;
+
+        private bool dead = false;
+
         private void Start()
         {
             offsetMove = Random.Range(0, 6.28f);
             startPosition = transform.position;
+            drift = Random.Range(-0.05f, 0.05f);
         }
 
         private void Update()
         {
-            transform.position = startPosition + new Vector3(0, _vibing+_vibing * Mathf.Sin(_ecstasy * (offsetMove + Time.time)), -Time.time * _moveSpeed);
+            if (!dead)
+                transform.position = startPosition + new Vector3(drift*3, _vibing+_vibing * Mathf.Sin(_ecstasy * (offsetMove + Time.time)), -Time.time * _moveSpeed*3);
         }
 
         public void SetUp(float vibing, float ecstasy, float moveSpeed)
@@ -35,13 +41,13 @@ namespace Enemies
 
         public IEnumerator Die()
         {
-            transform.parent = null;
-            for (int i = 0; i < 90; i++)
+            dead = true;
+            for (int i = 0; i < 44; i++)
             {
-                transform.Rotate(1, 0, 0);
+                transform.Rotate(2, 0, 0);
                 yield return null;
             }
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
 }

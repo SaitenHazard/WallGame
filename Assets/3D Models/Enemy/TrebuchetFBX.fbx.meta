@@ -86,10 +86,11 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.15670103
+      - time: 0.09249132
         functionName: AnimEvent_Launch
         data: 
-        objectReferenceParameter: {instanceID: 0}
+        objectReferenceParameter: {fileID: 11500000, guid: f02d5bf9aad514348a80faccb9a13692,
+          type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -103,6 +104,43 @@ ModelImporter:
       internalID: 8523633131805578189
       firstFrame: 0
       lastFrame: 280
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0.97308713
+        functionName: AnimEvent_DoneReloading
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: f02d5bf9aad514348a80faccb9a13692,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Trebuchet Armature|Trebuchet_Rewound_Wait
+      takeName: Trebuchet Armature|Trebuchet_Rewound_Wait
+      internalID: 8743205862527460638
+      firstFrame: 0
+      lastFrame: 10
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
