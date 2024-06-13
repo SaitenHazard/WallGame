@@ -40,6 +40,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "RepairWood",
+                    "type": "Button",
+                    "id": "0fae9aa7-5c59-42c8-8152-b176a8c2c447",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RepairStone",
+                    "type": "Button",
+                    "id": "2fc555c7-36dc-4077-874d-b5d55b6951e3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -262,6 +280,28 @@
                     "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "ab8f21e2-2d0e-4c0c-bf36-265bfd0771ad",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad;Xbox Controller;PS4 Controller",
+                    "action": "RepairWood",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "27a46637-0136-4cc8-88f8-4ab1be9b836c",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad;Xbox Controller;PS4 Controller",
+                    "action": "RepairStone",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
