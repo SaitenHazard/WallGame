@@ -92,10 +92,9 @@ namespace Wall
             _spawnTimer -= Time.deltaTime;
         }
 
-        private void SetSelection(InputValue value)
+        private void SetSelection(Vector2 value)
         {
-            var input = value.Get<Vector2>();
-            _selection += (int)input.y;
+            _selection += (int)value.y;
             if ((int)_selection == -1) _selection = Selection.Scaffolding;
             if ((int)_selection == 3) _selection = Selection.OverheadScaffolding;
         }
