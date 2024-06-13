@@ -229,13 +229,12 @@ namespace Wall
             return closestDoor;
         }
 
-        }
 
         public Vector3 GetWallSegmentPosition(int index)
         {
-            return _wallSegments[index].transform.position; 
+            return _wallSegments[index].transform.position;
         }
-            
+
         public bool IsWalkable(Vector3 position)
         {
             return _wallSegments[GetClosestSegmentDirect(position)].isScaffoldingIntact;
