@@ -4,6 +4,8 @@ namespace Enemies
 {
     public class ArmyController : MonoBehaviour
     {
+        public static ArmyController instance;
+
         // Start is called before the first frame update
         public GameObject soldierPrefab;
 
@@ -28,6 +30,11 @@ namespace Enemies
 
         [Tooltip("How fast the footsoldiers approach the wall")]
         public float hatred = 0.3f;
+
+        private void Awake()
+        {
+            instance = this;
+        }
 
         void Start()
         {
