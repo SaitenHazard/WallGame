@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Input;
 using UnityEditor;
 using UnityEngine;
@@ -26,15 +27,40 @@ namespace Wall
         private MeshFilter _meshFilter;
         private MeshRenderer _meshRenderer;
         private Material _wallMaterial;
-        
+
+        public WallSegmentCriticalEvent onWallSegmentCritical = new WallSegmentCriticalEvent();
+        public WallSegmentNotCriticalEvent onWallNotSegmentCritical = new WallSegmentNotCriticalEvent();
+
+
         private void Start()
         {
             _meshFilter = GetComponentInChildren<MeshFilter>();
             _meshRenderer = GetComponentInChildren<MeshRenderer>();
             _wallMaterial = _meshRenderer.material;
             normalWall = _meshFilter.mesh;
+
             // UpdateSoldierState();
         }
+
+        /////////////////for Debug Only
+
+        bool ciritcalInvooked = false;
+        private void Update()
+        {
+            if (health == 0 && ciritcalInvooked == false)
+            {
+                ciritcalInvooked = true;
+                onWallSegmentCritical.Invoke(this);
+            }
+            if (health > 0 && ciritcalInvooked == true)
+            {
+                ciritcalInvooked = false;
+                onWallNotSegmentCritical.Invoke(this);
+            }
+        }
+        /// /////////////////////
+        /// </summary>
+   
 
         public bool WallDamaged()
         {
@@ -102,6 +128,10 @@ namespace Wall
                 soldier.Die();
                 isSoldierPresent = false;
             }
+            if(health == 0)
+            {
+                onWallSegmentCritical.Invoke(this);
+            }
         }
 
         public bool RepairWall()
@@ -110,6 +140,7 @@ namespace Wall
             health = Mathf.Min(2, health + 1);
             ChangeWallState(health);
             RequestSoldier();
+            onWallNotSegmentCritical.Invoke(this);
             return true;
         }
 

@@ -69,6 +69,11 @@ namespace Wall
             _availableSoldiers = new Queue<FriendlySoldier>();
         }
 
+        public List<WallSegment> GetWallSegments()
+        {
+            return _wallSegments;
+        }
+
         private void Start()
         {
             Inputs.Select += SetSelection;
