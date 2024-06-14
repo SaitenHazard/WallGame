@@ -1,9 +1,9 @@
 ## Alpha Release ToDos
 
 ### UI
-- [ ] Tooltips prompting Button + Action _Towsif_
+- [X] Tooltips prompting Button + Action _Towsif_
 - [ ] Tooltips warning about imminent loss _Towsif_
-- [ ] Enemy Count or "Health Bar" _Towsif_
+- [X] Enemy Count or "Health Bar" _Towsif_
 #### Nice to have:
 - [ ] Repair not possible and why _Towsif_
 
