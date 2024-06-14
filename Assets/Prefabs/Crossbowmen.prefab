@@ -178,6 +178,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 4
+  _boltFlightTime: 2
+  boltPrefab: {fileID: 5389204621949537239, guid: d71adfc458043864185bf726505c5cac,
+    type: 3}
+  releasePoint: {fileID: 1060913806599392314}
   helmetVariants:
   - {fileID: 5530847967301898603}
   - {fileID: 2318358595410146495}
