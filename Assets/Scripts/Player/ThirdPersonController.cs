@@ -5,7 +5,7 @@ using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
@@ -16,60 +16,71 @@ namespace Player
     [RequireComponent(typeof(PlayerInput))]
     public class ThirdPersonController : MonoBehaviour
     {
-        [FormerlySerializedAs("MoveSpeed")] [Tooltip("Move speed of the character in m/s")]
+        [Tooltip("Move speed of the character in m/s")]
         public float moveSpeed = 2.0f;
 
-        [FormerlySerializedAs("SprintSpeed")] [Tooltip("Sprint speed of the character in m/s")]
+        [Tooltip("Sprint speed of the character in m/s")]
         public float sprintSpeed = 5.335f;
 
-        [FormerlySerializedAs("RotationSmoothTime")] [Tooltip("How fast the character turns to face movement direction")] [Range(0.0f, 0.3f)]
+        [Tooltip("How fast the character turns to face movement direction")] [Range(0.0f, 0.3f)]
         public float rotationSmoothTime = 0.12f;
 
-        [FormerlySerializedAs("SpeedChangeRate")] [Tooltip("Acceleration and deceleration")]
+        [Tooltip("Acceleration and deceleration")]
         public float speedChangeRate = 10.0f;
 
-        [FormerlySerializedAs("JumpHeight")] [Space(10)] [Tooltip("The height the player can jump")]
+        [Space(10)] [Tooltip("The height the player can jump")]
         public float jumpHeight = 1.2f;
 
-        [FormerlySerializedAs("Gravity")] [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
+        [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float gravity = -15.0f;
 
-        [FormerlySerializedAs("JumpTimeout")] [Space(10)] [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
+        [Space(10)] [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
         public float jumpTimeout = 0.1f;
 
-        [FormerlySerializedAs("FallTimeout")] [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
+        [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
         public float fallTimeout = 0.15f;
 
-        [FormerlySerializedAs("Grounded")]
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
         public bool grounded = true;
 
-        [FormerlySerializedAs("GroundedOffset")] [Tooltip("Useful for rough ground")] 
+        [Tooltip("Useful for rough ground")] 
         public float groundedOffset = -0.14f;
 
-        [FormerlySerializedAs("GroundedRadius")] [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
+        [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
         public float groundedRadius = 0.28f;
 
-        [FormerlySerializedAs("GroundLayers")] [Tooltip("What layers the character uses as ground")]
+        [Tooltip("What layers the character uses as ground")]
         public LayerMask groundLayers;
-
-        [FormerlySerializedAs("CinemachineCameraTarget")]
+        
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
         public GameObject cinemachineCameraTarget;
 
-        [FormerlySerializedAs("TopClamp")] [Tooltip("How far in degrees can you move the camera up")]
+        [Tooltip("How far in degrees can you move the camera up")]
         public float topClamp = 70.0f;
 
-        [FormerlySerializedAs("BottomClamp")] [Tooltip("How far in degrees can you move the camera down")]
+        [Tooltip("How far in degrees can you move the camera down")]
         public float bottomClamp = -30.0f;
 
-        [FormerlySerializedAs("CameraAngleOverride")] [Tooltip("Additional degrees to override the camera. Useful for fine tuning camera position when locked")]
+        [Tooltip("Additional degrees to override the camera. Useful for fine tuning camera position when locked")]
         public float cameraAngleOverride;
 
-        [FormerlySerializedAs("LockCameraPosition")] [Tooltip("For locking the camera position on all axis")]
+        [Tooltip("For locking the camera position on all axis")]
         public bool lockCameraPosition = true;
+
+        [Header("Inventory")] 
+        public Transform backpackWood;
+        public Transform backpackStone;
+
+        public Transform woodReplenisher;
+        public Transform stoneReplenisher; 
+
+        public int _stone = 1;
+        public int stoneCapacity;
+        public int _wood = 1;
+        public int woodCapacity;
+
 
         // cinemachine
         private float _cinemachineTargetYaw;
@@ -83,8 +94,7 @@ namespace Player
         private float _verticalVelocity;
         private readonly float _terminalVelocity = 53.0f;
         // inventory
-        public int _stone = 1;
-        public int _wood = 1;
+        
 
         // timeout
         private float _jumpTimeoutDelta;
@@ -125,6 +135,8 @@ namespace Player
             EventManager.OnCatapultFire += GetLaunched;
             EventManager.OnReplenishWood += FillWood;
             EventManager.OnReplenishStone += FillStone;
+            EventManager.OnRepairedWood += HandleRepairedWood;
+            EventManager.OnRepairedStone += HandleRepairedStone;
 
             Inputs.Jump += Jump;
         }
@@ -443,21 +455,49 @@ namespace Player
 
         private void FillWood(int amount = 3)
         {
-            _wood = 3;
+            amount = Mathf.Min(woodCapacity, amount);
+            _wood = amount;
+            while (woodReplenisher.childCount > 0 && amount > 0) {
+                transform.parent = backpackWood;
+                var child = woodReplenisher.GetChild(woodReplenisher.childCount - 1);
+                child.SetParent(backpackWood, false);
+                child.localRotation = Quaternion.Euler(0, Random.Range(-10, 10), 0);
+                child.localPosition = Vector3.zero + new Vector3(0, Random.Range(-0.025f, 0.025f), 0.2f);
+                --amount;
+            }
+   
+        }
+
+        private void HandleRepairedWood()
+        {
+            _wood--;
+            var toRemove = backpackWood.GetChild(0);
+            toRemove.SetParent(woodReplenisher, false);
+            toRemove.localRotation = Quaternion.identity;
+            toRemove.localPosition = Vector3.zero + new Vector3(-0.8f, 0.07f * woodReplenisher.transform.childCount, 0);
         }
         
-        public void IncrementWood(int amount = 1)
-        {
-            _wood += amount;
-        }
-        
-        public void IncrementStone(int amount = 1)
-        {
-            _stone += amount;
-        }
         private void FillStone(int amount = 3)
         {
-            _stone = 3;
+            amount = Mathf.Min(stoneCapacity, amount);
+            _stone = amount;
+            while (stoneReplenisher.childCount > 0 && amount > 0) {
+                transform.parent = backpackStone;
+                var child = stoneReplenisher.GetChild(stoneReplenisher.childCount - 1);
+                child.SetParent(backpackStone, false);
+                child.localRotation = Quaternion.Euler(0,0, 15);
+                child.localPosition = Vector3.zero + new Vector3(-0.13f + Random.Range(-0.05f, 0.05f), 0, 0.16f * amount);
+                --amount;
+            }
+        }
+
+        private void HandleRepairedStone()
+        {
+            _stone--;
+            var toRemove = backpackStone.GetChild(0);
+            toRemove.SetParent(stoneReplenisher, false);
+            toRemove.localRotation = Quaternion.Euler(0, Random.Range(-5, 5), 0);
+            toRemove.localPosition = Vector3.zero + new Vector3(2.7f, 0.55f, Random.Range(-0.6f, 0.6f));
         }
 
         public bool CanRepairWood()

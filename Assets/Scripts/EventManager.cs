@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EventManager : MonoBehaviour
 {
-
+    public delegate void NoParamsEvent();
     public delegate void FloatEvent(float value);
     public delegate void IntEvent(int value);
     public delegate void TransformEvent(Transform value);
@@ -16,6 +16,9 @@ public class EventManager : MonoBehaviour
 
     public static event IntEvent OnReplenishWood;
     public static event IntEvent OnReplenishStone;
+
+    public static event NoParamsEvent OnRepairedWood;
+    public static event NoParamsEvent OnRepairedStone;
 
     public static event IntEvent OnWallPieceHit;
     
@@ -51,5 +54,15 @@ public class EventManager : MonoBehaviour
     public static void RaiseOnWallPieceHit(int index)
     {
         OnWallPieceHit?.Invoke(index);
+    }
+
+    public static void RaiseOnRepairedWood()
+    {
+        OnRepairedWood?.Invoke();
+    }
+
+    public static void RaiseOnRepairedStone()
+    {
+        OnRepairedStone?.Invoke();
     }
 }

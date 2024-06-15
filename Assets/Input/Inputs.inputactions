@@ -294,11 +294,33 @@
                 },
                 {
                     "name": "",
+                    "id": "7718cce0-62fc-4aee-8eec-2a8493ea504c",
+                    "path": "<Keyboard>/comma",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RepairWood",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "27a46637-0136-4cc8-88f8-4ab1be9b836c",
                     "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad;Xbox Controller;PS4 Controller",
+                    "action": "RepairStone",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "686d7d7d-0f8e-4e42-b29e-6f329f0e9560",
+                    "path": "<Keyboard>/period",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "RepairStone",
                     "isComposite": false,
                     "isPartOfComposite": false
