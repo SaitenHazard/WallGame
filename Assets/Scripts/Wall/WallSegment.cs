@@ -12,11 +12,13 @@ namespace Wall
         public GameObject scaffoldingPiece;
         public FriendlySoldier soldier;
 
-        public int health = 2;
+        public int maxHealth = 3;
+        public int health;
         public bool isScaffoldingIntact = true;
         public bool soldierRequested = false;
         public bool isSoldierPresent;
         public Mesh normalWall;
+        public Mesh chippedWall;
         public Mesh damagedWall;
         public Mesh destroyedWall;
         public int level; //To be used to request soldier at the correct level
@@ -33,12 +35,13 @@ namespace Wall
             _meshRenderer = GetComponentInChildren<MeshRenderer>();
             _wallMaterial = _meshRenderer.material;
             normalWall = _meshFilter.mesh;
+            health = maxHealth;
             // UpdateSoldierState();
         }
 
         public bool WallDamaged()
         {
-            return health < 2;
+            return health < maxHealth;
         }
         public bool ScaffoldingDamaged()
         {
@@ -47,7 +50,7 @@ namespace Wall
 
         public bool SetPreview(bool enabled)
         {
-            if (enabled && health < 2)
+            if (enabled && health < maxHealth)
             {
                 ChangeWallState(health + 1);
                 _meshRenderer.material = translucent;
@@ -67,7 +70,8 @@ namespace Wall
             {
                 0 => destroyedWall,
                 1 => damagedWall,
-                2 => normalWall,
+                2 => chippedWall,
+                3 => normalWall,
                 _ => _meshFilter.mesh
             };
         }
@@ -106,8 +110,8 @@ namespace Wall
 
         public bool RepairWall()
         {
-            if (health == 2) return false;
-            health = Mathf.Min(2, health + 1);
+            if (health == maxHealth) return false;
+            health = Mathf.Min(maxHealth, health + 1);
             ChangeWallState(health);
             RequestSoldier();
             return true;
@@ -115,7 +119,7 @@ namespace Wall
 
         private void RequestSoldier()
         {
-            if (health == 2 && isScaffoldingIntact && !soldierRequested) WallManager.instance.RequestSoldier(this);
+            if (health == maxHealth && isScaffoldingIntact && !soldierRequested) WallManager.instance.RequestSoldier(this);
         }
 
         private GUIStyle _style = new GUIStyle();
@@ -135,7 +139,7 @@ namespace Wall
 
         public bool IsIntact()
         {
-            return isScaffoldingIntact && health == 2;
+            return isScaffoldingIntact && health == maxHealth;
         }
     }
 }
