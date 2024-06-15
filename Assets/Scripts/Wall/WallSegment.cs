@@ -99,7 +99,12 @@ namespace Wall
 
         public void DamageWall()
         {
-            health = Mathf.Max(0, health - 1);
+            health -= 1;
+            if (health < 0)
+            {
+                EventManager.RaiseGameOver();
+                return;
+            }
             ChangeWallState(health);
             if (isSoldierPresent)
             {
