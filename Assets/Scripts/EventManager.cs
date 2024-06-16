@@ -21,6 +21,7 @@ public class EventManager : MonoBehaviour
     public static event NoParamsEvent OnRepairedStone;
 
     public static event IntEvent OnWallPieceHit;
+    public static event IntEvent OnScaffoldingHit;
 
 
     public static event NoParamsEvent OnGameOver;
@@ -58,6 +59,11 @@ public class EventManager : MonoBehaviour
     public static void RaiseOnWallPieceHit(int index)
     {
         OnWallPieceHit?.Invoke(index);
+    }
+
+    public static void RaiseOnScaffoldingHit(int index)
+    {
+        OnScaffoldingHit?.Invoke(index);
     }
 
     public static void RaiseOnRepairedWood()

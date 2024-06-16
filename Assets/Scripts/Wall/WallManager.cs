@@ -75,6 +75,7 @@ namespace Wall
             Inputs.RepairWood += RepairScaffoldingSegment;
             Inputs.RepairStone += RepairWallSegment;
             EventManager.OnWallPieceHit += DamageWallSegment;
+            EventManager.OnScaffoldingHit += DamageScaffoldingSegment;
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonController>();
             _playerTransform = player.transform;
             if (_playerTransform == null) throw new MissingFieldException("The player transform is needed ");
@@ -87,7 +88,7 @@ namespace Wall
                 soldier.gameObject.SetActive(false);
                 _availableSoldiers.Enqueue(soldier);
             }
-            InvokeRepeating(nameof(DamageRandomSegment), 0f, 2f);
+            // InvokeRepeating(nameof(DamageRandomSegment), 0f, 2f);
         }
 
         private void OnDestroy()
@@ -96,6 +97,7 @@ namespace Wall
             Inputs.RepairWood -= RepairScaffoldingSegment;
             Inputs.RepairStone -= RepairWallSegment;
             EventManager.OnWallPieceHit -= DamageWallSegment;
+            EventManager.OnScaffoldingHit -= DamageScaffoldingSegment;
         }
 
         private void Update()
