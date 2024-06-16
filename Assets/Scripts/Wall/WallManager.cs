@@ -43,7 +43,8 @@ namespace Wall
         public int width = 5;
 
         private float _spawnTimer;
-        private List<WallSegment> _wallSegments;
+        [SerializeField]
+        private List<WallSegment> _wallSegments; // Only Serializable for debug purposes!!!
         private List<DoorAnimationController> _doorControllers;
         private Queue<FriendlySoldier> _availableSoldiers;
         private Transform _playerTransform;

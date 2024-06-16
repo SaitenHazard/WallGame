@@ -123,7 +123,6 @@ namespace Enemies
 
         private void LaunchTrebuchet()
         {
-            int selectedRow = Random.Range(0, WallManager.instance.wallRows);
             int wallPieceIndex = -1;
             int trebuchetIndex = -1;
 
@@ -186,7 +185,6 @@ namespace Enemies
                     }
                     output += ("Gewählt wurde: " + trebuchetIndex);
                     
-                    
                     break;
             }
 
@@ -199,7 +197,13 @@ namespace Enemies
                 if (consoleOutput) Debug.LogWarning("The selected trebuchet had not yet finished his reload animation. Consider increasing reload speed.");
             }
             lastTrebuchet = trebuchetIndex;
+
+            int selectedRow = Random.Range(0, WallManager.instance.wallRows);
+
             wallPieceIndex = selectedRow * WallManager.instance.wallColumns + trebuchetIndex;
+
+            Debug.Log("Launching at (" + trebuchetIndex + ", " + selectedRow + ") index " + wallPieceIndex);
+
             trebuchets[trebuchetIndex].SetSelection(wallManager.GetWallSegmentPosition(wallPieceIndex), wallPieceIndex);
             if (_trebuchetRandomness != 0)
                 trebuchets[trebuchetIndex].SetFlightTime(_trebuchets.projectile.flightTime + Random.Range(0, _trebuchetRandomness));

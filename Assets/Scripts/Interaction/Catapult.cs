@@ -48,7 +48,7 @@ namespace Interaction
 
         private bool _currentlyAiming;
 
-        private const float MagicNum = -0.011f;
+        public float MagicNum = -0.011f;
 
         public int bezierSmoothness = 5;
 
