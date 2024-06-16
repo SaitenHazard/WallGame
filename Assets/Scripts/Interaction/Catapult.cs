@@ -66,16 +66,19 @@ namespace Interaction
         private void Start()
         {
             // Why is the Catapult subscribing to the event it invokes itself?
+            targetPos.parent = null;
             _anim = GetComponent<Animator>();
             _lineRenderer = GetComponentInChildren<LineRenderer>();
             EventManager.OnEnterCatapult += StartAiming;
             EventManager.OnExitCatapult += StopAiming;
+            EventManager.OnCatapultFire += OnFire;
         }
 
         private void OnDestroy()
         {
             EventManager.OnEnterCatapult -= StartAiming;
             EventManager.OnExitCatapult -= StopAiming;
+            EventManager.OnCatapultFire -= OnFire;
         }
 
         public void Interact(ThirdPersonController interactor)
@@ -125,12 +128,11 @@ namespace Interaction
         {
             if (!_currentlyAiming) return;
 
-        
-        
             { // Vertical Aiming
                 contAltitude += desiredAltitudeChange * Time.deltaTime * aimUpDownSpeed;
                 contAltitude = Mathf.Clamp(contAltitude, firstRowY, firstRowY+(wallDepths.Count-1)*rowHeight);
-                targetPos.position = new Vector3(targetPos.position.x, 
+                targetPos.position = new Vector3(
+                    targetPos.position.x, 
                     Mathf.Round(contAltitude / rowHeight) * rowHeight + vertOffset, 
                     targetPos.position.z);
 
@@ -141,19 +143,19 @@ namespace Interaction
 
             if (desiredRotationChange != 0)
             {
-                //Debug.Log("Rotating by " + (targetRotation * Time.deltaTime));
-            
-                transform.Rotate(new Vector3(0, rotSpeed * desiredRotationChange * Time.deltaTime, 0));
-                var unclampedRot = transform.rotation.eulerAngles.y;
-                if (unclampedRot > 180) unclampedRot -= 360;
-            
-            
-                unclampedRot = Mathf.Clamp(unclampedRot, -60, 60);
-                transform.rotation = Quaternion.Euler(0, unclampedRot, 0);
+                targetPos.position = new Vector3(
+                    targetPos.position.x + rotSpeed * desiredRotationChange * Time.deltaTime, 
+                    targetPos.position.y, 
+                    targetPos.position.z);
+                transform.LookAt(new Vector3(targetPos.position.x, 0, targetPos.position.z));
             }
-            var alpha = transform.rotation.eulerAngles.y;
-            if (alpha > 180) alpha -= 360;
-            targetPos.position = new Vector3(Mathf.Tan(alpha*MagicNum) * wallDepths[aimingAtRow] , targetPos.position.y, wallDepths[aimingAtRow]);
+
+            targetPos.position = new Vector3(
+                targetPos.position.x, 
+                targetPos.position.y, 
+                wallDepths[aimingAtRow]);
+
+//            targetPos.position = new Vector3(Mathf.Tan(alpha*MagicNum) * wallDepths[aimingAtRow] , targetPos.position.y, wallDepths[aimingAtRow]);
             _lineRenderer.SetPositions(new Vector3[] { dropInPoint.position, targetPos.position });
             SmoothBezier();
         }
@@ -186,12 +188,8 @@ namespace Interaction
 
         public void Aim(Vector2 input)
         {
-            //Debug.Log("Aiming!" + input);
-            var clamped = Mathf.Abs(input.x) > 0.1 ? input.x : 0;
-            _anim.SetFloat("Rotation", -1 * clamped);
-            print(input);
-            desiredRotationChange = clamped;
-            desiredAltitudeChange = input.y;
+            desiredRotationChange = input.x;
+            desiredAltitudeChange = Mathf.Abs(input.y) < 0.2f? 0 : input.y;
         }
 
         public void ActionEvent_FullyRewound()

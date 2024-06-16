@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using AnimationCotrollers;
 using Input;
 using Unity.Mathematics;
@@ -78,9 +79,12 @@ namespace Player
 
         public int _stone = 1;
         public int stoneCapacity;
+        //public List<GameObject> diegeticStones;
+
         public int _wood = 1;
         public int woodCapacity;
 
+        //public List<GameObject> diegeticWood;
 
         // cinemachine
         private float _cinemachineTargetYaw;
@@ -307,7 +311,7 @@ namespace Player
                         // _animator.SetBool(_animIDFreeFall, false);
                         _animController.SetFalling(false);
                         _animController.SetAirTime(_airTime);
-                        PauseMovement(_airTime < 3 ? 0.3f : 1f);
+                        PauseMovement(_airTime < 1.2 ? 0.0f : 1f);
                     }
 
                     // stop our velocity dropping infinitely when grounded
@@ -477,7 +481,7 @@ namespace Player
 
         private void FillWood(int amount = 3)
         {
-            amount = Mathf.Min(woodCapacity, amount);
+            amount = Mathf.Min(woodCapacity, _wood + amount);
             _wood = amount;
             while (woodReplenisher.childCount > 0 && amount > 0) {
                 transform.parent = backpackWood;

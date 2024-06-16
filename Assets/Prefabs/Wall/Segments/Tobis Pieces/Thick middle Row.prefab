@@ -53,18 +53,21 @@ MonoBehaviour:
   wallPiece: {fileID: 6588992236801762409}
   scaffoldingPiece: {fileID: 0}
   soldier: {fileID: 3544384019437802241}
+  maxHealth: 3
   health: 3
   isScaffoldingIntact: 1
   soldierRequested: 0
   isSoldierPresent: 1
   normalWall: {fileID: -2432090755550338912, guid: 0a4b5c2e2ea69e5408288c61a134815c,
     type: 3}
+  chippedWall: {fileID: 0}
   damagedWall: {fileID: -2432090755550338912, guid: 080fbbe8bfbf91c47a81a860098afc6b,
     type: 3}
   destroyedWall: {fileID: -2432090755550338912, guid: 7d7ba77d637d3e245a5b7ca69b10d16c,
     type: 3}
   level: 0
   chosenOne: 0
+  translucent: {fileID: 2100000, guid: 9ff37b61263c8407b8d0493078bc1059, type: 2}
 --- !u!65 &6184783938823627318
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -74,7 +77,7 @@ BoxCollider:
   m_GameObject: {fileID: 7336903107498155735}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1.6354733, y: 0.29348898, z: 1.8231192}
   m_Center: {x: -0.0048885345, y: -0.026372671, z: -0.4115597}
@@ -87,7 +90,7 @@ BoxCollider:
   m_GameObject: {fileID: 7336903107498155735}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1.6775985, y: 1.4753308, z: 0.34262717}
   m_Center: {x: -0.0050570965, y: 0.7433369, z: 0.32868642}

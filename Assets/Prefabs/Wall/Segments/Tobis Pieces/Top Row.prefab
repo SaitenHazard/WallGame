@@ -50,18 +50,21 @@ MonoBehaviour:
   wallPiece: {fileID: 4663906335757953434}
   scaffoldingPiece: {fileID: 2152184528144007901}
   soldier: {fileID: 1827242870605838409}
+  maxHealth: 3
   health: 3
   isScaffoldingIntact: 1
   soldierRequested: 0
   isSoldierPresent: 1
   normalWall: {fileID: -2432090755550338912, guid: 0ea58c28b299ab44b9846e8ea905424c,
     type: 3}
+  chippedWall: {fileID: 0}
   damagedWall: {fileID: -2432090755550338912, guid: 080fbbe8bfbf91c47a81a860098afc6b,
     type: 3}
   destroyedWall: {fileID: -2432090755550338912, guid: 7d7ba77d637d3e245a5b7ca69b10d16c,
     type: 3}
   level: 0
   chosenOne: 0
+  translucent: {fileID: 0}
 --- !u!1001 &496194125345311996
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -176,6 +179,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 496194126183234427}
     m_Modifications:
+    - target: {fileID: 1830134397361469887, guid: 12553d8ced87e994095034813c1da7b0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4921222908914531873, guid: 12553d8ced87e994095034813c1da7b0,
         type: 3}
       propertyPath: m_RootOrder
@@ -271,6 +279,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Size.x
       value: 1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5514733346593298255, guid: d05c514c7d9d4724cb48ff00ff616072,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5542329420560155828, guid: d05c514c7d9d4724cb48ff00ff616072,
         type: 3}

@@ -15,12 +15,19 @@ namespace Enemies
         [Tooltip("This MeshRenderer is deactivated on impact. The invisible GameObject will linger for 1 second and wait for the trail to finish.")]
         private MeshRenderer meshRenderer;
 
+        public bool spawnParticlesOnHit = false;
+        [SerializeField]
+        private GameObject onHitParticles;
+
         public void Start()
         {
             releasePoint = transform.position;
             lastPosition = transform.position - transform.forward;
         }
         private Vector3 lastPosition;
+
+        public bool particlesSpawned = false;
+
         public void Update()
         {
             if (startOfLife == -1) return;
@@ -29,7 +36,13 @@ namespace Enemies
             if (t >= 1)
             {
                 meshRenderer.enabled = false;
-                Destroy(gameObject, 1); // Wait 1 sec for the trail to disappear
+                if (spawnParticlesOnHit && !particlesSpawned)
+                {
+                    Instantiate(onHitParticles, transform.position, Quaternion.identity);
+                    particlesSpawned = true;
+                    Destroy(gameObject); // Wait 1 sec for the trail to disappear
+                }
+                
             }
             else
             {

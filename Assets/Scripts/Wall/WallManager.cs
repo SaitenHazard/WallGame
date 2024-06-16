@@ -106,7 +106,7 @@ namespace Wall
             EventManager.OnScaffoldingHit -= DamageScaffoldingSegment;
         }
 
-        private void Update()
+        public void Update()
         {
             if (highlightingMode == HighlightingMode.Always && _nearWall)
             {
@@ -184,7 +184,7 @@ namespace Wall
             {
                 Selection.Left => index - 1 < 0 || (index - 1) % width > index % width ? -1 : index - 1,
                 Selection.Right => index + 1 > _wallSegments.Count || (index + 1) % width < index % width ? -1 : index + 1,
-                Selection.Up => index + width > _wallSegments.Count ? -1 : index + width,
+                Selection.Up => index - width > _wallSegments.Count ? -1 : index - width,
                 Selection.None => index,
                 _ => index
             };

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Input;
 using UnityEditor;
@@ -47,22 +48,24 @@ namespace Wall
 
         /////////////////for Debug Only
 
-        //bool ciritcalInvooked = false;
-        //private void Update()
-        //{
-        //    if (health == 0 && ciritcalInvooked == false)
-        //    {
-        //        ciritcalInvooked = true;
-        //        onWallSegmentCritical.Invoke(this);
-        //    }
-        //    if (health > 0 && ciritcalInvooked == true)
-        //    {
-        //        ciritcalInvooked = false;
-        //        onWallNotSegmentCritical.Invoke(this);
-        //    }
-        //}
-        /// /////////////////////
-        /// </summary>
+        bool ciritcalInvooked = false;
+        public void Update()
+        {
+            if (health == 0 && !ciritcalInvooked)
+            {
+                Debug.Log("Hello");
+                ciritcalInvooked = true;
+                onWallSegmentCritical.Invoke(this);
+            }
+            if (health > 0 && ciritcalInvooked)
+            {
+                Debug.Log("It's me");
+                ciritcalInvooked = false;
+                onWallNotSegmentCritical.Invoke(this);
+            }
+        }
+        // /////////////////////
+        // </summary>
    
 
         public bool WallDamaged()
@@ -74,8 +77,18 @@ namespace Wall
             return isScaffoldingIntact;
         }
 
+        private IEnumerator JuicyRepair()
+        {
+            for (float x = 0; x < 1; x += Time.deltaTime*4)
+            {
+                transform.localScale = Vector3.one * (1+(1 - Mathf.Cos(x*3.14f*2))/2.5f) ;
+                yield return null;
+            }
+        }
+
         public bool SetPreview(bool enabled)
         {
+            Debug.Log("SetPreview()");
             if (enabled && health < maxHealth)
             {
                 ChangeWallState(health + 1);
@@ -117,6 +130,8 @@ namespace Wall
         public bool RepairScaffolding()
         {
             if (isScaffoldingIntact) return false;
+
+            StartCoroutine("JuicyRepair");
             isScaffoldingIntact = true;
             scaffoldingPiece.SetActive(true);
             RequestSoldier();
@@ -146,6 +161,8 @@ namespace Wall
         public bool RepairWall()
         {
             if (health == maxHealth) return false;
+
+            StartCoroutine("JuicyRepair");
             health = Mathf.Min(maxHealth, health + 1);
             ChangeWallState(health);
             RequestSoldier();

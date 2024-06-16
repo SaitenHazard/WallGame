@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3563405072577203295}
   - component: {fileID: 8822010044279142681}
   - component: {fileID: 4711685871705653713}
-  - component: {fileID: 4522107713810157745}
   - component: {fileID: -6403147066047381681}
   m_Layer: 0
   m_Name: TrebuchetRound
@@ -86,19 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4522107713810157745
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4070375494017052736}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &-6403147066047381681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,8 +97,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23a39dd904f3131419b2e573825c9713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parabolaHeight: 15
+  _parabolaHeight: 50
   meshRenderer: {fileID: 4711685871705653713}
+  spawnParticlesOnHit: 1
+  onHitParticles: {fileID: 2913155782981411458, guid: 8cfbfb3ab5b594d5c937499c4af7e9dd,
+    type: 3}
+  particlesSpawned: 0
 --- !u!1 &6608426624904858782
 GameObject:
   m_ObjectHideFlags: 0
