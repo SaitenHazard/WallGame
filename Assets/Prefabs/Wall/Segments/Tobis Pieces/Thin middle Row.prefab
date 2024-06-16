@@ -12,6 +12,11 @@ PrefabInstance:
       propertyPath: health
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2359610844823171795, guid: 47656e33ec6b41b4d84c4bec1a222117,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4243285490376625733, guid: 47656e33ec6b41b4d84c4bec1a222117,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -31,6 +36,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Size.z
       value: 1.2381215
+      objectReference: {fileID: 0}
+    - target: {fileID: 6184783938823627318, guid: 47656e33ec6b41b4d84c4bec1a222117,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6184783938823627318, guid: 47656e33ec6b41b4d84c4bec1a222117,
         type: 3}

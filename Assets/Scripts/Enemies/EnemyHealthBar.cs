@@ -8,9 +8,9 @@ public class EnemyHealthBar : MonoBehaviour
 
     private Vector2 fullSizeDelta;
 
-    [SerializeField] private float maxHealth;
+    private float maxHealth;
 
-    [SerializeField] private float health;
+    private float health;
 
 
     // Start is called before the first frame update

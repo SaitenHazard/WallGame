@@ -87,12 +87,11 @@ namespace Enemies
 
         void Start()
         {
-            columns = WallManager.instance.wallColumns;
-            if (_trebuchets.projectile.flightTime >= _trebuchetCooldown)
+            /*if (_trebuchets.projectile.flightTime >= _trebuchetCooldown)
             {
                 Debug.LogError("trebuchet projectile flight time should never be lower than trebuchet cooldown! flight time will now be set to " + (_trebuchetCooldown + 0.1f));
                 _trebuchets.projectile.flightTime = _trebuchetCooldown + 0.1f;
-            }
+            }*/
             CreateEmptyParents();
             SpawnArmy();
             SpawnTrebuchets();
@@ -187,7 +186,7 @@ namespace Enemies
                     {
                         trebuchetIndex = preferred.Count == 1? preferred[0] : preferred[Random.Range(0, preferred.Count)];
                     }
-                    output += ("Gew‰hlt wurde: " + trebuchetIndex);
+                    output += ("Gew√§hlt wurde: " + trebuchetIndex);
                     
                     break;
             }
@@ -206,7 +205,7 @@ namespace Enemies
 
             wallPieceIndex = selectedRow * WallManager.instance.wallColumns + trebuchetIndex;
 
-            Debug.Log("Launching at (" + trebuchetIndex + ", " + selectedRow + ") index " + wallPieceIndex);
+            //Debug.Log("Launching at (" + trebuchetIndex + ", " + selectedRow + ") index " + wallPieceIndex);
 
             trebuchets[trebuchetIndex].SetSelection(wallManager.GetWallSegmentPosition(wallPieceIndex), wallPieceIndex);
             if (_trebuchetRandomness != 0)
