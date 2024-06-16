@@ -477,7 +477,7 @@ namespace Player
 
         private void FillWood(int amount = 3)
         {
-            amount = Mathf.Min(woodCapacity, amount);
+            amount = Mathf.Min(woodCapacity, _wood + amount);
             _wood = amount;
             while (woodReplenisher.childCount > 0 && amount > 0) {
                 transform.parent = backpackWood;
@@ -501,7 +501,7 @@ namespace Player
         
         private void FillStone(int amount = 3)
         {
-            amount = Mathf.Min(stoneCapacity, amount);
+            amount = Mathf.Min(stoneCapacity, _stone + amount);
             _stone = amount;
             while (stoneReplenisher.childCount > 0 && amount > 0) {
                 transform.parent = backpackStone;

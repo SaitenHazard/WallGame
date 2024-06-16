@@ -9,12 +9,14 @@ namespace Wall
 {
     public class WallSegment : MonoBehaviour
     {
-        public GameObject wallPiece;
-        public GameObject scaffoldingPiece;
+        public GameObject wallPiece = null;
+        public GameObject scaffoldingPiece = null;
         public FriendlySoldier soldier;
 
-        public int maxHealth = 3;
-        public int health;
+        public int wallMaxHealth = 3;
+        public int wallHealth;
+        public int scaffoldingMaxHealth = 2;
+        public int scaffoldingHealth;
         public bool isScaffoldingIntact = true;
         public bool soldierRequested = false;
         public bool isSoldierPresent;
@@ -40,8 +42,8 @@ namespace Wall
             _meshRenderer = GetComponentInChildren<MeshRenderer>();
             _wallMaterial = _meshRenderer.material;
             normalWall = _meshFilter.mesh;
-
-            health = maxHealth;
+            scaffoldingHealth = scaffoldingMaxHealth;
+            wallHealth = wallMaxHealth;
             // UpdateSoldierState();
         }
 
@@ -67,7 +69,7 @@ namespace Wall
 
         public bool WallDamaged()
         {
-            return health < maxHealth;
+            return wallHealth < wallMaxHealth;
         }
         public bool ScaffoldingDamaged()
         {
@@ -76,15 +78,15 @@ namespace Wall
 
         public bool SetPreview(bool enabled)
         {
-            if (enabled && health < maxHealth)
+            if (enabled && wallHealth < wallMaxHealth)
             {
-                ChangeWallState(health + 1);
+                ChangeWallState(wallHealth + 1);
                 _meshRenderer.material = translucent;
                 return true;
             }
             else
             {
-                ChangeWallState(health);
+                ChangeWallState(wallHealth);
                 _meshRenderer.material = _wallMaterial;
                 return false;
             }
@@ -104,9 +106,10 @@ namespace Wall
 
         public void DamageScaffolding()
         {
-            print("TEST");
-            isScaffoldingIntact = false;
-            scaffoldingPiece.SetActive(false);
+            if (!scaffoldingPiece) return;
+            print("DAmaged me" + scaffoldingHealth);
+            scaffoldingHealth -= 1;
+            if (scaffoldingHealth <= 0) scaffoldingPiece.SetActive(false);
             if (isSoldierPresent)
             {
                 soldier.Die();
@@ -116,8 +119,9 @@ namespace Wall
 
         public bool RepairScaffolding()
         {
-            if (isScaffoldingIntact) return false;
-            isScaffoldingIntact = true;
+            if (!scaffoldingPiece) return false;
+            if (scaffoldingHealth == scaffoldingMaxHealth) return false;
+            scaffoldingHealth = Mathf.Min(scaffoldingMaxHealth, scaffoldingHealth + 1);
             scaffoldingPiece.SetActive(true);
             RequestSoldier();
             return true;
@@ -125,19 +129,19 @@ namespace Wall
 
         public void DamageWall()
         {
-            health -= 1;
-            if (health < 0)
+            wallHealth -= 1;
+            if (wallHealth < 0)
             {
                 EventManager.RaiseGameOver();
                 return;
             }
-            ChangeWallState(health);
+            ChangeWallState(wallHealth);
             if (isSoldierPresent)
             {
                 soldier.Die();
                 isSoldierPresent = false;
             }
-            if(health == 0)
+            if(wallHealth == 0)
             {
                 onWallSegmentCritical.Invoke(this);
             }
@@ -145,9 +149,9 @@ namespace Wall
 
         public bool RepairWall()
         {
-            if (health == maxHealth) return false;
-            health = Mathf.Min(maxHealth, health + 1);
-            ChangeWallState(health);
+            if (wallHealth == wallMaxHealth) return false;
+            wallHealth = Mathf.Min(wallMaxHealth, wallHealth + 1);
+            ChangeWallState(wallHealth);
             RequestSoldier();
             onWallNotSegmentCritical.Invoke(this);
             return true;
@@ -155,7 +159,7 @@ namespace Wall
 
         private void RequestSoldier()
         {
-            if (health == maxHealth && isScaffoldingIntact && !soldierRequested) WallManager.instance.RequestSoldier(this);
+            if (wallHealth == wallMaxHealth && scaffoldingHealth == scaffoldingMaxHealth && !soldierRequested) WallManager.instance.RequestSoldier(this);
         }
 
         private GUIStyle _style = new GUIStyle();
@@ -163,7 +167,7 @@ namespace Wall
         private void OnDrawGizmos()
         {
             _style.fontSize = 32;
-            if (chosenOne) Handles.Label(transform.position + new Vector3(0, 3, 0), "Wall Health: " + health, _style);
+            if (chosenOne) Handles.Label(transform.position + new Vector3(0, 3, 0), "Wall Health: " + wallHealth, _style);
         }
 
         public void AssignSoldier(FriendlySoldier incomingSoldier)
@@ -175,7 +179,7 @@ namespace Wall
 
         public bool IsIntact()
         {
-            return isScaffoldingIntact && health == maxHealth;
+            return isScaffoldingIntact && wallHealth == wallMaxHealth;
         }
     }
 }

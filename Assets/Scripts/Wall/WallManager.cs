@@ -231,6 +231,7 @@ namespace Wall
         {
             return _wallSegments[index].transform.position;
         }
+       
 
         public bool IsWalkable(Vector3 position)
         {
@@ -336,7 +337,7 @@ namespace Wall
 
         public void DamageScaffoldingSegment(WallSegment segment)
         {
-            if (segment != null && segment.scaffoldingPiece.activeSelf)
+            if (segment != null)
             {
                 segment.DamageScaffolding();
             }
