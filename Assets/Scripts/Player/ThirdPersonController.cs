@@ -85,6 +85,7 @@ namespace Player
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
+        private bool _hasCamera;
 
         // player
         private float _speed;
@@ -159,7 +160,11 @@ namespace Player
         {
             _animController = GetComponentInChildren<PlayerAnimationController>();
             _hasAnimController = _animController != null;
-            _cinemachineTargetYaw = cinemachineCameraTarget.transform.rotation.eulerAngles.y;
+            if (cinemachineCameraTarget)
+            {
+                _hasCamera = true;
+                _cinemachineTargetYaw = cinemachineCameraTarget.transform.rotation.eulerAngles.y;
+            }
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<Inputs>();
             _playerInput = GetComponent<PlayerInput>();
@@ -189,7 +194,7 @@ namespace Player
 
         private void LateUpdate()
         {
-            CameraRotation();
+            if (_hasCamera) CameraRotation();
         }
 
         private void AssignActionMapIDs()
@@ -261,8 +266,7 @@ namespace Player
             // if there is a move input rotate player when the player is moving
             if (_input.move != Vector2.zero)
             {
-                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                                  _mainCamera.transform.eulerAngles.y;
+                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     rotationSmoothTime);
 
