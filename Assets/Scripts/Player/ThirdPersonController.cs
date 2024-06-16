@@ -99,6 +99,8 @@ namespace Player
         // timeout
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
+        private float _airTime;
+        private bool _midAir;
 
         private PlayerInput _playerInput;
         private CharacterController _controller;
@@ -291,17 +293,25 @@ namespace Player
                 _fallTimeoutDelta = fallTimeout;
 
                 // update animator if using character
-                if (_hasAnimController)
+                if (_midAir)
                 {
-                    // animator.SetTrigger(_animIDJump);
-                    // _animator.SetBool(_animIDFreeFall, false);
-                    _animController.SetFalling(false);
-                }
+                    _midAir = false;
 
-                // stop our velocity dropping infinitely when grounded
-                if (_verticalVelocity < 0.0f)
-                {
-                    _verticalVelocity = -2f;
+                    if (_hasAnimController)
+                    {
+                        // animator.SetTrigger(_animIDJump);
+                        // _animator.SetBool(_animIDFreeFall, false);
+                        _animController.SetFalling(false);
+                        _animController.SetAirTime(_airTime);
+                        PauseMovement(_airTime < 3 ? 0.3f : 1f);
+                    }
+
+                    // stop our velocity dropping infinitely when grounded
+                    if (_verticalVelocity < 0.0f)
+                    {
+                        _verticalVelocity = -2f;
+                    }
+                    _airTime = 0;
                 }
 
                 // jump timeout
@@ -309,11 +319,14 @@ namespace Player
                 {
                     _jumpTimeoutDelta -= Time.deltaTime;
                 }
+
             }
             else
             {
+                if (!_midAir) _midAir = true;
                 // reset the jump timeout timer
                 _jumpTimeoutDelta = jumpTimeout;
+                _airTime += Time.deltaTime;
 
                 // fall timeout
                 if (_fallTimeoutDelta >= 0.0f)
@@ -433,6 +446,10 @@ namespace Player
             _animController.Launching(false);
         }
 
+        /// <summary>
+        /// Cancels players velocity and suspends movement for duration
+        /// </summary>
+        /// <param name="duration">Time in Seconds</param>
         private void PauseMovement(float duration)
         {
             CancelVelocity();
