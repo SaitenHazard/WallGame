@@ -87,12 +87,7 @@ namespace Wall
                 soldier.gameObject.SetActive(false);
                 _availableSoldiers.Enqueue(soldier);
             }
-
-            foreach (var se in _wallSegments)
-            {
-                DamageWallSegment(se);
-            }
-            // InvokeRepeating(nameof(DamageRandomSegment), 1f, 5f);
+            InvokeRepeating(nameof(DamageRandomSegment), 0f, 2f);
         }
 
         private void OnDestroy()
@@ -117,11 +112,6 @@ namespace Wall
                     {
                         _previousClosestSegment.SetPreview(false);
                     }
-                    print(_closestSegment);
-                    foreach (var segm in _wallSegments)
-                    {
-                        print(segm);
-                    }
                     _closestSegment.SetPreview(true);
                     _previousClosestSegment = _closestSegment;
                 }
@@ -140,7 +130,6 @@ namespace Wall
                 (0, 1) => Selection.Up,
                 _ => Selection.None
             };
-            print(_selection);
         }
 
         private void InitializeWallSegments()
@@ -276,7 +265,8 @@ namespace Wall
 
         private void DamageRandomSegment()
         {
-            DamageWallSegment(_wallSegments[Random.Range(0, 4)]);
+            if (Random.Range(0, 2) == 0) DamageScaffoldingSegment(_wallSegments[Random.Range(0, 9)]);
+            else DamageWallSegment(_wallSegments[Random.Range(0, 9)]);
         }
 
         // If Closest Segment is not updated every frame, replace with _playerTransform.position
@@ -294,9 +284,9 @@ namespace Wall
 
         private bool RepairWallSegment(WallSegment segment)
         {
-            if (segment == null || !segment.wallPiece.activeSelf || !player.CanRepairStone()) return false;
+            if (segment == null || !player.CanRepairStone()) return false;
             if (!segment.RepairWall()) return false;
-            player.IncrementStone(-1);
+            EventManager.RaiseOnRepairedStone();
             return true;
         }
 
@@ -320,7 +310,7 @@ namespace Wall
         {
             var closest = GetClosestSegmentSelection(_playerTransform.position);
             if (closest == -1) print("Can't repair that");
-            else RepairScaffoldingSegment(closest);
+            else print(RepairScaffoldingSegment(closest));
         }
 
         private bool RepairScaffoldingSegment(int index)
@@ -330,9 +320,9 @@ namespace Wall
 
         private bool RepairScaffoldingSegment(WallSegment segment)
         {
-            if (segment == null || !segment.scaffoldingPiece.activeSelf || !player.CanRepairWood()) return false;
+            if (segment == null || !player.CanRepairWood()) return false;
             if (!segment.RepairScaffolding()) return false;
-            player.IncrementWood(-1);
+            EventManager.RaiseOnRepairedWood();
             return true;
         }
 
