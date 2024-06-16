@@ -81,6 +81,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cb4e249821ef33c489ddc4ba385fd4df,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: cb4e249821ef33c489ddc4ba385fd4df,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: cb4e249821ef33c489ddc4ba385fd4df,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: cb4e249821ef33c489ddc4ba385fd4df,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: -20.8
       objectReference: {fileID: 0}
@@ -485,13 +500,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f02d5bf9aad514348a80faccb9a13692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _flightTime: 2
   _reloadSpeed: 1
-  wallPieces: []
-  projectilePrefab: {fileID: 4070375494017052736, guid: c3ae024c823c9884fa88310c92374b80,
-    type: 3}
+  _projectileSettings:
+    prefab: {fileID: 0}
+    flightTime: 0
+    parabolaHeight: 0
   releasePoint: {fileID: 690156589}
   targetPoint: {fileID: 1915343446}
+  ready: 1
 --- !u!4 &3033704028267854259 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cb4e249821ef33c489ddc4ba385fd4df,
