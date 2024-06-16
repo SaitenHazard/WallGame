@@ -1,7 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/3D Models/Materials.meta
 guid: b9e5ba02c4ea48c42ac104c8e1ecd1ea
 folderAsset: yes
 DefaultImporter:
+========
+guid: 0eca48e6cd29a4fe38af3d0d8fc97e8a
+PrefabImporter:
+>>>>>>>> fire-particles:Assets/3D Models/The Wall/WildFire.prefab.meta
   externalObjects: {}
   userData: 
   assetBundleName: 
