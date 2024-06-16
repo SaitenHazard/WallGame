@@ -8,6 +8,8 @@ namespace Enemies
 {
     public class ArmyController : MonoBehaviour
     {
+        public static ArmyController instance;
+
         // Start is called before the first frame update
         [Header("_______________ Gameplay Relevant _______________")]
         [SerializeField]
@@ -74,7 +76,12 @@ namespace Enemies
         private Transform _graveyardParent = null;
         private Transform _trebuchetParent = null;
         private Transform _bowmenParent = null;
-        
+
+        private void Awake()
+        {
+            instance = this;
+        }
+
         void Start()
         {
             if (_trebuchets.projectile.flightTime >= _trebuchetCooldown)
