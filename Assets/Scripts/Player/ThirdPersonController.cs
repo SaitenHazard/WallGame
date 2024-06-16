@@ -101,7 +101,6 @@ namespace Player
         private float _fallTimeoutDelta;
 
         private PlayerInput _playerInput;
-        private GameObject _walther;
         private CharacterController _controller;
         private Inputs _input;
         private InputActionMap _actionMapNormal;
@@ -149,6 +148,8 @@ namespace Player
             EventManager.OnCatapultFire -= GetLaunched;
             EventManager.OnReplenishWood -= FillWood;
             EventManager.OnReplenishStone -= FillStone;
+            EventManager.OnRepairedWood -= HandleRepairedWood;
+            EventManager.OnRepairedStone -= HandleRepairedStone;
             Inputs.Jump -= Jump;
         }
 
@@ -470,11 +471,11 @@ namespace Player
 
         private void HandleRepairedWood()
         {
-            _wood--;
             var toRemove = backpackWood.GetChild(0);
             toRemove.SetParent(woodReplenisher, false);
             toRemove.localRotation = Quaternion.identity;
             toRemove.localPosition = Vector3.zero + new Vector3(-0.8f, 0.07f * woodReplenisher.transform.childCount, 0);
+            _wood--;
         }
         
         private void FillStone(int amount = 3)
@@ -493,11 +494,11 @@ namespace Player
 
         private void HandleRepairedStone()
         {
-            _stone--;
             var toRemove = backpackStone.GetChild(0);
             toRemove.SetParent(stoneReplenisher, false);
             toRemove.localRotation = Quaternion.Euler(0, Random.Range(-5, 5), 0);
             toRemove.localPosition = Vector3.zero + new Vector3(2.7f, 0.55f, Random.Range(-0.6f, 0.6f));
+            _stone--;
         }
 
         public bool CanRepairWood()

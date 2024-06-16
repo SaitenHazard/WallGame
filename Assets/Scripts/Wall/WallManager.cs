@@ -130,7 +130,6 @@ namespace Wall
                 (0, 1) => Selection.Up,
                 _ => Selection.None
             };
-            print(_selection);
         }
 
         private void InitializeWallSegments()
