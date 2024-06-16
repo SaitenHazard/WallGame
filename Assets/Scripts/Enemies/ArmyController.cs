@@ -1,4 +1,5 @@
 
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
@@ -62,6 +63,8 @@ namespace Enemies
         private int trebuchetCount = 5;
 
         private WallManager wallManager;
+        private int columns;
+        private List<int> arrowTargets;
 
         private List<float> trebuchetPositions; // vertical positions [0..1] relative to avaliable space
 
@@ -183,7 +186,7 @@ namespace Enemies
                     {
                         trebuchetIndex = preferred.Count == 1? preferred[0] : preferred[Random.Range(0, preferred.Count)];
                     }
-                    output += ("Gew‰hlt wurde: " + trebuchetIndex);
+                    output += ("Gew√§hlt wurde: " + trebuchetIndex);
                     
                     break;
             }
@@ -214,18 +217,35 @@ namespace Enemies
 
         private void LaunchFireArrows()
         {
+            int parts = _bowmen.count / columns;
+            int remainder = _bowmen.count % columns;
+            bool addRemainder = false;
             float horizSpacing = (_bowmen.spawnAreaUpperRight.x - _bowmen.spawnAreaLowerLeft.x) / _bowmen.count;
-            for (int i = 0; i < _bowmen.count; i++)
+            for (var i = 0; i < columns; i++)
             {
-                Vector3 worldStart = transform.position
+                print(i);
+                if (addRemainder) parts += remainder;
+                if (UnityEngine.Random.Range(0f, 1f) > fireArrowsDestruction) continue;
+                for (var j = 0; j < parts; j++)
+                {
+                    Vector3 worldStart = transform.position
                                                 + new Vector3(_bowmen.spawnAreaLowerLeft.x + i * horizSpacing, 0, _bowmen.spawnAreaUpperRight.y)
-                                                + new Vector3(Random.Range(-0.5f, 0.5f), 0, Random.Range(-0.5f, 0.5f));
-                TargetProjectile fireArrow = Instantiate(_bowmen.fireArrowPrefab, worldStart
-                    , Quaternion.identity, _bowmenParent);
-                fireArrow.SetDestination(new Vector3(worldStart.x, worldStart.y, -5));
-                fireArrow.SetFlightTime(3 + Random.Range(-0.5f, 0.5f));
+                                                + new Vector3(UnityEngine.Random.Range(-0.5f, 0.5f), 0, UnityEngine.Random.Range(-0.5f, 0.5f));
+                    TargetProjectile fireArrow = Instantiate(_bowmen.fireArrowPrefab, worldStart
+                        , Quaternion.identity, _bowmenParent);
+                    fireArrow.SetDestination(wallManager.GetWallSegmentPosition(i));
+                    var flightTime = 3 + UnityEngine.Random.Range(-0.5f, 0.5f);
+                    fireArrow.SetFlightTime(flightTime);
+                }
+                StartCoroutine(InvokeAfterDelay(3, EventManager.RaiseOnScaffoldingHit, i));
             }
             Invoke("LaunchFireArrows", fireArrowsCooldown);
+        }
+
+        private IEnumerator InvokeAfterDelay<T>(float delay, System.Action<T> method, T parameter)
+        {
+            yield return new WaitForSeconds(delay);
+            method(parameter);
         }
 
         private void Update()
@@ -411,7 +431,7 @@ namespace Enemies
     {
         public GameObject prefab;
         public TargetProjectile fireArrowPrefab;
-        public float count = 20;
+        public int count = 20;
     }
 
     [System.Serializable]

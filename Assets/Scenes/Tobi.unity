@@ -730,7 +730,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec0ccbf384b09a54d9b75af918f25914, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _criticalWallSegments: []
   pulseSpeed: 1
   minAlpha: 0.5
   maxAlpha: 1
@@ -18623,6 +18622,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _trebuchetRandomness
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7494733541712630487, guid: 9d3d102869b4ce34bb2e17848722d2c3,
+        type: 3}
+      propertyPath: fireArrowsDestruction
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7494733541712630487, guid: 9d3d102869b4ce34bb2e17848722d2c3,
         type: 3}
