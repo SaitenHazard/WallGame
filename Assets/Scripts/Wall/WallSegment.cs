@@ -44,20 +44,20 @@ namespace Wall
 
         /////////////////for Debug Only
 
-        bool ciritcalInvooked = false;
-        private void Update()
-        {
-            if (health == 0 && ciritcalInvooked == false)
-            {
-                ciritcalInvooked = true;
-                onWallSegmentCritical.Invoke(this);
-            }
-            if (health > 0 && ciritcalInvooked == true)
-            {
-                ciritcalInvooked = false;
-                onWallNotSegmentCritical.Invoke(this);
-            }
-        }
+        //bool ciritcalInvooked = false;
+        //private void Update()
+        //{
+        //    if (health == 0 && ciritcalInvooked == false)
+        //    {
+        //        ciritcalInvooked = true;
+        //        onWallSegmentCritical.Invoke(this);
+        //    }
+        //    if (health > 0 && ciritcalInvooked == true)
+        //    {
+        //        ciritcalInvooked = false;
+        //        onWallNotSegmentCritical.Invoke(this);
+        //    }
+        //}
         /// /////////////////////
         /// </summary>
    
