@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EventManager : MonoBehaviour
 {
-
+    public delegate void NoParamsEvent();
     public delegate void FloatEvent(float value);
     public delegate void IntEvent(int value);
     public delegate void TransformEvent(Transform value);
@@ -18,6 +18,10 @@ public class EventManager : MonoBehaviour
     public static event IntEvent OnReplenishStone;
 
     public static event IntEvent OnWallPieceHit;
+
+
+    public static event NoParamsEvent OnGameOver;
+    
     
     public static void RaiseCatapultFire(Vector3[] path, int vertexCount)
     {
@@ -51,5 +55,11 @@ public class EventManager : MonoBehaviour
     public static void RaiseOnWallPieceHit(int index)
     {
         OnWallPieceHit?.Invoke(index);
+    }
+
+    public static void RaiseGameOver()
+    {
+        print("GAME OVER");
+        OnGameOver?.Invoke();
     }
 }
