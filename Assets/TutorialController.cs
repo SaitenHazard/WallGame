@@ -14,7 +14,7 @@ public class TutorialController : MonoBehaviour
     public int currentIndex = -1;
 
     private List<string> texts = new List<string>{
-        "You take control of Wallther, the ridiculosly buff repairman.",
+        "You take control of Wallther, the ridiculously buff repairman.",
         "Your job is to keep the wall in shape in the midst of an enemy siege.",
         "If you do your job well, the crossbowmen on the walls can do their job and eliminate the enemy army.",
         "Move with the left stick, Jump with A.",

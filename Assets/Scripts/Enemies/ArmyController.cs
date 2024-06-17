@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Wall;
 
 namespace Enemies
@@ -31,7 +32,6 @@ namespace Enemies
         [Range(0.0f,1.0f)]
         private float _trebuchetRandomness = 0.0f;
         [Space]
-        [Header("As of now, fire arrows are purely cosmetic")]
         [SerializeField]
         private float fireArrowsCooldown = 20;
         [SerializeField]
@@ -272,6 +272,11 @@ namespace Enemies
 
         public Vector3 GetFootsoldierPosition()
         {
+            if (footsoldiersForefeit >= _footsoldierParent.childCount)
+            {
+                Debug.LogWarning("More footsoldiers forefeit than left. returning dummy value. If this was close to winning the game you can ignore this warning.");
+                return new Vector3(0, 0, 50);
+            }
             return _footsoldierParent.GetChild(footsoldiersForefeit++).transform.position + new Vector3(0,0.6f,0);
         }
 
@@ -336,6 +341,7 @@ namespace Enemies
                 victim.GetComponent<Footsoldier>().StartCoroutine("Die");
                 enemyCount--;
                 footsoldiersForefeit = Mathf.Max(footsoldiersForefeit - 1, 0);
+                if (enemyCount <= 0) SceneManager.LoadScene("Win");
             }
         }
 

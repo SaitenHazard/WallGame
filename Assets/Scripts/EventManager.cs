@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EventManager : MonoBehaviour
 {
@@ -80,7 +81,9 @@ public class EventManager : MonoBehaviour
 
     public static void RaiseGameOver()
     {
-        print("GAME OVER");
+        SceneManager.LoadScene("GameOver");
+        //print("GAME OVER");
+
         OnGameOver?.Invoke();
     }
 }

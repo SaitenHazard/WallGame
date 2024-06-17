@@ -311,6 +311,7 @@ namespace Wall
         {
             if (_wallSegments.Count > index)
             {
+                Debug.Log("Index was " + index);
                 DamageWallSegment(_wallSegments[index]);
             }
         }
