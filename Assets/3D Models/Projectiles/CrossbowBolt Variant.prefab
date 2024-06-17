@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &9097310017146132082
 Transform:
   m_ObjectHideFlags: 0
@@ -276,6 +276,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parabolaHeight: 2
   meshRenderer: {fileID: 3436553177663186038}
+  spawnParticlesOnHit: 0
+  onHitParticles: {fileID: 0}
+  particlesSpawned: 0
 --- !u!4 &4482127985093544176 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 79f060dd3b38b29488efdfd32e8437c2,

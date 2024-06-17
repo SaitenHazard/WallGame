@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Wall;
 
 namespace Enemies
@@ -31,7 +32,6 @@ namespace Enemies
         [Range(0.0f,1.0f)]
         private float _trebuchetRandomness = 0.0f;
         [Space]
-        [Header("As of now, fire arrows are purely cosmetic")]
         [SerializeField]
         private float fireArrowsCooldown = 20;
         [SerializeField]
@@ -101,6 +101,7 @@ namespace Enemies
             Invoke("LaunchFireArrows", fireArrowsCooldown);
             wallManager = FindObjectOfType<WallManager>();
             columnsHit = new List<bool>();
+            columns = WallManager.instance.wallColumns;
             for (int i = 0; i < trebuchetCount; i++)
             {
                 columnsHit.Add(false);
@@ -224,18 +225,18 @@ namespace Enemies
             float horizSpacing = (_bowmen.spawnAreaUpperRight.x - _bowmen.spawnAreaLowerLeft.x) / _bowmen.count;
             for (var i = 0; i < columns; i++)
             {
-                print(i);
+                //print(i);
                 if (addRemainder) parts += remainder;
                 if (UnityEngine.Random.Range(0f, 1f) > fireArrowsDestruction) continue;
                 for (var j = 0; j < parts; j++)
                 {
                     Vector3 worldStart = transform.position
-                                                + new Vector3(_bowmen.spawnAreaLowerLeft.x + i * horizSpacing, 0, _bowmen.spawnAreaUpperRight.y)
-                                                + new Vector3(UnityEngine.Random.Range(-0.5f, 0.5f), 0, UnityEngine.Random.Range(-0.5f, 0.5f));
+                                                //+ new Vector3(_bowmen.spawnAreaLowerLeft.x + i * horizSpacing, 0, _bowmen.spawnAreaUpperRight.y)
+                                                + new Vector3(UnityEngine.Random.Range(_bowmen.spawnAreaLowerLeft.x, _bowmen.spawnAreaUpperRight.x), 0, UnityEngine.Random.Range(-0.5f, 0.5f));
                     TargetProjectile fireArrow = Instantiate(_bowmen.fireArrowPrefab, worldStart
                         , Quaternion.identity, _bowmenParent);
-                    fireArrow.SetDestination(wallManager.GetWallSegmentPosition(i));
-                    var flightTime = 3 + UnityEngine.Random.Range(-0.5f, 0.5f);
+                    fireArrow.SetDestination(wallManager.GetWallSegmentPosition(i) + new Vector3(Random.Range(-0.6f, 0.6f), 0.7f, Random.Range(-0.3f, 0.3f)));
+                    var flightTime = 2 + UnityEngine.Random.Range(-0.5f, 0.5f);
                     fireArrow.SetFlightTime(flightTime);
                 }
                 StartCoroutine(InvokeAfterDelay(3, EventManager.RaiseOnScaffoldingHit, i));
@@ -272,6 +273,11 @@ namespace Enemies
 
         public Vector3 GetFootsoldierPosition()
         {
+            if (footsoldiersForefeit >= _footsoldierParent.childCount)
+            {
+                Debug.LogWarning("More footsoldiers forefeit than left. returning dummy value. If this was close to winning the game you can ignore this warning.");
+                return new Vector3(0, 0, 50);
+            }
             return _footsoldierParent.GetChild(footsoldiersForefeit++).transform.position + new Vector3(0,0.6f,0);
         }
 
@@ -336,6 +342,7 @@ namespace Enemies
                 victim.GetComponent<Footsoldier>().StartCoroutine("Die");
                 enemyCount--;
                 footsoldiersForefeit = Mathf.Max(footsoldiersForefeit - 1, 0);
+                if (enemyCount <= 0) SceneManager.LoadScene("Win");
             }
         }
 
@@ -396,7 +403,7 @@ namespace Enemies
             float vertSpace = _trebuchets.spawnAreaUpperRight.y - _trebuchets.spawnAreaLowerLeft.y;
 
             //if (!Application.IsPlaying(this))
-
+            /*
             for (int i = 0; i < trebuchetCount; i++)
             {
                 Gizmos.color = Color.blue;
@@ -411,7 +418,7 @@ namespace Enemies
                 Gizmos.color = new Color(0, 0, 0.5f, 0.5f);
                 Gizmos.DrawLine(trebuchetPos, parabolaPeak);
                 Gizmos.DrawLine(parabolaPeak, new Vector3((i - trebuchetCount/2)*1.5f, 0, 0));
-            }
+            }*/
         }
     }
 

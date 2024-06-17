@@ -115,6 +115,7 @@ namespace Wall
                     ? _wallSegments[closestSegmentDirect]
                     : _wallSegments[indexSelection];
 
+
                 if (_previousClosestSegment)
                 {
                     _previousClosestSegment.SetPreview(false);
@@ -311,6 +312,7 @@ namespace Wall
         {
             if (_wallSegments.Count > index)
             {
+                Debug.Log("Index was " + index);
                 DamageWallSegment(_wallSegments[index]);
             }
         }

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using JetBrains.Annotations;
 using Player;
 
 using UnityEngine;
@@ -84,6 +84,7 @@ namespace Interaction
         public void Interact(ThirdPersonController interactor)
 
         {
+            Debug.Log("Interacting with Catapult...");
             if (_inCatapult)
             {
                 print("Invoking");
@@ -200,6 +201,7 @@ namespace Interaction
 
         public void OnFire(Vector3[] path, int vertexCount)
         {
+            Debug.Log("Firing!");
             StopAiming(transform);
             _anim.SetTrigger("Shoot");
         }

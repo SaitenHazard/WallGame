@@ -5,9 +5,21 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Towsif.unity
-    guid: e9017d5f96b9f09489b4b37e1d6eb914
+    guid: 82ed14cc9af27c74aaf1deb2feef5b0a
+  - enabled: 1
+    path: Assets/Scenes/Tutorial.unity
+    guid: 9e681407950f54a419518a8a08046904
+  - enabled: 1
+    path: Assets/Scenes/Tobi.unity
+    guid: 79aff0082c7767545afd13326d298147
+  - enabled: 1
+    path: Assets/Scenes/Win.unity
+    guid: f58b5fc3e04925842b9e916dcb09b820
+  - enabled: 1
+    path: Assets/Scenes/GameOver.unity
+    guid: c991fa03af9000e40a85638bde16a0ff
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7,
       type: 2}

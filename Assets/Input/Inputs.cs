@@ -1,6 +1,7 @@
 using Interaction;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static EventManager;
 
 namespace Input
 {
@@ -24,7 +25,7 @@ namespace Input
         public static event OnInputNoParams Interact;
         public static event OnInputNoParams RepairWood;
         public static event OnInputNoParams RepairStone;
-
+        public static event OnInputNoParams YPressed;
         public static event OnInputVector2 Select;
 
         private Catapult catapult;
@@ -37,6 +38,14 @@ namespace Input
                 Debug.LogWarning(
                     "Inputs.cs could not find a Catapult.cs script in the scene and is now deactivated. Make sure to include a Catapult prefab in the scene and activate its Catapult.cs component!");
                 enabled = false;
+            }
+        }
+
+        public void OnYPressed(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                YPressed?.Invoke();
             }
         }
 
