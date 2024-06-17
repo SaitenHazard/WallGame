@@ -30,8 +30,10 @@ namespace Wall
         public Material translucent;
 
         private MeshFilter _meshFilter;
-        private MeshRenderer _meshRenderer;
+        private MeshRenderer _wallMeshRenderer;
+        private MeshRenderer _scaffoldingMeshRenderer;
         private Material _wallMaterial;
+        private Material _scaffoldingMaterial;
 
         public WallSegmentCriticalEvent onWallSegmentCritical = new WallSegmentCriticalEvent();
         public WallSegmentNotCriticalEvent onWallNotSegmentCritical = new WallSegmentNotCriticalEvent();
@@ -40,10 +42,16 @@ namespace Wall
         private void Start()
         {
             _meshFilter = GetComponentInChildren<MeshFilter>();
-            _meshRenderer = GetComponentInChildren<MeshRenderer>();
-            _wallMaterial = _meshRenderer.material;
+            _wallMeshRenderer = wallPiece.GetComponentInChildren<MeshRenderer>();
+            _wallMaterial = _wallMeshRenderer.material;
             normalWall = _meshFilter.mesh;
-            scaffoldingHealth = scaffoldingMaxHealth;
+            if (scaffoldingPiece)
+            {
+                _scaffoldingMeshRenderer = scaffoldingPiece.GetComponentInChildren<MeshRenderer>();
+                scaffoldingHealth = scaffoldingMaxHealth;
+                _scaffoldingMaterial = _scaffoldingMeshRenderer.material;
+            }
+
             wallHealth = wallMaxHealth;
             // UpdateSoldierState();
         }
@@ -51,15 +59,17 @@ namespace Wall
         /////////////////for Debug Only
 
         bool ciritcalInvooked = false;
+
         public void Update()
         {
-            if (health == 0 && !ciritcalInvooked)
+            if (wallHealth == 0 && !ciritcalInvooked)
             {
                 Debug.Log("Hello");
                 ciritcalInvooked = true;
                 onWallSegmentCritical.Invoke(this);
             }
-            if (health > 0 && ciritcalInvooked)
+
+            if (wallHealth > 0 && ciritcalInvooked)
             {
                 Debug.Log("It's me");
                 ciritcalInvooked = false;
@@ -68,39 +78,56 @@ namespace Wall
         }
         // /////////////////////
         // </summary>
-   
+
 
         public bool WallDamaged()
         {
             return wallHealth < wallMaxHealth;
         }
+
         public bool ScaffoldingDamaged()
         {
-            return isScaffoldingIntact;
+            return scaffoldingPiece && !isScaffoldingIntact;
         }
 
         private IEnumerator JuicyRepair()
         {
-            for (float x = 0; x < 1; x += Time.deltaTime*4)
+            for (float x = 0; x < 1; x += Time.deltaTime * 4)
             {
-                transform.localScale = Vector3.one * (1+(1 - Mathf.Cos(x*3.14f*2))/2.5f) ;
+                transform.localScale = Vector3.one * (1 + (1 - Mathf.Cos(x * 3.14f * 2)) / 2.5f);
                 yield return null;
             }
         }
 
-        public bool SetPreview(bool enabled)
+        public bool SetPreview(bool enable)
         {
-            if (enabled && wallHealth < wallMaxHealth)
+            if (enable)
             {
-                ChangeWallState(wallHealth + 1);
-                _meshRenderer.material = translucent;
+                if (WallDamaged() && _wallMeshRenderer.material != translucent)
+                {
+                    ChangeWallState(wallHealth + 1);
+                    _wallMeshRenderer.material = translucent;
+                }
+
+                if (scaffoldingPiece && ScaffoldingDamaged() && _scaffoldingMeshRenderer.material != translucent)
+                {
+                    _scaffoldingMeshRenderer.material = translucent;
+                }
+
                 return true;
             }
             else
             {
-                ChangeWallState(wallHealth);
-                _meshRenderer.material = _wallMaterial;
-                return false;
+                if (_wallMeshRenderer.material != _wallMaterial)
+                {
+                    ChangeWallState(wallHealth);
+                    _wallMeshRenderer.material = _wallMaterial;
+                }
+                if (scaffoldingPiece && _scaffoldingMeshRenderer.material != _scaffoldingMaterial)
+                {
+                    _scaffoldingMeshRenderer.material = _scaffoldingMaterial;
+                }
+                return true;
             }
         }
 
@@ -148,13 +175,15 @@ namespace Wall
                 EventManager.RaiseGameOver();
                 return;
             }
+
             ChangeWallState(wallHealth);
             if (isSoldierPresent)
             {
                 soldier.Die();
                 isSoldierPresent = false;
             }
-            if(wallHealth == 0)
+
+            if (wallHealth == 0)
             {
                 onWallSegmentCritical.Invoke(this);
             }
@@ -173,7 +202,8 @@ namespace Wall
 
         private void RequestSoldier()
         {
-            if (wallHealth == wallMaxHealth && scaffoldingHealth == scaffoldingMaxHealth && !soldierRequested) WallManager.instance.RequestSoldier(this);
+            if (wallHealth == wallMaxHealth && scaffoldingHealth == scaffoldingMaxHealth && !soldierRequested)
+                WallManager.instance.RequestSoldier(this);
         }
 
         private GUIStyle _style = new GUIStyle();
@@ -181,7 +211,8 @@ namespace Wall
         private void OnDrawGizmos()
         {
             _style.fontSize = 32;
-            if (chosenOne) Handles.Label(transform.position + new Vector3(0, 3, 0), "Wall Health: " + wallHealth, _style);
+            if (chosenOne)
+                Handles.Label(transform.position + new Vector3(0, 3, 0), "Wall Health: " + wallHealth, _style);
         }
 
         public void AssignSoldier(FriendlySoldier incomingSoldier)
