@@ -30,10 +30,8 @@ namespace Wall
         public Material translucent;
 
         private MeshFilter _meshFilter;
-        private MeshRenderer _wallMeshRenderer;
-        private MeshRenderer _scaffoldingMeshRenderer;
+        private MeshRenderer _meshRenderer;
         private Material _wallMaterial;
-        private Material _scaffoldingMaterial;
 
         public WallSegmentCriticalEvent onWallSegmentCritical = new WallSegmentCriticalEvent();
         public WallSegmentNotCriticalEvent onWallNotSegmentCritical = new WallSegmentNotCriticalEvent();
@@ -42,16 +40,10 @@ namespace Wall
         private void Start()
         {
             _meshFilter = GetComponentInChildren<MeshFilter>();
-            _wallMeshRenderer = wallPiece.GetComponentInChildren<MeshRenderer>();
-            _wallMaterial = _wallMeshRenderer.material;
+            _meshRenderer = GetComponentInChildren<MeshRenderer>();
+            _wallMaterial = _meshRenderer.material;
             normalWall = _meshFilter.mesh;
-            if (scaffoldingPiece)
-            {
-                _scaffoldingMeshRenderer = scaffoldingPiece.GetComponentInChildren<MeshRenderer>();
-                scaffoldingHealth = scaffoldingMaxHealth;
-                _scaffoldingMaterial = _scaffoldingMeshRenderer.material;
-            }
-
+            scaffoldingHealth = scaffoldingMaxHealth;
             wallHealth = wallMaxHealth;
             // UpdateSoldierState();
         }
@@ -59,74 +51,56 @@ namespace Wall
         /////////////////for Debug Only
 
         bool ciritcalInvooked = false;
-
         public void Update()
         {
             if (wallHealth == 0 && !ciritcalInvooked)
             {
-                //Debug.Log("Hello");
+                Debug.Log("Hello");
                 ciritcalInvooked = true;
                 onWallSegmentCritical.Invoke(this);
             }
             if (wallHealth > 0 && ciritcalInvooked)
             {
-                //Debug.Log("It's me");
+                Debug.Log("It's me");
                 ciritcalInvooked = false;
                 onWallNotSegmentCritical.Invoke(this);
             }
         }
         // /////////////////////
         // </summary>
-
+   
 
         public bool WallDamaged()
         {
             return wallHealth < wallMaxHealth;
         }
-
         public bool ScaffoldingDamaged()
         {
-            return scaffoldingPiece && !isScaffoldingIntact;
+            return isScaffoldingIntact;
         }
 
         private IEnumerator JuicyRepair()
         {
-            for (float x = 0; x < 1; x += Time.deltaTime * 4)
+            for (float x = 0; x < 1; x += Time.deltaTime*4)
             {
-                transform.localScale = Vector3.one * (1 + (1 - Mathf.Cos(x * 3.14f * 2)) / 2.5f);
+                transform.localScale = Vector3.one * (1+(1 - Mathf.Cos(x*3.14f*2))/2.5f) ;
                 yield return null;
             }
         }
 
-        public bool SetPreview(bool enable)
+        public bool SetPreview(bool enabled)
         {
-            if (enable)
+            if (enabled && wallHealth < wallMaxHealth)
             {
-                if (WallDamaged() && _wallMeshRenderer.material != translucent)
-                {
-                    ChangeWallState(wallHealth + 1);
-                    _wallMeshRenderer.material = translucent;
-                }
-
-                if (scaffoldingPiece && ScaffoldingDamaged() && _scaffoldingMeshRenderer.material != translucent)
-                {
-                    _scaffoldingMeshRenderer.material = translucent;
-                }
-
+                ChangeWallState(wallHealth + 1);
+                _meshRenderer.material = translucent;
                 return true;
             }
             else
             {
-                if (_wallMeshRenderer.material != _wallMaterial)
-                {
-                    ChangeWallState(wallHealth);
-                    _wallMeshRenderer.material = _wallMaterial;
-                }
-                if (scaffoldingPiece && _scaffoldingMeshRenderer.material != _scaffoldingMaterial)
-                {
-                    _scaffoldingMeshRenderer.material = _scaffoldingMaterial;
-                }
-                return true;
+                ChangeWallState(wallHealth);
+                _meshRenderer.material = _wallMaterial;
+                return false;
             }
         }
 
@@ -145,7 +119,7 @@ namespace Wall
         public void DamageScaffolding()
         {
             if (!scaffoldingPiece) return;
-            //print("DAmaged me" + scaffoldingHealth);
+            print("DAmaged me" + scaffoldingHealth);
             scaffoldingHealth -= 1;
             if (scaffoldingHealth <= 0) scaffoldingPiece.SetActive(false);
             if (isSoldierPresent)
@@ -174,15 +148,13 @@ namespace Wall
                 EventManager.RaiseGameOver();
                 return;
             }
-
             ChangeWallState(wallHealth);
             if (isSoldierPresent)
             {
                 soldier.Die();
                 isSoldierPresent = false;
             }
-
-            if (wallHealth == 0)
+            if(wallHealth == 0)
             {
                 onWallSegmentCritical.Invoke(this);
             }
@@ -201,8 +173,7 @@ namespace Wall
 
         private void RequestSoldier()
         {
-            if (wallHealth == wallMaxHealth && scaffoldingHealth == scaffoldingMaxHealth && !soldierRequested)
-                WallManager.instance.RequestSoldier(this);
+            if (wallHealth == wallMaxHealth && scaffoldingHealth == scaffoldingMaxHealth && !soldierRequested) WallManager.instance.RequestSoldier(this);
         }
 
         private GUIStyle _style = new GUIStyle();
@@ -210,8 +181,7 @@ namespace Wall
         private void OnDrawGizmos()
         {
             _style.fontSize = 32;
-            if (chosenOne)
-                Handles.Label(transform.position + new Vector3(0, 3, 0), "Wall Health: " + wallHealth, _style);
+            if (chosenOne) Handles.Label(transform.position + new Vector3(0, 3, 0), "Wall Health: " + wallHealth, _style);
         }
 
         public void AssignSoldier(FriendlySoldier incomingSoldier)
