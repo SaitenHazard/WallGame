@@ -43,8 +43,7 @@ namespace Wall
         public int width = 5;
 
         private float _spawnTimer;
-        [SerializeField]
-        private List<WallSegment> _wallSegments; // Only Serializable for debug purposes!!!
+        [SerializeField] private List<WallSegment> _wallSegments; // Only Serializable for debug purposes!!!
         private List<DoorAnimationController> _doorControllers;
         private Queue<FriendlySoldier> _availableSoldiers;
         private Transform _playerTransform;
@@ -112,17 +111,18 @@ namespace Wall
             {
                 var closestSegmentDirect = GetClosestSegmentDirect(_playerTransform.position);
                 var indexSelection = IndexToSelection(closestSegmentDirect);
-                _closestSegment = (indexSelection == -1 || !_wallSegments[indexSelection].WallDamaged()) ? _wallSegments[closestSegmentDirect] : _wallSegments[indexSelection];
+                _closestSegment = (indexSelection == -1 || (!_wallSegments[indexSelection].WallDamaged() && !_wallSegments[indexSelection].ScaffoldingDamaged()))
+                    ? _wallSegments[closestSegmentDirect]
+                    : _wallSegments[indexSelection];
 
-                if (!_previousClosestSegment || !_previousClosestSegment.Equals(_closestSegment))
+
+                if (_previousClosestSegment)
                 {
-                    if (_previousClosestSegment)
-                    {
-                        _previousClosestSegment.SetPreview(false);
-                    }
-                    _closestSegment.SetPreview(true);
-                    _previousClosestSegment = _closestSegment;
+                    _previousClosestSegment.SetPreview(false);
                 }
+
+                _closestSegment.SetPreview(true);
+                _previousClosestSegment = _closestSegment;
             }
 
             TrySpawnSoldier();
@@ -175,7 +175,6 @@ namespace Wall
         private int GetClosestSegmentSelection(Vector3 position)
         {
             return IndexToSelection(GetClosestSegmentDirect(position));
-            
         }
 
         private int IndexToSelection(int index)
@@ -183,7 +182,9 @@ namespace Wall
             return _selection switch
             {
                 Selection.Left => index - 1 < 0 || (index - 1) % width > index % width ? -1 : index - 1,
-                Selection.Right => index + 1 > _wallSegments.Count || (index + 1) % width < index % width ? -1 : index + 1,
+                Selection.Right => index + 1 > _wallSegments.Count || (index + 1) % width < index % width
+                    ? -1
+                    : index + 1,
                 Selection.Up => index - width > _wallSegments.Count ? -1 : index - width,
                 Selection.None => index,
                 _ => index
@@ -231,7 +232,7 @@ namespace Wall
         {
             return _wallSegments[index].transform.position;
         }
-       
+
 
         public bool IsWalkable(Vector3 position)
         {
