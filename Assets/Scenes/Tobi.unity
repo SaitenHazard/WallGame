@@ -3790,7 +3790,7 @@ PrefabInstance:
     - target: {fileID: 535340731422146745, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 537078690007354003, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -4396,7 +4396,7 @@ PrefabInstance:
     - target: {fileID: 917312073426401936, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 917398809732966944, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -4787,7 +4787,7 @@ PrefabInstance:
     - target: {fileID: 1104170409081706597, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1104197165750315772, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -4933,7 +4933,7 @@ PrefabInstance:
     - target: {fileID: 1174645220387029944, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1174645220387029950, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -5679,7 +5679,7 @@ PrefabInstance:
     - target: {fileID: 1605571253937861929, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1612872835040542872, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -6055,7 +6055,7 @@ PrefabInstance:
     - target: {fileID: 1820450100459353671, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1824846885355116437, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -6821,7 +6821,7 @@ PrefabInstance:
     - target: {fileID: 2234504601866286567, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2245676884046286191, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -8362,7 +8362,7 @@ PrefabInstance:
     - target: {fileID: 3161362871367597659, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3161362871367597661, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -8778,7 +8778,7 @@ PrefabInstance:
     - target: {fileID: 3379698835599081413, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3385436872214754734, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -9514,7 +9514,7 @@ PrefabInstance:
     - target: {fileID: 3794478721115746125, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3795647567849604882, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -9590,7 +9590,7 @@ PrefabInstance:
     - target: {fileID: 3823485044511233634, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3826153087083882385, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -9611,7 +9611,7 @@ PrefabInstance:
     - target: {fileID: 3826153087083882385, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3827941893952486794, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -9752,7 +9752,7 @@ PrefabInstance:
     - target: {fileID: 3894828894726027558, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3897699931924994217, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -9918,7 +9918,7 @@ PrefabInstance:
     - target: {fileID: 3974644497083660678, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3974837062437169462, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -11119,7 +11119,7 @@ PrefabInstance:
     - target: {fileID: 4608455813312394639, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4608962299734680215, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -11180,7 +11180,7 @@ PrefabInstance:
     - target: {fileID: 4628432678118448307, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4637187658014255427, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -11531,7 +11531,7 @@ PrefabInstance:
     - target: {fileID: 4820267523378181086, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4823643837111623517, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -11642,7 +11642,7 @@ PrefabInstance:
     - target: {fileID: 4884341892013625676, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4886719829007780862, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -12223,7 +12223,7 @@ PrefabInstance:
     - target: {fileID: 5200713736847408343, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5202751452113785150, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -12459,7 +12459,7 @@ PrefabInstance:
     - target: {fileID: 5344582913985473464, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5344582913985473470, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -13620,7 +13620,7 @@ PrefabInstance:
     - target: {fileID: 6000673819856692610, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6009421645363098436, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -15466,7 +15466,7 @@ PrefabInstance:
     - target: {fileID: 7135149356664849441, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7135149356664849447, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -15662,7 +15662,7 @@ PrefabInstance:
     - target: {fileID: 7205995153516396751, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7214644687450369318, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -15703,7 +15703,7 @@ PrefabInstance:
     - target: {fileID: 7248321440357320470, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7248979471929659666, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -17734,7 +17734,7 @@ PrefabInstance:
     - target: {fileID: 8357367626284455387, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8357738749415501364, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -18845,7 +18845,7 @@ PrefabInstance:
     - target: {fileID: 8969269064259537628, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8970981446651403858, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
@@ -19051,7 +19051,7 @@ PrefabInstance:
     - target: {fileID: 9085889819152634797, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
       propertyPath: scaffoldingMaxHealth
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9087165169817243955, guid: 9f8d2e90bfd27d24ab7b76ac391f37e9,
         type: 3}
