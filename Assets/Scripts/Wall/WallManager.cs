@@ -112,7 +112,7 @@ namespace Wall
             {
                 var closestSegmentDirect = GetClosestSegmentDirect(_playerTransform.position);
                 var indexSelection = IndexToSelection(closestSegmentDirect);
-                _closestSegment = indexSelection == -1 || !_wallSegments[indexSelection].WallDamaged() ? _wallSegments[closestSegmentDirect] : _wallSegments[indexSelection];
+                _closestSegment = (indexSelection == -1 || !_wallSegments[indexSelection].WallDamaged()) ? _wallSegments[closestSegmentDirect] : _wallSegments[indexSelection];
 
                 if (!_previousClosestSegment || !_previousClosestSegment.Equals(_closestSegment))
                 {

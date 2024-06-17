@@ -25,8 +25,10 @@ public class EventManager : MonoBehaviour
 
 
     public static event NoParamsEvent OnGameOver;
+
     
-    
+
+
     public static void RaiseCatapultFire(Vector3[] path, int vertexCount)
     {
         OnCatapultFire?.Invoke(path, vertexCount);

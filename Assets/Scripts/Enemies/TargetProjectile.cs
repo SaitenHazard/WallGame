@@ -38,7 +38,7 @@ namespace Enemies
                 meshRenderer.enabled = false;
                 if (spawnParticlesOnHit && !particlesSpawned)
                 {
-                    Instantiate(onHitParticles, transform.position, Quaternion.identity);
+                    Instantiate(onHitParticles, destination, Quaternion.identity);
                     particlesSpawned = true;
                     Destroy(gameObject); // Wait 1 sec for the trail to disappear
                 }

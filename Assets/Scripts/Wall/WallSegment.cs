@@ -53,15 +53,15 @@ namespace Wall
         bool ciritcalInvooked = false;
         public void Update()
         {
-            if (health == 0 && !ciritcalInvooked)
+            if (wallHealth == 0 && !ciritcalInvooked)
             {
-                Debug.Log("Hello");
+                //Debug.Log("Hello");
                 ciritcalInvooked = true;
                 onWallSegmentCritical.Invoke(this);
             }
-            if (health > 0 && ciritcalInvooked)
+            if (wallHealth > 0 && ciritcalInvooked)
             {
-                Debug.Log("It's me");
+                //Debug.Log("It's me");
                 ciritcalInvooked = false;
                 onWallNotSegmentCritical.Invoke(this);
             }
@@ -119,7 +119,7 @@ namespace Wall
         public void DamageScaffolding()
         {
             if (!scaffoldingPiece) return;
-            print("DAmaged me" + scaffoldingHealth);
+            //print("DAmaged me" + scaffoldingHealth);
             scaffoldingHealth -= 1;
             if (scaffoldingHealth <= 0) scaffoldingPiece.SetActive(false);
             if (isSoldierPresent)
