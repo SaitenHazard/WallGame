@@ -1,25 +1,21 @@
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Player;
-
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Interaction
 {
     [RequireComponent(typeof(Animator))]
     public class Catapult : MonoBehaviour, IInteractable
     {
-        [Header("AimingSpeed")]
-        [SerializeField]
-        [Tooltip("How many degrees per second can you rotate the Mangonel")]
+        [Header("AimingSpeed")] [SerializeField] [Tooltip("How many degrees per second can you rotate the Mangonel")]
         private float rotSpeed;
 
-        [SerializeField]
-        [Tooltip("How many meters per second can you change the Mangonel vertically")]
+        [SerializeField] [Tooltip("How many meters per second can you change the Mangonel vertically")]
         private float aimUpDownSpeed;
 
-        [Header("Important Transforms")]
-        public Transform dropInPoint;
+        [Header("Important Transforms")] public Transform dropInPoint;
+
         public Transform dropOffPoint;
         public Transform targetPos;
 
@@ -36,32 +32,33 @@ namespace Interaction
 
         [Tooltip("The vertical offset of the target positions from the floor of the row")]
         public float vertOffset = 1.2f;
-    
 
-        private bool _ready = false;
-
-        private bool _inCatapult = false;
-
-        private Animator _anim;
-
-        private LineRenderer _lineRenderer;
-
-        private bool _currentlyAiming;
-
-        public float MagicNum = -0.011f;
+        public float magicNum = -0.011f;
 
         public int bezierSmoothness = 5;
 
-        private Vector3 _startPoint = Vector3.zero;
+        public float desiredAltitudeChange;
+        public float contAltitude = 3f;
+        public float desiredRotationChange;
+
+        private Animator _anim;
+        private int _animIDShoot;
+
+        private bool _currentlyAiming;
+        private Vector3 _endHandle = Vector3.zero;
         private Vector3 _endPoint = Vector3.zero;
+
+        private bool _inCatapult;
+
+        private LineRenderer _lineRenderer;
+
+
+        private bool _ready;
 
         // Setting Interpolation Points
         private Vector3 _startHandle = Vector3.zero;
-        private Vector3 _endHandle = Vector3.zero;
 
-        public float desiredAltitudeChange = 0;
-        public float contAltitude = 3f;
-        public float desiredRotationChange = 0;
+        private Vector3 _startPoint = Vector3.zero;
 
         private void Start()
         {
@@ -72,6 +69,46 @@ namespace Interaction
             EventManager.OnEnterCatapult += StartAiming;
             EventManager.OnExitCatapult += StopAiming;
             EventManager.OnCatapultFire += OnFire;
+            _animIDShoot = Animator.StringToHash("Shoot");
+        }
+
+        // Update is called once per frame
+
+
+        private void Update()
+        {
+            if (!_currentlyAiming) return;
+
+            {
+                // Vertical Aiming
+                contAltitude += desiredAltitudeChange * Time.deltaTime * aimUpDownSpeed;
+                contAltitude = Mathf.Clamp(contAltitude, firstRowY, firstRowY + (wallDepths.Count - 1) * rowHeight);
+                targetPos.position = new Vector3(
+                    targetPos.position.x,
+                    Mathf.Round(contAltitude / rowHeight) * rowHeight + vertOffset,
+                    targetPos.position.z);
+            }
+            var aimingAtRow = Mathf.RoundToInt((contAltitude - firstRowY) / rowHeight);
+            // Debug.Log("Aiming at Row " + aimingAtRow);
+
+
+            if (desiredRotationChange != 0)
+            {
+                targetPos.position = new Vector3(
+                    targetPos.position.x + rotSpeed * desiredRotationChange * Time.deltaTime,
+                    targetPos.position.y,
+                    targetPos.position.z);
+                transform.LookAt(new Vector3(targetPos.position.x, 0, targetPos.position.z));
+            }
+
+            targetPos.position = new Vector3(
+                targetPos.position.x,
+                targetPos.position.y,
+                wallDepths[aimingAtRow]);
+
+//            targetPos.position = new Vector3(Mathf.Tan(alpha*MagicNum) * wallDepths[aimingAtRow] , targetPos.position.y, wallDepths[aimingAtRow]);
+            _lineRenderer.SetPositions(new[] { dropInPoint.position, targetPos.position });
+            SmoothBezier();
         }
 
         private void OnDestroy()
@@ -79,6 +116,14 @@ namespace Interaction
             EventManager.OnEnterCatapult -= StartAiming;
             EventManager.OnExitCatapult -= StopAiming;
             EventManager.OnCatapultFire -= OnFire;
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            var darkRedColor = new Color(0.5f, 0.1f, 0.1f, 0.8f);
+            Gizmos.color = darkRedColor;
+            Gizmos.DrawLine(_startPoint, _startHandle);
+            Gizmos.DrawLine(_endPoint, _endHandle);
         }
 
         public void Interact(ThirdPersonController interactor)
@@ -92,7 +137,7 @@ namespace Interaction
                 _ready = false;
                 var path = new Vector3[_lineRenderer.positionCount];
                 _lineRenderer.GetPositions(path);
-            
+
                 EventManager.RaiseCatapultFire(path, _lineRenderer.positionCount);
             }
             else
@@ -101,7 +146,8 @@ namespace Interaction
                 {
                     _inCatapult = true;
                     EventManager.RaiseEnterCatapult(dropInPoint);
-                } else
+                }
+                else
                 {
                     Debug.Log("Catapult Not Ready Yet.");
                 }
@@ -122,56 +168,9 @@ namespace Interaction
             _lineRenderer.enabled = false;
         }
 
-        // Update is called once per frame
-
-
-        private void Update()
-        {
-            if (!_currentlyAiming) return;
-
-            { // Vertical Aiming
-                contAltitude += desiredAltitudeChange * Time.deltaTime * aimUpDownSpeed;
-                contAltitude = Mathf.Clamp(contAltitude, firstRowY, firstRowY+(wallDepths.Count-1)*rowHeight);
-                targetPos.position = new Vector3(
-                    targetPos.position.x, 
-                    Mathf.Round(contAltitude / rowHeight) * rowHeight + vertOffset, 
-                    targetPos.position.z);
-
-            }
-            var aimingAtRow = Mathf.RoundToInt((contAltitude - firstRowY) / rowHeight);
-            // Debug.Log("Aiming at Row " + aimingAtRow);
-
-
-            if (desiredRotationChange != 0)
-            {
-                targetPos.position = new Vector3(
-                    targetPos.position.x + rotSpeed * desiredRotationChange * Time.deltaTime, 
-                    targetPos.position.y, 
-                    targetPos.position.z);
-                transform.LookAt(new Vector3(targetPos.position.x, 0, targetPos.position.z));
-            }
-
-            targetPos.position = new Vector3(
-                targetPos.position.x, 
-                targetPos.position.y, 
-                wallDepths[aimingAtRow]);
-
-//            targetPos.position = new Vector3(Mathf.Tan(alpha*MagicNum) * wallDepths[aimingAtRow] , targetPos.position.y, wallDepths[aimingAtRow]);
-            _lineRenderer.SetPositions(new Vector3[] { dropInPoint.position, targetPos.position });
-            SmoothBezier();
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            var darkRedColor = new Color(0.5f, 0.1f, 0.1f, 0.8f);
-            Gizmos.color = darkRedColor;
-            Gizmos.DrawLine(_startPoint, _startHandle);
-            Gizmos.DrawLine(_endPoint, _endHandle);
-        }
-
         private void SmoothBezier()
         {
-            _startPoint = _lineRenderer.GetPosition(0)+new Vector3(0,1.6f,0);
+            _startPoint = _lineRenderer.GetPosition(0) + new Vector3(0, 1.6f, 0);
             _endPoint = _lineRenderer.GetPosition(1);
 
             // Setting Interpolation Points
@@ -181,16 +180,17 @@ namespace Interaction
             _lineRenderer.positionCount = bezierSmoothness + 1;
             for (var i = 0; i <= bezierSmoothness; i++)
             {
-                var t = (float)i / (float)bezierSmoothness;
-                _lineRenderer.SetPosition(i, Vector3.Lerp(Vector3.Lerp(_startPoint, _startHandle, t), Vector3.Lerp(_endHandle, _endPoint, t), t));
+                var t = i / (float)bezierSmoothness;
+                _lineRenderer.SetPosition(i,
+                    Vector3.Lerp(Vector3.Lerp(_startPoint, _startHandle, t), Vector3.Lerp(_endHandle, _endPoint, t),
+                        t));
             }
-
         }
 
         public void Aim(Vector2 input)
         {
             desiredRotationChange = input.x;
-            desiredAltitudeChange = Mathf.Abs(input.y) < 0.2f? 0 : input.y;
+            desiredAltitudeChange = Mathf.Abs(input.y) < 0.2f ? 0 : input.y;
         }
 
         public void ActionEvent_FullyRewound()
@@ -203,7 +203,7 @@ namespace Interaction
         {
             Debug.Log("Firing!");
             StopAiming(transform);
-            _anim.SetTrigger("Shoot");
+            _anim.SetTrigger(_animIDShoot);
         }
     }
 }

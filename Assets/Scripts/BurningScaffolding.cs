@@ -1,32 +1,30 @@
-using UnityEngine.EventSystems;
 using UnityEngine;
-using System.Collections;
 
 public class BurningScaffolding : MonoBehaviour
 {
     public GameObject particlePrefab;
-    private GameObject particleInstance;
-    private ParticleSystem fireParticleSystem;
     public float simulationTime = 2.0f;
     public AnimationCurve intensityCurve;
     public float duration = 10f;
-    private float timer = 0f;
-    private ParticleSystem.EmissionModule emissionModule;
+    private ParticleSystem.EmissionModule _emissionModule;
+    private ParticleSystem _fireParticleSystem;
+    private GameObject _particleInstance;
+    private float _timer = 0f;
 
-    void Start()
+    private void Start()
     {
-        particleInstance = Instantiate(particlePrefab, transform.position, Quaternion.identity);
+        _particleInstance = Instantiate(particlePrefab, transform.position, Quaternion.identity);
 
-        fireParticleSystem = particleInstance.GetComponent<ParticleSystem>();
-        fireParticleSystem.Simulate(simulationTime, true, true, true);
-        fireParticleSystem.Play();
+        _fireParticleSystem = _particleInstance.GetComponent<ParticleSystem>();
+        _fireParticleSystem.Simulate(simulationTime, true, true, true);
+        _fireParticleSystem.Play();
 
         gameObject.SetActive(false);
 
-        emissionModule = fireParticleSystem.emission;
+        _emissionModule = _fireParticleSystem.emission;
     }
 
-    void Update()
+    private void Update()
     {
         // timer += Time.deltaTime;
         // float normalizedTime = timer / duration;

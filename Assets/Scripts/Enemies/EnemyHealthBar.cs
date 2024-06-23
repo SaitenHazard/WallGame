@@ -1,34 +1,39 @@
-using Enemies;
 using UnityEngine;
 
-public class EnemyHealthBar : MonoBehaviour
+namespace Enemies
 {
-    
-    [SerializeField] private GameObject bar;
-
-    private Vector2 fullSizeDelta;
-
-    private float maxHealth;
-
-    private float health;
-
-
-    // Start is called before the first frame update
-    void Start()
+    public class EnemyHealthBar : MonoBehaviour
     {
-        maxHealth = (float)ArmyController.instance.enemyCount;
-        fullSizeDelta = bar.GetComponent<RectTransform>().sizeDelta;
-    }
+        [SerializeField] private GameObject bar;
 
-    // Update is called once per frame
-    void Update()
-    {
-        health = (float)ArmyController.instance.enemyCount;
+        private RectTransform _rectTransform;
+        private Vector2 _fullSizeDelta;
 
-        Vector2 width = fullSizeDelta;
+        private float _health;
 
-        width.x = fullSizeDelta.x * health / maxHealth;
+        private float _maxHealth;
 
-        bar.GetComponent<RectTransform>().sizeDelta = width;
+
+        // Start is called before the first frame update
+        private void Start()
+        {
+            _maxHealth = ArmyController.instance.enemyCount;
+            _rectTransform = bar.GetComponent<RectTransform>();
+            _fullSizeDelta = _rectTransform.sizeDelta;
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
+            _health = ArmyController.instance.enemyCount;
+
+            var width = _fullSizeDelta;
+
+            width.x = _fullSizeDelta.x * _health / _maxHealth;
+
+            // Let's not call GetComponent each frame, especially when we already have the component
+            // bar.GetComponent<RectTransform>().sizeDelta = width;
+            _rectTransform.sizeDelta = width;
+        }
     }
 }

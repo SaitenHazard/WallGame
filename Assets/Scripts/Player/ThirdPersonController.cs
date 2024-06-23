@@ -1,11 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using AnimationCotrollers;
+using AnimationControllers;
 using Input;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -35,7 +35,8 @@ namespace Player
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float gravity = -15.0f;
 
-        [Space(10)] [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
+        [Space(10)]
+        [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
         public float jumpTimeout = 0.1f;
 
         [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
@@ -45,15 +46,14 @@ namespace Player
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
         public bool grounded = true;
 
-        [Tooltip("Useful for rough ground")] 
-        public float groundedOffset = -0.14f;
+        [Tooltip("Useful for rough ground")] public float groundedOffset = -0.14f;
 
         [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
         public float groundedRadius = 0.28f;
 
         [Tooltip("What layers the character uses as ground")]
         public LayerMask groundLayers;
-        
+
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
         public GameObject cinemachineCameraTarget;
@@ -70,71 +70,70 @@ namespace Player
         [Tooltip("For locking the camera position on all axis")]
         public bool lockCameraPosition = true;
 
-        [Header("Inventory")] 
-        public Transform backpackWood;
+        [Header("Inventory")] public Transform backpackWood;
+
         public Transform backpackStone;
 
         public Transform woodReplenisher;
-        public Transform stoneReplenisher; 
+        public Transform stoneReplenisher;
 
-        public int _stone = 1;
+        public int stone = 1;
+
         public int stoneCapacity;
         //public List<GameObject> diegeticStones;
 
-        public int _wood = 1;
+        public int wood = 1;
         public int woodCapacity;
+        public float launchDuration = 1.0f;
+        private readonly float _terminalVelocity = 53.0f;
+        private InputActionMap _actionMapCatapult;
+        private InputActionMap _actionMapNormal;
+        private float _airTime;
+        private float _animationBlend;
+
+        private PlayerAnimationController _animController;
+        private float _cinemachineTargetPitch;
 
         //public List<GameObject> diegeticWood;
 
         // cinemachine
         private float _cinemachineTargetYaw;
-        private float _cinemachineTargetPitch;
+        private CharacterController _controller;
+
+        private PlayerState _currentState = PlayerState.Normal;
+        private float _fallTimeoutDelta;
+        private bool _hasAnimController;
         private bool _hasCamera;
 
-        // player
-        private float _speed;
-        private float _animationBlend;
-        private float _targetRotation;
-        private float _rotationVelocity;
-        private float _verticalVelocity;
-        private readonly float _terminalVelocity = 53.0f;
+        private Inputs _input;
         // inventory
-        
+
 
         // timeout
         private float _jumpTimeoutDelta;
-        private float _fallTimeoutDelta;
-        private float _airTime;
+        private Vector3[] _launchPath;
+        private int _launchPathLength;
+
+        private float _launchTime;
+
+        private GameObject _mainCamera;
         private bool _midAir;
 
         private PlayerInput _playerInput;
-        private CharacterController _controller;
-        private Inputs _input;
-        private InputActionMap _actionMapNormal;
-        private InputActionMap _actionMapCatapult;
-    
-        private GameObject _mainCamera;
+        private float _rotationVelocity;
 
-        private PlayerAnimationController _animController;
-        private bool _hasAnimController;
+        // player
+        private float _speed;
 
-        private enum PlayerState
-        {
-            Normal,
-            InCatapult,
-            Launched,
-            Stunned
-        }
 
-        private PlayerState _currentState = PlayerState.Normal;
+        private readonly GUIStyle _style = new();
+        private float _targetRotation;
+        private float _verticalVelocity;
 
         private void Awake()
         {
             // get a reference to our main camera
-            if (_mainCamera == null)
-            {
-                _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-            }
+            if (_mainCamera == null) _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             EventManager.OnEnterCatapult += EnterCatapult;
             EventManager.OnExitCatapult += ExitCatapult;
             EventManager.OnPlayerStunned += PauseMovement;
@@ -147,19 +146,6 @@ namespace Player
             Inputs.Jump += Jump;
         }
 
-        private void OnDestroy()
-        {
-            EventManager.OnEnterCatapult -= EnterCatapult;
-            EventManager.OnExitCatapult -= ExitCatapult;
-            EventManager.OnPlayerStunned -= PauseMovement;
-            EventManager.OnCatapultFire -= GetLaunched;
-            EventManager.OnReplenishWood -= FillWood;
-            EventManager.OnReplenishStone -= FillStone;
-            EventManager.OnRepairedWood -= HandleRepairedWood;
-            EventManager.OnRepairedStone -= HandleRepairedStone;
-            Inputs.Jump -= Jump;
-        }
-
         private void Start()
         {
             _animController = GetComponentInChildren<PlayerAnimationController>();
@@ -169,11 +155,12 @@ namespace Player
                 _hasCamera = true;
                 _cinemachineTargetYaw = cinemachineCameraTarget.transform.rotation.eulerAngles.y;
             }
+
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<Inputs>();
             _playerInput = GetComponent<PlayerInput>();
             _actionMapNormal = _playerInput.actions.FindActionMap("Normal", true);
-            _actionMapCatapult= _playerInput.actions.FindActionMap("Catapult", true);
+            _actionMapCatapult = _playerInput.actions.FindActionMap("Catapult", true);
 
             AssignActionMapIDs();
 
@@ -201,36 +188,65 @@ namespace Player
             if (_hasCamera) CameraRotation();
         }
 
+        private void OnDestroy()
+        {
+            EventManager.OnEnterCatapult -= EnterCatapult;
+            EventManager.OnExitCatapult -= ExitCatapult;
+            EventManager.OnPlayerStunned -= PauseMovement;
+            EventManager.OnCatapultFire -= GetLaunched;
+            EventManager.OnReplenishWood -= FillWood;
+            EventManager.OnReplenishStone -= FillStone;
+            EventManager.OnRepairedWood -= HandleRepairedWood;
+            EventManager.OnRepairedStone -= HandleRepairedStone;
+            Inputs.Jump -= Jump;
+        }
+
+        private void OnDrawGizmos()
+        {
+            _style.fontSize = 32;
+            // if (chosenOne) Handles.Label(transform.position + new Vector3(0, 3, 0), "Wall Health: " + health, _style);
+            Handles.Label(transform.position + new Vector3(0, 5, 0), "Wood: " + wood + "\nStone: " + stone, _style);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            var transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
+            var transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
+
+            Gizmos.color = grounded ? transparentGreen : transparentRed;
+
+            // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
+            Gizmos.DrawSphere(
+                new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z),
+                groundedRadius);
+        }
+
         private void AssignActionMapIDs()
         {
             // TODO
         }
-    
+
 
         private void GroundedCheck()
         {
             // set sphere position, with offset
-            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - groundedOffset,
+            var spherePosition = new Vector3(transform.position.x, transform.position.y - groundedOffset,
                 transform.position.z);
             grounded = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers,
                 QueryTriggerInteraction.Ignore);
-
-            // update animator if using character
-            // if (_hasAnimController)
-            // {
-            //     animator.SetBool(_animIDGrounded, !Grounded);
-            // }
+            
         }
 
         private void CameraRotation()
         {
-            cinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + cameraAngleOverride,_cinemachineTargetYaw, 0.0f);
+            cinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + cameraAngleOverride,
+                _cinemachineTargetYaw, 0.0f);
         }
 
         private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.sprint ? sprintSpeed : moveSpeed;
+            var targetSpeed = _input.sprint ? sprintSpeed : moveSpeed;
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error-prone, and is cheaper than magnitude
@@ -238,10 +254,10 @@ namespace Player
             if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
-            float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
+            var currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
-            float speedOffset = 0.1f;
-            float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+            var speedOffset = 0.1f;
+            var inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset ||
@@ -264,14 +280,14 @@ namespace Player
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
             // normalise input direction
-            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+            var inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
 
             // note: Vector2's != operator uses approximation so is not floating point error-prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
             if (_input.move != Vector2.zero)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg;
-                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
+                var rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     rotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
@@ -279,18 +295,17 @@ namespace Player
             }
 
 
-            Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+            var targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
             // move the player
-            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
+                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
             // update animator if using character
             if (_hasAnimController)
-            {
                 // animator.SetFloat(_animIDSpeed, _animationBlend);
                 // animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
                 _animController.SetSpeed(math.remap(0, 4, 0, 1, _speed));
-            }
         }
 
         private void Falling()
@@ -315,19 +330,12 @@ namespace Player
                     }
 
                     // stop our velocity dropping infinitely when grounded
-                    if (_verticalVelocity < 0.0f)
-                    {
-                        _verticalVelocity = -2f;
-                    }
+                    if (_verticalVelocity < 0.0f) _verticalVelocity = -2f;
                     _airTime = 0;
                 }
 
                 // jump timeout
-                if (_jumpTimeoutDelta >= 0.0f)
-                {
-                    _jumpTimeoutDelta -= Time.deltaTime;
-                }
-
+                if (_jumpTimeoutDelta >= 0.0f) _jumpTimeoutDelta -= Time.deltaTime;
             }
             else
             {
@@ -345,18 +353,13 @@ namespace Player
                 {
                     // update animator if using character
                     if (_hasAnimController)
-                    {
                         // _animator.SetBool(_animIDFreeFall, true);
                         _animController.SetFalling(true);
-                    }
                 }
             }
 
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
-            if (_verticalVelocity < _terminalVelocity)
-            {
-                _verticalVelocity += gravity * Time.deltaTime;
-            }
+            if (_verticalVelocity < _terminalVelocity) _verticalVelocity += gravity * Time.deltaTime;
         }
 
         private void Jump()
@@ -367,24 +370,8 @@ namespace Player
                 _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
 
                 // update animator if using character
-                if (_hasAnimController)
-                {
-                    _animController.SetJump();
-                }
+                if (_hasAnimController) _animController.SetJump();
             }
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            var transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
-            var transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
-
-            Gizmos.color = grounded ? transparentGreen : transparentRed;
-
-            // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
-            Gizmos.DrawSphere(
-                new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z),
-                groundedRadius);
         }
 
         private void EnterCatapult(Transform catapultBowl)
@@ -413,10 +400,6 @@ namespace Player
             // _controller.enabled = true;
         }
 
-        private float _launchTime;
-        private Vector3[] _launchPath;
-        private int _launchPathLength;
-        public float launchDuration = 1.0f;
         private void GetLaunched(Vector3[] path, int vertexCount)
         {
             CancelVelocity();
@@ -436,14 +419,18 @@ namespace Player
 
         private void Fly()
         {
-            float currentProgress = (Time.time - _launchTime) / launchDuration;
+            var currentProgress = (Time.time - _launchTime) / launchDuration;
             //The Mid-Air Movement is divided into y and xz because in a normal flying object, horizontal and vertical speed are also disconnected.
 
-            Vector3 horiz = Vector3.Lerp(_launchPath[0], _launchPath[_launchPathLength - 1], currentProgress);
+            var horiz = Vector3.Lerp(_launchPath[0], _launchPath[_launchPathLength - 1], currentProgress);
 
-            Vector3 lastPoint = _launchPath[Mathf.FloorToInt(Mathf.Clamp(currentProgress * _launchPathLength, 0, _launchPathLength - 1))];
-            Vector3 nextPoint = _launchPath[Mathf.CeilToInt(Mathf.Clamp(currentProgress * _launchPathLength, 0, _launchPathLength - 1))];
-            float uber = currentProgress * _launchPathLength - Mathf.FloorToInt(currentProgress * _launchPathLength);
+            var lastPoint =
+                _launchPath[
+                    Mathf.FloorToInt(Mathf.Clamp(currentProgress * _launchPathLength, 0, _launchPathLength - 1))];
+            var nextPoint =
+                _launchPath[
+                    Mathf.CeilToInt(Mathf.Clamp(currentProgress * _launchPathLength, 0, _launchPathLength - 1))];
+            var uber = currentProgress * _launchPathLength - Mathf.FloorToInt(currentProgress * _launchPathLength);
             transform.position = new Vector3(horiz.x, Mathf.Lerp(lastPoint.y, nextPoint.y, uber), horiz.z);
         }
 
@@ -455,7 +442,7 @@ namespace Player
         }
 
         /// <summary>
-        /// Cancels players velocity and suspends movement for duration
+        ///     Cancels players velocity and suspends movement for duration
         /// </summary>
         /// <param name="duration">Time in Seconds</param>
         private void PauseMovement(float duration)
@@ -481,9 +468,10 @@ namespace Player
 
         private void FillWood(int amount = 3)
         {
-            amount = Mathf.Min(woodCapacity, _wood + amount);
-            _wood = amount;
-            while (woodReplenisher.childCount > 0 && amount > 0) {
+            amount = Mathf.Min(woodCapacity, wood + amount);
+            wood = amount;
+            while (woodReplenisher.childCount > 0 && amount > 0)
+            {
                 transform.parent = backpackWood;
                 var child = woodReplenisher.GetChild(woodReplenisher.childCount - 1);
                 child.SetParent(backpackWood, false);
@@ -491,7 +479,6 @@ namespace Player
                 child.localPosition = Vector3.zero + new Vector3(0, Random.Range(-0.025f, 0.025f), 0.2f);
                 --amount;
             }
-   
         }
 
         private void HandleRepairedWood()
@@ -500,19 +487,21 @@ namespace Player
             toRemove.SetParent(woodReplenisher, false);
             toRemove.localRotation = Quaternion.identity;
             toRemove.localPosition = Vector3.zero + new Vector3(-0.8f, 0.07f * woodReplenisher.transform.childCount, 0);
-            _wood--;
+            wood--;
         }
-        
+
         private void FillStone(int amount = 3)
         {
-            amount = Mathf.Min(stoneCapacity, _stone + amount);
-            _stone = amount;
-            while (stoneReplenisher.childCount > 0 && amount > 0) {
+            amount = Mathf.Min(stoneCapacity, stone + amount);
+            stone = amount;
+            while (stoneReplenisher.childCount > 0 && amount > 0)
+            {
                 transform.parent = backpackStone;
                 var child = stoneReplenisher.GetChild(stoneReplenisher.childCount - 1);
                 child.SetParent(backpackStone, false);
-                child.localRotation = Quaternion.Euler(0,0, 15);
-                child.localPosition = Vector3.zero + new Vector3(-0.13f + Random.Range(-0.05f, 0.05f), 0, 0.16f * amount);
+                child.localRotation = Quaternion.Euler(0, 0, 15);
+                child.localPosition =
+                    Vector3.zero + new Vector3(-0.13f + Random.Range(-0.05f, 0.05f), 0, 0.16f * amount);
                 --amount;
             }
         }
@@ -523,27 +512,25 @@ namespace Player
             toRemove.SetParent(stoneReplenisher, false);
             toRemove.localRotation = Quaternion.Euler(0, Random.Range(-5, 5), 0);
             toRemove.localPosition = Vector3.zero + new Vector3(2.7f, 0.55f, Random.Range(-0.6f, 0.6f));
-            _stone--;
+            stone--;
         }
 
         public bool CanRepairWood()
         {
-            return _wood > 0;
-        }
-        
-        public bool CanRepairStone()
-        {
-            return _stone > 0;
+            return wood > 0;
         }
 
-        
-        
-        private GUIStyle _style = new GUIStyle();
-        private void OnDrawGizmos()
+        public bool CanRepairStone()
         {
-            _style.fontSize = 32;
-            // if (chosenOne) Handles.Label(transform.position + new Vector3(0, 3, 0), "Wall Health: " + health, _style);
-            Handles.Label(transform.position + new Vector3(0, 5, 0), "Wood: " + _wood + "\nStone: " + _stone, _style);
+            return stone > 0;
+        }
+
+        private enum PlayerState
+        {
+            Normal,
+            InCatapult,
+            Launched,
+            Stunned
         }
     }
 }

@@ -1,58 +1,58 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Wall;
 
 public class WallSegmentCriticalUI : MonoBehaviour
 {
-    public List<WallSegment> _criticalWallSegments = new List<WallSegment>();
+    public List<WallSegment> criticalWallSegments = new();
+
+    public float pulseSpeed = 1.0f; // Adjust speed of pulsation
+    public float minAlpha = 0.5f; // Minimum opacity during pulse
+    public float maxAlpha = 1.0f; // Maximum opacity during pulse
+    private Image _image;
+
+    private bool _setUp;
 
     private void Start()
     {
-        Invoke("DelayedSetUp", 0.1f);
+        Invoke(nameof(DelayedSetUp), 0.1f);
     }
 
-    private bool setUp = false;
+    private void Update()
+    {
+        if (!_setUp) return;
+        var alpha = Mathf.Lerp(minAlpha, maxAlpha, Mathf.PingPong(Time.time * pulseSpeed, 1.0f));
+        _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, alpha);
+
+        if (criticalWallSegments.Count == 0) gameObject.SetActive(false);
+    }
 
     public void DelayedSetUp()
     {
-        setUp = true;
-        image = GetComponent<Image>();
+        _setUp = true;
+        _image = GetComponent<Image>();
 
-        List<WallSegment> _wallSegments = WallManager.instance.GetWallSegments();
+        var wallSegments = WallManager.instance.GetWallSegments();
 
-        foreach (var segment in _wallSegments)
+        foreach (var segment in wallSegments)
         {
-            segment.onWallSegmentCritical.AddListener(OnWallSegmentCritical);
-            segment.onWallNotSegmentCritical.AddListener(OnWallSegmentNotCritical);
+            segment.OnWallSegmentCritical.AddListener(OnWallSegmentCritical);
+            segment.OnWallNotSegmentCritical.AddListener(OnWallSegmentNotCritical);
         }
     }
 
     private void OnWallSegmentCritical(WallSegment segment)
     {
         Debug.Log("OnWallSegmentCritical");
-        _criticalWallSegments.Add(segment);
+        criticalWallSegments.Add(segment);
         gameObject.SetActive(true);
     }
 
     private void OnWallSegmentNotCritical(WallSegment segment)
     {
         Debug.Log("OnWallSegmentNotCritical");
-        _criticalWallSegments.Remove(segment);
+        criticalWallSegments.Remove(segment);
     }
-
-    private void Update()
-    {
-        if (!setUp) return;
-        float alpha = Mathf.Lerp(minAlpha, maxAlpha, Mathf.PingPong(Time.time * pulseSpeed, 1.0f));
-        image.color = new Color(image.color.r, image.color.g, image.color.b, alpha);
-
-        if (_criticalWallSegments.Count == 0) gameObject.SetActive(false);
-    }
-
-    public float pulseSpeed = 1.0f; // Adjust speed of pulsation
-    public float minAlpha = 0.5f; // Minimum opacity during pulse
-    public float maxAlpha = 1.0f; // Maximum opacity during pulse
-    private Image image;
 }
