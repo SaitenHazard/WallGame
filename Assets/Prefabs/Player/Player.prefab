@@ -1295,10 +1295,10 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4692628046276259234}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.97, y: 0, z: -5.1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.7, y: 1.7, z: 1.7}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5180885743566190785}
   m_Father: {fileID: 0}
@@ -1315,13 +1315,13 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 1.8
+  m_Height: 1.53
   m_Radius: 0.4
   m_SlopeLimit: 45
   m_StepOffset: 0.25
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0
-  m_Center: {x: 0, y: 0.94, z: 0}
+  m_Center: {x: 0, y: 0.71, z: 0}
 --- !u!114 &4692628046276259239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1334,34 +1334,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26e54e5a728a9234ab24fcf1460ed8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
+  moveSpeed: 8
   sprintSpeed: 6
-  rotationSmoothTime: 0.12
+  rotationSmoothTime: 0
   speedChangeRate: 10
-  jumpHeight: 5
-  gravity: -15
+  jumpHeight: 3.2
+  gravity: -25
   jumpTimeout: 0.1
   fallTimeout: 0.15
   grounded: 1
   groundedOffset: -0.14
-  groundedRadius: 0.28
+  groundedRadius: 0.64
   groundLayers:
     serializedVersion: 2
     m_Bits: 512
-  cinemachineCameraTarget: {fileID: 0}
-  topClamp: 70
-  bottomClamp: -30
-  cameraAngleOverride: 0
-  lockCameraPosition: 0
   backpackWood: {fileID: 5809163653209234364}
   backpackStone: {fileID: 5809163651777017010}
   woodReplenisher: {fileID: 0}
   stoneReplenisher: {fileID: 0}
-  _stone: 0
+  stone: 1
   stoneCapacity: 3
-  _wood: 0
+  wood: 1
   woodCapacity: 3
-  launchDuration: 1
+  launchDuration: 0.75
 --- !u!114 &4692628046276259236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1516,6 +1511,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 2fc555c7-36dc-4077-874d-b5d55b6951e3
     m_ActionName: Normal/RepairStone[/XInputControllerWindows/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 518f5de9-a35b-48a4-a04b-67d2b06fe20a
+    m_ActionName: Normal/YPressed
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Normal
