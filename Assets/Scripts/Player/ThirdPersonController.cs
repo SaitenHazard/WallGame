@@ -54,23 +54,7 @@ namespace Player
         [Tooltip("What layers the character uses as ground")]
         public LayerMask groundLayers;
 
-        [Header("Cinemachine")]
-        [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
-        public GameObject cinemachineCameraTarget;
-
-        [Tooltip("How far in degrees can you move the camera up")]
-        public float topClamp = 70.0f;
-
-        [Tooltip("How far in degrees can you move the camera down")]
-        public float bottomClamp = -30.0f;
-
-        [Tooltip("Additional degrees to override the camera. Useful for fine tuning camera position when locked")]
-        public float cameraAngleOverride;
-
-        [Tooltip("For locking the camera position on all axis")]
-        public bool lockCameraPosition = true;
-
-        [Header("Inventory")] public Transform backpackWood;
+      [Header("Inventory")] public Transform backpackWood;
 
         public Transform backpackStone;
 
@@ -150,12 +134,6 @@ namespace Player
         {
             _animController = GetComponentInChildren<PlayerAnimationController>();
             _hasAnimController = _animController != null;
-            if (cinemachineCameraTarget)
-            {
-                _hasCamera = true;
-                _cinemachineTargetYaw = cinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            }
-
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<Inputs>();
             _playerInput = GetComponent<PlayerInput>();
@@ -181,11 +159,6 @@ namespace Player
             GroundedCheck();
             Falling();
             Move();
-        }
-
-        private void LateUpdate()
-        {
-            if (_hasCamera) CameraRotation();
         }
 
         private void OnDestroy()
@@ -235,12 +208,6 @@ namespace Player
             grounded = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers,
                 QueryTriggerInteraction.Ignore);
             
-        }
-
-        private void CameraRotation()
-        {
-            cinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + cameraAngleOverride,
-                _cinemachineTargetYaw, 0.0f);
         }
 
         private void Move()
