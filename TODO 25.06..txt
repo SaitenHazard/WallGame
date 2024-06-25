@@ -1,0 +1,70 @@
+Focus Right now:
+	Fixing core Mechanic (Balancing) and making it fun
+	Back to papaer prototype?
+
+Point System rewarding good Players
+	
+Mooore diegetic UI - Tobi
+	- Enemies are carrying flags signaling 10 guys
+
+More Enemy Variety - Tobi
+	- more Damage per shot
+	- tar pit, slowing down wallther
+	- stun if Segment infront is hit (Maybe)
+	- Smoke screen
+
+Camera Movement - Leon
+	- Smooth slight follow
+	- Camera Shake on Event
+
+Upgrade System (Maybe)
+	Every night you upgrade on wall Segment to have a permanent upgrade.
+	THis is done by chosing betwen 2 (or 3) randomly drawn Upgrades and placing it on the wall.
+
+		Ideas for Upgrades
+			- Wall Segment gets more Health
+			- Scaffolding gets more Health
+			- double attack impact
+			- attracting Trebuchet shots to this part that would otherwise hit neighbouring parts
+			- redirecting Trebuchet shots to a neighbouring wall Segment
+			- slow down Trebuchet
+			- Auto repair with cooldown
+			- Rebounding trebuchet attacks to the enemy (Massive Damage)
+			- better telegraphing of enemy attacks
+
+Sound Design - Karl (Feel free to expand)
+	- Panic Sounds when health is low
+		Distraught villagers
+		Fire
+	- Battle Drums
+		getting louder when Health is low
+	- Crossbowmen
+		Shot fired
+		Running
+		Dying (Scream Maybe)
+		reloading
+	- Catapult shot
+	- Trebuchet 
+		creaking
+		Shooting
+		Wall impact
+	- Wallther
+		Landing
+		Steps on Stone/Sand/Wood
+		Resource Pickup
+		Repairing stuff
+		Grunting
+	- Air whoosh for Arrows/Crossbows
+	- Enemy Shouting commands in the distance
+	- Enemy Soldiers dying
+	- Upgrades Need sounds too!
+		Metal clanging
+	- Ambient sounds at night
+		People talking, mugs clacking, bugs chirping	
+	- Sound of wall crumbling and Breaking alltogether, very epic because game over
+
+Lose Condition - Leon
+	Percentage of Sum of all maximum wall healths should not be unterschritten
+
+Win Condition: 
+	All soldiers dead, get upgrade at night and repeat.
