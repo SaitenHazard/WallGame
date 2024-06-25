@@ -1,63 +1,55 @@
-using JetBrains.Annotations;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Text))]
 public class MockupBoltReceiver : MonoBehaviour
 {
-    private Queue<DamageDealer> damageQueue;
+    private int _armyRemaining = 300;
 
-    private int armyRemaining = 300;
+    private float _currentScale = 1.0f;
+    private Queue<DamageDealer> _damageQueue;
 
-    private Text text;
+    private Text _text;
 
-    private float currentScale = 1.0f;
-
-    void Start()
+    private void Start()
     {
-        damageQueue = new Queue<DamageDealer>();    
-        text = GetComponent<Text>();
-        updateText();
-    }
-
-    public void EnqueueDamage(int damage)
-    {
-        damageQueue.Enqueue(new DamageDealer(damage));
+        _damageQueue = new Queue<DamageDealer>();
+        _text = GetComponent<Text>();
+        UpdateText();
     }
 
     public void Update()
     {
-        if (damageQueue.Count != 0)
+        if (_damageQueue.Count != 0)
         {
-            while (damageQueue.Count > 0)
-            {
-                armyRemaining -= damageQueue.Dequeue().damage;
-            }
-            updateText();
-            currentScale += 0.1f;
+            while (_damageQueue.Count > 0) _armyRemaining -= _damageQueue.Dequeue().Damage;
+            UpdateText();
+            _currentScale += 0.1f;
         }
-        float desireddisplacement = 1 - currentScale;
-        currentScale += desireddisplacement * 0.1f;
-        transform.localScale = Vector3.one * currentScale;
+
+        var desireddisplacement = 1 - _currentScale;
+        _currentScale += desireddisplacement * 0.1f;
+        transform.localScale = Vector3.one * _currentScale;
     }
 
-    private void updateText()
+    public void EnqueueDamage(int damage)
     {
-        text.text = armyRemaining + " enemies remaining!";
+        _damageQueue.Enqueue(new DamageDealer(damage));
+    }
+
+    private void UpdateText()
+    {
+        _text.text = _armyRemaining + " enemies remaining!";
     }
 
     private class DamageDealer
     {
+        public readonly int Damage;
+
         public DamageDealer(int damage)
         {
-            this.damage = damage;
+            this.Damage = damage;
         }
-
-        public int damage;
     }
 }
-
-

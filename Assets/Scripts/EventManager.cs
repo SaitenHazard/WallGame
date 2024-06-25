@@ -1,14 +1,17 @@
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class EventManager : MonoBehaviour
 {
-    public delegate void NoParamsEvent();
     public delegate void FloatEvent(float value);
+
     public delegate void IntEvent(int value);
-    public delegate void TransformEvent(Transform value);
+
+    public delegate void NoParamsEvent();
+
     public delegate void PathEvent(Vector3[] path, int vertexCount);
+
+    public delegate void TransformEvent(Transform value);
 
     public static event TransformEvent OnEnterCatapult;
     public static event TransformEvent OnExitCatapult;
@@ -27,8 +30,6 @@ public class EventManager : MonoBehaviour
 
     public static event NoParamsEvent OnGameOver;
 
-    
-
 
     public static void RaiseCatapultFire(Vector3[] path, int vertexCount)
     {
@@ -39,7 +40,7 @@ public class EventManager : MonoBehaviour
     {
         OnEnterCatapult?.Invoke(catapultBowl);
     }
-    
+
     public static void RaiseExitCatapult(Transform exitPoint)
     {
         OnExitCatapult?.Invoke(exitPoint);
@@ -54,6 +55,7 @@ public class EventManager : MonoBehaviour
     {
         OnReplenishWood?.Invoke(amount);
     }
+
     public static void RaiseOnReplenishStone(int amount)
     {
         OnReplenishStone?.Invoke(amount);

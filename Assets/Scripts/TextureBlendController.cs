@@ -1,33 +1,40 @@
+using System;
 using UnityEngine;
 
 public class TextureBlendController : MonoBehaviour
 {
     public Material blendMaterial;
     public float blendSpeed = 1.0f;
-    private float blendValue = 0.0f;
-    private bool blendForward = true;
+    private bool _blendForward = true;
+    private float _blendValue;
+    private int _animIDBlend;
 
-    void Update()
+    private void Start()
     {
-        if (blendForward)
+        _animIDBlend = Animator.StringToHash("Blend");
+    }
+
+    private void Update()
+    {
+        if (_blendForward)
         {
-            blendValue += Time.deltaTime * blendSpeed;
-            if (blendValue >= 1.0f)
+            _blendValue += Time.deltaTime * blendSpeed;
+            if (_blendValue >= 1.0f)
             {
-                blendValue = 1.0f;
-                blendForward = false;
+                _blendValue = 1.0f;
+                _blendForward = false;
             }
         }
         else
         {
-            blendValue -= Time.deltaTime * blendSpeed;
-            if (blendValue <= 0.0f)
+            _blendValue -= Time.deltaTime * blendSpeed;
+            if (_blendValue <= 0.0f)
             {
-                blendValue = 0.0f;
-                blendForward = true;
+                _blendValue = 0.0f;
+                _blendForward = true;
             }
         }
 
-        blendMaterial.SetFloat("_Blend", blendValue);
+        blendMaterial.SetFloat(_animIDBlend, _blendValue);
     }
 }

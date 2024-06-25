@@ -1,48 +1,49 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Enemies
 {
     public class Footsoldier : MonoBehaviour
     {
-        private float offsetMove = 0.0f;
+        public float vibing = 1;
 
-        private Vector3 startPosition;
+        public float ecstasy = 1;
 
-        public float _vibing = 1;
+        public float moveSpeed = 0.1f;
 
-        public float _ecstasy = 1;
+        private bool _dead;
 
-        public float _moveSpeed = 0.1f;
+        private float _drift;
+        private float _offsetMove;
 
-        private float drift = 0.0f;
-
-        private bool dead = false;
+        private Vector3 _startPosition;
 
         private void Start()
         {
-            offsetMove = Random.Range(0, 6.28f);
-            startPosition = transform.position;
-            drift = Random.Range(-0.05f, 0.05f);
+            _offsetMove = Random.Range(0, 6.28f);
+            _startPosition = transform.position;
+            _drift = Random.Range(-0.05f, 0.05f);
         }
 
         private void Update()
         {
-            if (!dead)
-                transform.position = startPosition + new Vector3(drift*3, _vibing+_vibing * Mathf.Sin(_ecstasy * (offsetMove + Time.time)), -Time.time * _moveSpeed*3);
+            if (!_dead)
+                transform.position = _startPosition + new Vector3(_drift * 3,
+                    vibing + vibing * Mathf.Sin(ecstasy * (_offsetMove + Time.time)), -Time.time * moveSpeed * 3);
         }
 
         public void SetUp(float vibing, float ecstasy, float moveSpeed)
         {
-            _vibing = vibing;
-            _ecstasy = ecstasy;
-            _moveSpeed = moveSpeed;
+            this.vibing = vibing;
+            this.ecstasy = ecstasy;
+            this.moveSpeed = moveSpeed;
         }
 
         public IEnumerator Die()
         {
-            dead = true;
-            for (int i = 0; i < 44; i++)
+            _dead = true;
+            for (var i = 0; i < 44; i++)
             {
                 transform.Rotate(2, 0, 0);
                 yield return null;

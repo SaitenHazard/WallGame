@@ -1,9 +1,7 @@
-using Input;
-using System.Collections;
 using System.Collections.Generic;
+using Input;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class TutorialController : MonoBehaviour
@@ -13,7 +11,7 @@ public class TutorialController : MonoBehaviour
 
     public int currentIndex = -1;
 
-    private List<string> texts = new List<string>{
+    private readonly List<string> _texts = new List<string>{
         "You take control of Wallther, the ridiculously buff repairman.",
         "Your job is to keep the wall in shape in the midst of an enemy siege.",
         "If you do your job well, the crossbowmen on the walls can do their job and eliminate the enemy army.",
@@ -42,20 +40,20 @@ public class TutorialController : MonoBehaviour
 
     public bool ableToContinue = true;
 
-    public void NextTutorialStep()
+    private void NextTutorialStep()
     {
         if (!ableToContinue) return;
 
         ableToContinue = false;
         continueButton.SetActive(false);
-        Invoke("AbleToContinue", 1.0f);
+        Invoke(nameof(AbleToContinue), 1.0f);
 
         currentIndex++;
-        if (currentIndex == texts.Count)
+        if (currentIndex == _texts.Count)
         {
             SceneManager.LoadScene("Tobi");
         }
-        textMeshPro.text = texts[currentIndex];
+        textMeshPro.text = _texts[currentIndex];
     }
 
     private void AbleToContinue()

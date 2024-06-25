@@ -1,7 +1,5 @@
 using Input;
-
 using Player;
-
 using UnityEngine;
 
 namespace Interaction
@@ -17,6 +15,9 @@ namespace Interaction
     public class Interactor : MonoBehaviour
     {
         private ThirdPersonController _controller;
+
+        private Interaction _interact;
+
         private void Awake()
         {
             _controller = GetComponent<ThirdPersonController>();
@@ -28,22 +29,17 @@ namespace Interaction
         {
             Inputs.Interact -= Interact;
         }
-
-        private Interaction _interact;    
         // Start is called before the first frame update
-    
+
         private void OnTriggerEnter(Collider other)
         {
             var interactable = other.gameObject.GetComponent<IInteractable>();
 
-            if (interactable != null)
-            {
-                _interact = interactable.Interact;
-            }
-        
+            if (interactable != null) _interact = interactable.Interact;
+
             /*
-         * Possibly call to UI class to display Tooltip (Press E to Interact)
-         */
+             * Possibly call to UI class to display Tooltip (Press E to Interact)
+             */
         }
 
         private void OnTriggerExit(Collider other)

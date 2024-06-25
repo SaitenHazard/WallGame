@@ -28,12 +28,12 @@ namespace Input
         public static event OnInputNoParams YPressed;
         public static event OnInputVector2 Select;
 
-        private Catapult catapult;
+        private Catapult _catapult;
 
         void Start()
         {
-            catapult = FindObjectOfType<Catapult>();
-            if (catapult == null)
+            _catapult = FindObjectOfType<Catapult>();
+            if (_catapult == null)
             {
                 Debug.LogWarning(
                     "Inputs.cs could not find a Catapult.cs script in the scene and is now deactivated. Make sure to include a Catapult prefab in the scene and activate its Catapult.cs component!");
@@ -87,7 +87,7 @@ namespace Input
 
         public void OnAim(InputAction.CallbackContext context)
         {
-            catapult.Aim(context.ReadValue<Vector2>());
+            _catapult.Aim(context.ReadValue<Vector2>());
         }
 
         private void OnApplicationFocus(bool hasFocus)

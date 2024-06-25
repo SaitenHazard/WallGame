@@ -1,17 +1,13 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Input;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Wall
 {
     public class WallSegment : MonoBehaviour
     {
-        public GameObject wallPiece = null;
-        public GameObject scaffoldingPiece = null;
+        public GameObject wallPiece;
+        public GameObject scaffoldingPiece;
         public FriendlySoldier soldier;
 
         public int wallMaxHealth = 3;
@@ -19,7 +15,7 @@ namespace Wall
         public int scaffoldingMaxHealth = 2;
         public int scaffoldingHealth;
         public bool isScaffoldingIntact = true;
-        public bool soldierRequested = false;
+        public bool soldierRequested;
         public bool isSoldierPresent;
         public Mesh normalWall;
         public Mesh chippedWall;
@@ -31,10 +27,16 @@ namespace Wall
 
         private MeshFilter _meshFilter;
         private MeshRenderer _meshRenderer;
+
+        private readonly GUIStyle _style = new();
         private Material _wallMaterial;
 
-        public WallSegmentCriticalEvent onWallSegmentCritical = new WallSegmentCriticalEvent();
-        public WallSegmentNotCriticalEvent onWallNotSegmentCritical = new WallSegmentNotCriticalEvent();
+        /////////////////for Debug Only
+
+        private bool _ciritcalInvooked;
+        public readonly WallSegmentNotCriticalEvent OnWallNotSegmentCritical = new();
+
+        public readonly WallSegmentCriticalEvent OnWallSegmentCritical = new();
 
 
         private void Start()
@@ -48,32 +50,42 @@ namespace Wall
             // UpdateSoldierState();
         }
 
-        /////////////////for Debug Only
-
-        bool ciritcalInvooked = false;
         public void Update()
         {
-            if (wallHealth == 0 && !ciritcalInvooked)
+            /* TODO
+             * 
+             * This needs to be reworked. We cannot invoke an event each frame only to set a value each frame that's probably already set.
+             * If it's for debugging, please remove.
+             * Also the way the these events are created is not right, please use the EventManager.
+             */
+            switch (wallHealth)
             {
-                Debug.Log("Hello");
-                ciritcalInvooked = true;
-                onWallSegmentCritical.Invoke(this);
-            }
-            if (wallHealth > 0 && ciritcalInvooked)
-            {
-                Debug.Log("It's me");
-                ciritcalInvooked = false;
-                onWallNotSegmentCritical.Invoke(this);
+                case 0 when !_ciritcalInvooked:
+                    Debug.Log("Hello");
+                    _ciritcalInvooked = true;
+                    OnWallSegmentCritical.Invoke(this);
+                    break;
+                case > 0 when _ciritcalInvooked:
+                    Debug.Log("It's me");
+                    _ciritcalInvooked = false;
+                    OnWallNotSegmentCritical.Invoke(this);
+                    break;
             }
         }
-        // /////////////////////
-        // </summary>
-   
+
+        private void OnDrawGizmos()
+        {
+            _style.fontSize = 32;
+            if (chosenOne)
+                Handles.Label(transform.position + new Vector3(0, 3, 0), "Wall Health: " + wallHealth, _style);
+        }
+
 
         public bool WallDamaged()
         {
             return wallHealth < wallMaxHealth;
         }
+
         public bool ScaffoldingDamaged()
         {
             return isScaffoldingIntact;
@@ -81,9 +93,9 @@ namespace Wall
 
         private IEnumerator JuicyRepair()
         {
-            for (float x = 0; x < 1; x += Time.deltaTime*4)
+            for (float x = 0; x < 1; x += Time.deltaTime * 4)
             {
-                transform.localScale = Vector3.one * (1+(1 - Mathf.Cos(x*3.14f*2))/2.5f) ;
+                transform.localScale = Vector3.one * (1 + (1 - Mathf.Cos(x * 3.14f * 2)) / 2.5f);
                 yield return null;
             }
         }
@@ -96,12 +108,10 @@ namespace Wall
                 _meshRenderer.material = translucent;
                 return true;
             }
-            else
-            {
-                ChangeWallState(wallHealth);
-                _meshRenderer.material = _wallMaterial;
-                return false;
-            }
+
+            ChangeWallState(wallHealth);
+            _meshRenderer.material = _wallMaterial;
+            return false;
         }
 
         private void ChangeWallState(int state)
@@ -136,7 +146,7 @@ namespace Wall
             scaffoldingHealth = Mathf.Min(scaffoldingMaxHealth, scaffoldingHealth + 1);
             scaffoldingPiece.SetActive(true);
             RequestSoldier();
-            StartCoroutine("JuicyRepair");
+            StartCoroutine(nameof(JuicyRepair));
             return true;
         }
 
@@ -148,16 +158,15 @@ namespace Wall
                 EventManager.RaiseGameOver();
                 return;
             }
+
             ChangeWallState(wallHealth);
             if (isSoldierPresent)
             {
                 soldier.Die();
                 isSoldierPresent = false;
             }
-            if(wallHealth == 0)
-            {
-                onWallSegmentCritical.Invoke(this);
-            }
+
+            if (wallHealth == 0) OnWallSegmentCritical.Invoke(this);
         }
 
         public bool RepairWall()
@@ -166,22 +175,15 @@ namespace Wall
             wallHealth = Mathf.Min(wallMaxHealth, wallHealth + 1);
             ChangeWallState(wallHealth);
             RequestSoldier();
-            onWallNotSegmentCritical.Invoke(this);
-            StartCoroutine("JuicyRepair");
+            OnWallNotSegmentCritical.Invoke(this);
+            StartCoroutine(nameof(JuicyRepair));
             return true;
         }
 
         private void RequestSoldier()
         {
-            if (wallHealth == wallMaxHealth && scaffoldingHealth == scaffoldingMaxHealth && !soldierRequested) WallManager.instance.RequestSoldier(this);
-        }
-
-        private GUIStyle _style = new GUIStyle();
-
-        private void OnDrawGizmos()
-        {
-            _style.fontSize = 32;
-            if (chosenOne) Handles.Label(transform.position + new Vector3(0, 3, 0), "Wall Health: " + wallHealth, _style);
+            if (wallHealth == wallMaxHealth && scaffoldingHealth == scaffoldingMaxHealth && !soldierRequested)
+                WallManager.instance.RequestSoldier(this);
         }
 
         public void AssignSoldier(FriendlySoldier incomingSoldier)
