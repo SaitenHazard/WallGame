@@ -31,9 +31,7 @@ namespace Wall
         private readonly GUIStyle _style = new();
         private Material _wallMaterial;
 
-        /////////////////for Debug Only
 
-        private bool _ciritcalInvooked;
         public readonly WallSegmentNotCriticalEvent OnWallNotSegmentCritical = new();
 
         public readonly WallSegmentCriticalEvent OnWallSegmentCritical = new();
@@ -50,28 +48,31 @@ namespace Wall
             // UpdateSoldierState();
         }
 
-        public void Update()
-        {
-            /* TODO
-             * 
-             * This needs to be reworked. We cannot invoke an event each frame only to set a value each frame that's probably already set.
-             * If it's for debugging, please remove.
-             * Also the way the these events are created is not right, please use the EventManager.
-             */
-            switch (wallHealth)
-            {
-                case 0 when !_ciritcalInvooked:
-                    Debug.Log("Hello");
-                    _ciritcalInvooked = true;
-                    OnWallSegmentCritical.Invoke(this);
-                    break;
-                case > 0 when _ciritcalInvooked:
-                    Debug.Log("It's me");
-                    _ciritcalInvooked = false;
-                    OnWallNotSegmentCritical.Invoke(this);
-                    break;
-            }
-        }
+        //public void Update()
+        //{
+        //    /* TODO
+        //     * 
+        //     * This needs to be reworked. We cannot invoke an event each frame only to set a value each frame that's probably already set.
+        //     * If it's for debugging, please remove.
+        //     * Also the way the these events are created is not right, please use the EventManager.
+        //     */
+        //    switch (wallHealth)
+        //    {
+        //        case 0 when !_ciritcalInvooked:
+        //            Debug.Log("Hello");
+        //            _ciritcalInvooked = true;
+        //            OnWallSegmentCritical.Invoke(this);
+        //            break;
+        //        case > 0 when _ciritcalInvooked:
+        //            Debug.Log("It's me");
+        //            _ciritcalInvooked = false;
+        //            OnWallNotSegmentCritical.Invoke(this);
+        //            break;
+        //    }
+        //}
+
+        /// /////////////////
+
 
         private void OnDrawGizmos()
         {
