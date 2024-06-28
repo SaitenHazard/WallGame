@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b4f2abd53f7a6c419285dc0d4324a61, type: 3}
+  m_Name: ScafReinforcement
+  m_EditorClassIdentifier: 
+  upgradePrefab: {fileID: -5640361478842853772, guid: 753290e5396e64e4a817ef1f8d50fd9f,
+    type: 3}
+  id: 2
+  title: Reinforced Scaffolding
+  subtitle: 
+  rarety: 0
+  description: Makes one piece of scaffolding more durable, giving it 2 extra health
+    points at the start of each day.
+  cooldown: 0
+  foreground: {fileID: 21300000, guid: c89b223111adef54292a5d4e06289372, type: 3}
+  glow: {fileID: 21300000, guid: 6899e792bf653f747bb2e79da91c5651, type: 3}
+  background: {fileID: 21300000, guid: 7d3503c3c4c2216458d02655c84f623d, type: 3}
+  lineCount: 3

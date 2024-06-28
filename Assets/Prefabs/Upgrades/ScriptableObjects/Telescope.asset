@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b4f2abd53f7a6c419285dc0d4324a61, type: 3}
+  m_Name: Telescope
+  m_EditorClassIdentifier: 
+  upgradePrefab: {fileID: 7849088900141762529, guid: 292a6d23ed2fc0742995665d6f5295d2,
+    type: 3}
+  id: 6
+  title: Telescope
+  subtitle: 
+  rarety: 1
+  description: Will tell you exactly which one of the surrounding wall pieces is
+    going to get hit next. Can only be placed on the highest row.
+  cooldown: 0
+  foreground: {fileID: 21300000, guid: 663b6393c96b9ad49baff4ed63aebd24, type: 3}
+  glow: {fileID: 21300000, guid: fb691408c956910448a36d903532e76c, type: 3}
+  background: {fileID: 21300000, guid: 922075b06b939f444818ad772d3d1699, type: 3}
+  lineCount: 4

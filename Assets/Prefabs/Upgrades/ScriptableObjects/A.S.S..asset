@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b4f2abd53f7a6c419285dc0d4324a61, type: 3}
+  m_Name: A.S.S.
+  m_EditorClassIdentifier: 
+  upgradePrefab: {fileID: 385791796, guid: 0d9cd706a51f9254d938672d1ed1f087, type: 3}
+  id: 11
+  title: A.S.S.
+  subtitle: Automated Self Sevice
+  rarety: 2
+  description: Repairs scaffolding and wall in this slot by itself (1hp each activation)
+  cooldown: 10
+  foreground: {fileID: 21300000, guid: 4aac5132f8ace4b409fd89ac3e8ede4a, type: 3}
+  glow: {fileID: 21300000, guid: feaf4984b416aa347bfad8cb2223abb1, type: 3}
+  background: {fileID: 21300000, guid: 61243b6e5fd660f4c83d3ace5f9fd435, type: 3}
+  lineCount: 2
