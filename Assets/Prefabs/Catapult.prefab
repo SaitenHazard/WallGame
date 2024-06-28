@@ -417,8 +417,8 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 979190146792443406}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &3448319576107628856
-BoxCollider:
+--- !u!136 &5433697787969138910
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -427,9 +427,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.7350245, y: 0.7704801, z: 2.8176174}
-  m_Center: {x: -0.002717813, y: 0.43024012, z: 0.043232284}
+  m_Radius: 1.8
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!95 &2319105587769940932
 Animator:
   serializedVersion: 5
@@ -469,13 +470,12 @@ MonoBehaviour:
   dropOffPoint: {fileID: 3448319575450417903}
   targetPos: {fileID: 3448319575233705585}
   wallDepths:
-  - -8
-  - -7.1
-  - -7.1
+  - 0.01
+  - 2.07
   firstRowY: 3
   rowHeight: 1.5
   vertOffset: 1.2
-  MagicNum: -0.011
+  magicNum: -0.011
   bezierSmoothness: 20
   desiredAltitudeChange: 0
   contAltitude: 3
