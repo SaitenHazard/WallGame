@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23a39dd904f3131419b2e573825c9713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _parabolaHeight: 2
+  parabolaHeight: 10
   meshRenderer: {fileID: 3436553177663186038}
   spawnParticlesOnHit: 0
   onHitParticles: {fileID: 0}

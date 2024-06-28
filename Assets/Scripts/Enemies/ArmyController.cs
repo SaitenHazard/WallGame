@@ -403,6 +403,7 @@ namespace Enemies
 
         private void SpawnArmy()
         {
+            float vertDistance = (footsoldiers.spawnAreaUpperRight.y - footsoldiers.spawnAreaLowerLeft.y) / enemyCount;
             for (var i = 0; i < enemyCount; i++)
             {
                 var soldier =
@@ -410,7 +411,7 @@ namespace Enemies
                         transform.position + new Vector3(
                             Random.Range(footsoldiers.spawnAreaLowerLeft.x, footsoldiers.spawnAreaUpperRight.x),
                             0,
-                            Random.Range(footsoldiers.spawnAreaLowerLeft.y, footsoldiers.spawnAreaUpperRight.y)),
+                            footsoldiers.spawnAreaLowerLeft.y + i*vertDistance),
                         Quaternion.identity,
                         _footsoldierParent);
                 soldier.SetUp(footsoldiers.vibing, footsoldiers.ecstasy, footsoldiers.hatred);
@@ -418,7 +419,6 @@ namespace Enemies
                 if (i % 10 == 0)
                 {
                     GameObject fahne = Instantiate(footsoldiers.flagge, soldier.transform.position, Quaternion.Euler(0, 64, 0), soldier.transform);
-                    
                 }
             }
         }
