@@ -414,6 +414,12 @@ namespace Enemies
                         Quaternion.identity,
                         _footsoldierParent);
                 soldier.SetUp(footsoldiers.vibing, footsoldiers.ecstasy, footsoldiers.hatred);
+
+                if (i % 10 == 0)
+                {
+                    GameObject fahne = Instantiate(footsoldiers.flagge, soldier.transform.position, Quaternion.Euler(0, 64, 0), soldier.transform);
+                    
+                }
             }
         }
 
@@ -524,6 +530,10 @@ namespace Enemies
     internal class FootsoldierSettings : EnemyTroop
     {
         public Footsoldier prefab;
+
+        public GameObject flagge;
+
+        //public Color flagColor = Color.white;
 
         [Tooltip("Defines the Oscillation height (Or footstep height) of the foot soldiers.")]
         public float vibing;
