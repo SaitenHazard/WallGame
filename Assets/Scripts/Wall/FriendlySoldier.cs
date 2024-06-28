@@ -20,6 +20,7 @@ namespace Wall
 
         private Animator _anim;
         private int _animIDDeath;
+        private int _animIDDeathByArrows;
         private int _animIDInherentSpeedup;
         private int _animIDRightPlace;
 
@@ -68,6 +69,7 @@ namespace Wall
             _animIDStopRunning = Animator.StringToHash("StopRunning");
             _animIDRightPlace = Animator.StringToHash("RightPlace");
             _animIDDeath = Animator.StringToHash("Death");
+            _animIDDeathByArrows = Animator.StringToHash("DeathArrows");
             _animIDInherentSpeedup = Animator.StringToHash("InherentSpeedup");
         }
 
@@ -82,6 +84,12 @@ namespace Wall
         public void Die()
         {
             _anim.SetTrigger(_animIDDeath);
+            _isMoving = false;
+        }
+
+        public void DieByArrows()
+        {
+            _anim.SetTrigger(_animIDDeathByArrows);
             _isMoving = false;
         }
 

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b4f2abd53f7a6c419285dc0d4324a61, type: 3}
+  m_Name: Torch
+  m_EditorClassIdentifier: 
+  upgradePrefab: {fileID: 546112408696483033, guid: 0f5b63d91562ebb4a9a18c8c8fc96680,
+    type: 3}
+  id: 5
+  title: Torch
+  subtitle: 
+  rarety: 0
+  description: Crossbowmen shooting from this slot shoot fire arrows, killing 2 enemies
+    at once!
+  cooldown: 0
+  foreground: {fileID: 21300000, guid: 8d1c1fa38ca51ce4a9e8bff3a5bb6136, type: 3}
+  glow: {fileID: 21300000, guid: f8ad19984efb9e64982eeb0fd4e02fd2, type: 3}
+  background: {fileID: 21300000, guid: d9daaf045acc4394bb540a573a3f2ac1, type: 3}
+  lineCount: 3

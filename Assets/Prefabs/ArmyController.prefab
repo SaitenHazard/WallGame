@@ -45,39 +45,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyCount: 100
-  _trebuchetCooldown: 3
-  _targetingScheme: 4
-  _trebuchetRandomness: 0
+  trebuchetCooldown: 5
+  targetingScheme: 0
+  trebuchetRandomness: 0
   fireArrowsCooldown: 19
-  fireArrowsDestruction: 0.8
-  _bowmen:
-    spawnAreaLowerLeft: {x: -27.17, y: -14.79}
-    spawnAreaUpperRight: {x: 26.3, y: -12.49}
+  fireArrowsDestruction: 0.5
+  bowmen:
+    spawnAreaLowerLeft: {x: 0, y: 0}
+    spawnAreaUpperRight: {x: 0, y: 0}
     prefab: {fileID: 8574338274363194620, guid: 5c6e32c0581ab554a9b663daefa469dc,
       type: 3}
     fireArrowPrefab: {fileID: -7798448794434159932, guid: 54999c6870a373d4b9a0c739b517a19c,
       type: 3}
-    count: 100
-  _trebuchets:
-    spawnAreaLowerLeft: {x: -25.09, y: 9.86}
-    spawnAreaUpperRight: {x: 25.2, y: 19.18}
+    count: 20
+  trebuchetSettings:
+    spawnAreaLowerLeft: {x: -20.66, y: 0}
+    spawnAreaUpperRight: {x: 38.02, y: 15.32}
     prefab: {fileID: 1694601126, guid: e695a6378d5f57449acbff51b1519928, type: 3}
-    reloadSpeed: 3
+    reloadSpeed: 0
     projectile:
-      prefab: {fileID: -6403147066047381681, guid: c3ae024c823c9884fa88310c92374b80,
-        type: 3}
-      flightTime: 2.5
-      parabolaHeight: 30
-  _footsoldiers:
-    spawnAreaLowerLeft: {x: -29.62, y: -31.7}
-    spawnAreaUpperRight: {x: 30, y: -17}
+      prefab: {fileID: 0}
+      flightTime: 0
+      parabolaHeight: 0
+  footsoldiers:
+    spawnAreaLowerLeft: {x: -23.9, y: -17.26}
+    spawnAreaUpperRight: {x: 43.38, y: -1.11}
     prefab: {fileID: 2529088511995973569, guid: 235057aedc7268647abc97ceb6972cac,
       type: 3}
-    vibing: 0.015
-    ecstasy: 8
-    hatred: 0.05
+    vibing: 0
+    ecstasy: 0
+    hatred: 0
   consoleOutput: 0
-  DEBUG_FireArrows: 0
-  DEBUG_TrebuchetLaunch: 0
-  DEBUG_KillTrebuchet: 0
+  debugFireArrows: 0
+  debugTrebuchetLaunch: 0
+  debugKillTrebuchet: 0
   columnsHit: 

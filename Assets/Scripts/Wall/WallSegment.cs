@@ -134,7 +134,7 @@ namespace Wall
             if (scaffoldingHealth <= 0) scaffoldingPiece.SetActive(false);
             if (isSoldierPresent)
             {
-                soldier.Die();
+                soldier.DieByArrows();
                 isSoldierPresent = false;
             }
         }

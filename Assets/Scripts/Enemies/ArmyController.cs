@@ -396,6 +396,11 @@ namespace Enemies
             Kill(1);
         }
 
+        public void BombArrives()
+        {
+            Kill(5);
+        }
+
         private void SpawnArmy()
         {
             for (var i = 0; i < enemyCount; i++)

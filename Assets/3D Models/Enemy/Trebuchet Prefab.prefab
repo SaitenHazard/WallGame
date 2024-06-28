@@ -500,9 +500,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f02d5bf9aad514348a80faccb9a13692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _reloadSpeed: 1
-  _projectileSettings:
-    prefab: {fileID: 0}
+  reloadSpeed: 1
+  projectileSettings:
+    prefab: {fileID: -6403147066047381681, guid: c3ae024c823c9884fa88310c92374b80,
+      type: 3}
     flightTime: 0
     parabolaHeight: 0
   releasePoint: {fileID: 690156589}

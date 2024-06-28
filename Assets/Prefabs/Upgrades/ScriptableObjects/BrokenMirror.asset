@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b4f2abd53f7a6c419285dc0d4324a61, type: 3}
+  m_Name: BrokenMirror
+  m_EditorClassIdentifier: 
+  upgradePrefab: {fileID: 4587192352923221397, guid: 32983d9f09f8c794f9b0fbc0d6ebed07,
+    type: 3}
+  id: 4
+  title: Broken Mirror
+  subtitle: 7 years of bad luck
+  rarety: 1
+  description: Makes a wall piece two times as likely to be hit
+  cooldown: 0
+  foreground: {fileID: 21300000, guid: b3e8802f49ba79a43b3e8cec0b56882e, type: 3}
+  glow: {fileID: 21300000, guid: 9a98a064240c97545bb740a40aa39a41, type: 3}
+  background: {fileID: 21300000, guid: 6219ed88360dbd94aabc521c1c83a7a2, type: 3}
+  lineCount: 2
