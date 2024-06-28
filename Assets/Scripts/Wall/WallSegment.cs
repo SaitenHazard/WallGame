@@ -31,9 +31,7 @@ namespace Wall
         private readonly GUIStyle _style = new();
         private Material _wallMaterial;
 
-        /////////////////for Debug Only
 
-        private bool _ciritcalInvooked;
         public readonly WallSegmentNotCriticalEvent OnWallNotSegmentCritical = new();
 
         public readonly WallSegmentCriticalEvent OnWallSegmentCritical = new();
@@ -50,28 +48,31 @@ namespace Wall
             // UpdateSoldierState();
         }
 
-        public void Update()
-        {
-            /* TODO
-             * 
-             * This needs to be reworked. We cannot invoke an event each frame only to set a value each frame that's probably already set.
-             * If it's for debugging, please remove.
-             * Also the way the these events are created is not right, please use the EventManager.
-             */
-            switch (wallHealth)
-            {
-                case 0 when !_ciritcalInvooked:
-                    Debug.Log("Hello");
-                    _ciritcalInvooked = true;
-                    OnWallSegmentCritical.Invoke(this);
-                    break;
-                case > 0 when _ciritcalInvooked:
-                    Debug.Log("It's me");
-                    _ciritcalInvooked = false;
-                    OnWallNotSegmentCritical.Invoke(this);
-                    break;
-            }
-        }
+        //public void Update()
+        //{
+        //    /* TODO
+        //     * 
+        //     * This needs to be reworked. We cannot invoke an event each frame only to set a value each frame that's probably already set.
+        //     * If it's for debugging, please remove.
+        //     * Also the way the these events are created is not right, please use the EventManager.
+        //     */
+        //    switch (wallHealth)
+        //    {
+        //        case 0 when !_ciritcalInvooked:
+        //            Debug.Log("Hello");
+        //            _ciritcalInvooked = true;
+        //            OnWallSegmentCritical.Invoke(this);
+        //            break;
+        //        case > 0 when _ciritcalInvooked:
+        //            Debug.Log("It's me");
+        //            _ciritcalInvooked = false;
+        //            OnWallNotSegmentCritical.Invoke(this);
+        //            break;
+        //    }
+        //}
+
+        /// /////////////////
+
 
         private void OnDrawGizmos()
         {
@@ -141,8 +142,16 @@ namespace Wall
 
         public bool RepairScaffolding()
         {
-            if (!scaffoldingPiece) return false;
-            if (scaffoldingHealth == scaffoldingMaxHealth) return false;
+            if (!scaffoldingPiece)
+            {
+                FloatingTextManager.instance.DoFloatingText("Not Scaffolding!");
+                return false;
+            }
+            if (scaffoldingHealth == scaffoldingMaxHealth)
+            {
+                FloatingTextManager.instance.DoFloatingText("Not Damaged!");
+                return false;
+            }
             scaffoldingHealth = Mathf.Min(scaffoldingMaxHealth, scaffoldingHealth + 1);
             scaffoldingPiece.SetActive(true);
             RequestSoldier();
@@ -171,7 +180,11 @@ namespace Wall
 
         public bool RepairWall()
         {
-            if (wallHealth == wallMaxHealth) return false;
+            if (wallHealth == wallMaxHealth)
+            {
+                FloatingTextManager.instance.DoFloatingText("Not Damaged!");
+                return false;
+            }
             wallHealth = Mathf.Min(wallMaxHealth, wallHealth + 1);
             ChangeWallState(wallHealth);
             RequestSoldier();

@@ -18,9 +18,13 @@ namespace Interaction
         public void Interact(ThirdPersonController interactor)
         {
             if (resource == Resource.Wood)
+            {
                 EventManager.RaiseOnReplenishWood(replenishAmount);
+            }
             else
+            {
                 EventManager.RaiseOnReplenishStone(replenishAmount);
+            }
         }
     }
 }

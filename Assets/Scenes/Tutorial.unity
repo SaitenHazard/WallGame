@@ -1033,7 +1033,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec0ccbf384b09a54d9b75af918f25914, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _criticalWallSegments: []
+  criticalWallSegments: []
   pulseSpeed: 1
   minAlpha: 0.5
   maxAlpha: 1
