@@ -29,6 +29,7 @@ namespace Wall
         public static WallManager instance;
 
         public HighlightingMode highlightingMode;
+        public float loseThreshold = 20;
 
         public int wallRows;
         public int wallColumns;
@@ -43,6 +44,8 @@ namespace Wall
         public ThirdPersonController player;
         public int width = 5;
         [SerializeField] private List<WallSegment> wallSegments; // Only Serializable for debug purposes!!!
+        public int _wallHealth;
+        public int _maxWallHealth;
         private Queue<FriendlySoldier> _availableSoldiers;
         private Vector3 _closestGizmo;
         private WallSegment _closestSegment;
@@ -51,9 +54,7 @@ namespace Wall
         private Transform _playerTransform;
         private WallSegment _previousClosestSegment;
         private Queue<WallSegment> _requestedSoldierPositions;
-
         private float _spawnTimer;
-
 
         private void Awake()
         {
@@ -164,8 +165,11 @@ namespace Wall
             foreach (Transform child in segmentsParent)
             {
                 var segment = child.GetComponent<WallSegment>();
+                _wallHealth += segment.wallMaxHealth;
                 if (segment != null) wallSegments.Add(segment);
             }
+
+            _maxWallHealth = _wallHealth;
         }
 
         private void InitializeDoorControllers()
@@ -309,16 +313,18 @@ namespace Wall
             return true;
         }
 
-        private static void DamageWallSegment(WallSegment segment)
+        private void DamageWallSegment(WallSegment segment)
         {
-            if (segment != null && segment.wallPiece.activeSelf) segment.DamageWall();
+            if (segment == null || !segment.wallPiece.activeSelf) return;
+            segment.DamageWall();
+            CheckGameOver();
+
         }
 
         private void DamageWallSegment(int index)
         {
             if (wallSegments.Count > index)
             {
-                Debug.Log("Index was " + index);
                 DamageWallSegment(wallSegments[index]);
             }
         }
@@ -345,12 +351,18 @@ namespace Wall
 
         private static void DamageScaffoldingSegment(WallSegment segment)
         {
-            if (segment != null) segment.DamageScaffolding();
+            if (segment) segment.DamageScaffolding();
         }
 
         private void DamageScaffoldingSegment(int index)
         {
             if (wallSegments.Count > index) DamageScaffoldingSegment(wallSegments[index]);
+        }
+
+        private void CheckGameOver()
+        {
+            _wallHealth -= 1;
+            if ((float) _wallHealth / _maxWallHealth < loseThreshold) {EventManager.RaiseGameOver();}
         }
     }
 }

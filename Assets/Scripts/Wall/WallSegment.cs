@@ -153,11 +153,7 @@ namespace Wall
         public void DamageWall()
         {
             wallHealth -= 1;
-            if (wallHealth < 0)
-            {
-                EventManager.RaiseGameOver();
-                return;
-            }
+            if (wallHealth < 0) return;
 
             ChangeWallState(wallHealth);
             if (isSoldierPresent)
