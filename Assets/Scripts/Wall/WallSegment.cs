@@ -174,7 +174,7 @@ namespace Wall
             if (!scaffoldingPiece) return false;
             if (scaffoldingHealth == scaffoldingMaxHealth) return false;
             scaffoldingHealth = Mathf.Min(scaffoldingMaxHealth, scaffoldingHealth + 1);
-            scaffoldingPiece.SetActive(true);
+            if (scaffoldingHealth == 0) scaffoldingPiece.GetComponent<BoxCollider>().enabled = false;
             RequestSoldier();
             StartCoroutine(nameof(JuicyRepair));
             ChangeScaffoldingState(scaffoldingHealth);
