@@ -142,8 +142,16 @@ namespace Wall
 
         public bool RepairScaffolding()
         {
-            if (!scaffoldingPiece) return false;
-            if (scaffoldingHealth == scaffoldingMaxHealth) return false;
+            if (!scaffoldingPiece)
+            {
+                FloatingTextManager.instance.DoFloatingText("Not Scaffolding!");
+                return false;
+            }
+            if (scaffoldingHealth == scaffoldingMaxHealth)
+            {
+                FloatingTextManager.instance.DoFloatingText("Not Damaged!");
+                return false;
+            }
             scaffoldingHealth = Mathf.Min(scaffoldingMaxHealth, scaffoldingHealth + 1);
             scaffoldingPiece.SetActive(true);
             RequestSoldier();
@@ -172,7 +180,11 @@ namespace Wall
 
         public bool RepairWall()
         {
-            if (wallHealth == wallMaxHealth) return false;
+            if (wallHealth == wallMaxHealth)
+            {
+                FloatingTextManager.instance.DoFloatingText("Not Damaged!");
+                return false;
+            }
             wallHealth = Mathf.Min(wallMaxHealth, wallHealth + 1);
             ChangeWallState(wallHealth);
             RequestSoldier();

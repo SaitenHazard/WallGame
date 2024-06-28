@@ -7,7 +7,7 @@ using UnityEngine.Windows;
 
 public class FloatingTextManager : MonoBehaviour
 {
-    private FloatingTextManager instance;
+    public static FloatingTextManager instance;
     private float cloneDeathTimer = 1f;
 
     private void Awake()
