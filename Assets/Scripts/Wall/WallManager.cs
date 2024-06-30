@@ -83,6 +83,7 @@ namespace Wall
             for (var i = 0; i < soldierBuffer; i++)
             {
                 var soldier = Instantiate(soldierPrefab, soldiersParent);
+                soldier.gameObject.transform.localScale = Vector3.one;
                 soldier.gameObject.SetActive(false);
                 _availableSoldiers.Enqueue(soldier);
             }
@@ -269,6 +270,7 @@ namespace Wall
             var door = GetClosestDoor(segment.transform.position);
             var soldier = _availableSoldiers.Dequeue();
             soldier.transform.position = _doorControllers[door].spawnpoint.transform.position;
+            soldier.transform.localScale = Vector3.one;
             soldier.gameObject.SetActive(true);
             _doorControllers[door].Open();
             soldier.MoveTo(segment);

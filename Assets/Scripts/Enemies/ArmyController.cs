@@ -199,7 +199,7 @@ namespace Enemies
             Invoke(nameof(LaunchTrebuchet), trebuchetCooldown);
         }
 
-        private void LaunchFireArrows()
+        public void LaunchFireArrows()
         {
             if (targetingScheme == TargetingScheme.HoldFire)
             {

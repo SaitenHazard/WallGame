@@ -45,7 +45,7 @@ public class TutorialController : MonoBehaviour
         new TutorialStep("If you do your job well, the crossbowmen on the walls can do their job and eliminate the enemy army."),
         new TutorialStep("Move with the left stick, Jump with A."),
         new TutorialStep("Watch out! The enemy has commenced their attack!"
-            , new Func<int>(() => { ArmyController.instance.SetTargetingScheme(TargetingScheme.Random_NoWallTwice); Invoke(nameof(HaltEnemyAttack), 2.5f); return 0; })
+            , new Func<int>(() => { ArmyController.instance.SetTargetingScheme(TargetingScheme.Succession); Invoke(nameof(HaltEnemyAttack), 2.5f); return 0; })
             , new Func<bool>(() => { return !CheckWallHealthMax(); })),
         new TutorialStep("A trebuchet round hit the wall! To repair it, you first need stones. Pick them up from the masonry on the bottom right using [B]"
             , new Func<bool>(() => { return CheckWalltherHasStones(); })),
@@ -53,7 +53,7 @@ public class TutorialController : MonoBehaviour
             , new Func<bool>(() => { return CheckWallHealthMax(); })),
         new TutorialStep("Now that the wall is safe again, a well-rested crossbowman will take the place of his fallen comrade and continue to return fire."),
         new TutorialStep("By the gods, fire arrows!\nThe scaffolding is damaged! Go pick up wood from Wallter's shed on the botton left unsing [B]"
-            , new Func<int>(() => { ArmyController.instance.SetTargetingScheme(TargetingScheme.Random_NoWallTwice); ArmyController.instance.debugFireArrows = true; Invoke(nameof(HaltEnemyAttack), 0.5f); return 0; })
+            , new Func<int>(() => { ArmyController.instance.SetTargetingScheme(TargetingScheme.Random_NoWallTwice);  ArmyController.instance.LaunchFireArrows(); ArmyController.instance.SetTargetingScheme(TargetingScheme.HoldFire); return 0; })
             , new Func<bool>(() => { return CheckWalltherHasWood(); })),
         new TutorialStep("No time to waste! To get to any piece of the wall quickly, Wallther can launch himself using the catapult. Stand next to it and use [B] to enter."
             , new Func<bool>(() => { return CheckWalltherInsideCatapult(); })),
@@ -68,7 +68,7 @@ public class TutorialController : MonoBehaviour
 
     private void IfPossibleNext()
     {
-        if (_texts[currentIndex].skippable) NextTutorialStep();
+        if (currentIndex == -1 || _texts[currentIndex].skippable) NextTutorialStep();
     }
 
     private void OnDestroy()
