@@ -365,7 +365,7 @@ namespace Wall
         {
             _wallHealth += value;
             var percentage = (float)_wallHealth / _maxWallHealth;
-            if (percentage < loseThreshold)
+            if (percentage <= loseThreshold)
             {
                 EventManager.RaiseGameOver();
             }

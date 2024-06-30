@@ -10,7 +10,8 @@ public class PostProcessing : MonoBehaviour
     private Volume _postProcessVolume;
     private Vignette _vignette;
     public float maxDestruction;
-    
+    private Coroutine _currentCoroutine;
+    public int smoothingDuration;
     private void Start()
     {
         _postProcessVolume = GetComponent<Volume>();
@@ -22,12 +23,26 @@ public class PostProcessing : MonoBehaviour
     {
         if (_vignette != null)
         {
-            if (intensity > 0.4f)
+            if (_currentCoroutine != null)
             {
-                _vignette.intensity.value = 0f;
-                return;
+                StopCoroutine(_currentCoroutine);
             }
-            _vignette.intensity.value = (intensity - maxDestruction) / (0 - maxDestruction) * (0.5f - 0.4f) + 0.4f;
+            _currentCoroutine = StartCoroutine(SmoothChangeVignetteIntensity(Mathf.Lerp(0.5f, 0.0f, (intensity - maxDestruction) / (1.0f - maxDestruction)), smoothingDuration));
         }
+    }
+    
+    private IEnumerator SmoothChangeVignetteIntensity(float targetIntensity, float duration)
+    {
+        float startIntensity = _vignette.intensity.value;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            _vignette.intensity.value = Mathf.Lerp(startIntensity, targetIntensity, elapsedTime / duration);
+            yield return null;
+        }
+
+        _vignette.intensity.value = targetIntensity;
     }
 }
