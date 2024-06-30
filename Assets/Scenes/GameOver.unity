@@ -159,7 +159,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -69}
-  m_SizeDelta: {x: 0, y: -1030}
+  m_SizeDelta: {x: -800, y: -1030}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &264976677
 MonoBehaviour:
@@ -181,12 +181,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'A trebuchet round shot through a gap in the wall, wreaking havoc in the
-    town square.
+  m_text: 'You let the wall falter!
 
 
-    Take care of wall pieces on critical health, if they recieve
-    another shot, you lose!
+    If the wall health reaches less than 50%
+    of its total integrety, you lose. Try to minimize walking time by strategically
+    planning your routes!
 
 
     Play again? Press [Y]'

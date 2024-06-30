@@ -396,7 +396,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -968,7 +968,7 @@ PrefabInstance:
     - target: {fileID: 4155744170335589557, guid: 197417fc520c3f24786b2e91e111f49a,
         type: 3}
       propertyPath: probabilityModifier
-      value: 0.25
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4258899370526763518, guid: 197417fc520c3f24786b2e91e111f49a,
         type: 3}
@@ -1028,8 +1028,18 @@ PrefabInstance:
     - target: {fileID: 7034121076448561292, guid: 197417fc520c3f24786b2e91e111f49a,
         type: 3}
       propertyPath: wallRows
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7034121076448561292, guid: 197417fc520c3f24786b2e91e111f49a,
+        type: 3}
+      propertyPath: loseThreshold
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034121076448561292, guid: 197417fc520c3f24786b2e91e111f49a,
+        type: 3}
+      propertyPath: postProcessing
+      value: 
+      objectReference: {fileID: 2029361419}
     - target: {fileID: 7034121076448561293, guid: 197417fc520c3f24786b2e91e111f49a,
         type: 3}
       propertyPath: m_RootOrder
@@ -1328,7 +1338,7 @@ PrefabInstance:
     - target: {fileID: 6355947142325016848, guid: d87241f0c4f8bdb4b81c09f7e96c3fba,
         type: 3}
       propertyPath: m_Radius
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6355947142325016848, guid: d87241f0c4f8bdb4b81c09f7e96c3fba,
         type: 3}
@@ -1338,7 +1348,7 @@ PrefabInstance:
     - target: {fileID: 6355947142325016848, guid: d87241f0c4f8bdb4b81c09f7e96c3fba,
         type: 3}
       propertyPath: m_Center.x
-      value: 3.51
+      value: 3.04
       objectReference: {fileID: 0}
     - target: {fileID: 6355947142325016848, guid: d87241f0c4f8bdb4b81c09f7e96c3fba,
         type: 3}
@@ -2353,12 +2363,22 @@ PrefabInstance:
     - target: {fileID: 5433697787969138910, guid: fb106c4c04e76a04abe04c7791047010,
         type: 3}
       propertyPath: m_Height
-      value: 9.86
+      value: 3.7
       objectReference: {fileID: 0}
     - target: {fileID: 5433697787969138910, guid: fb106c4c04e76a04abe04c7791047010,
         type: 3}
       propertyPath: m_Radius
-      value: 1.23
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5433697787969138910, guid: fb106c4c04e76a04abe04c7791047010,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 5433697787969138910, guid: fb106c4c04e76a04abe04c7791047010,
+        type: 3}
+      propertyPath: m_Direction
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb106c4c04e76a04abe04c7791047010, type: 3}
@@ -2397,6 +2417,70 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2029361416
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2029361418}
+  - component: {fileID: 2029361417}
+  - component: {fileID: 2029361419}
+  m_Layer: 0
+  m_Name: Global Volume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2029361417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2029361416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 19a9b590dea59ce449e43216ad7cffd9, type: 2}
+--- !u!4 &2029361418
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2029361416}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2029361419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2029361416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3960f82bad04fd34bb3482c408e95691, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDestruction: 0.2
+  smoothingDuration: 0
 --- !u!1001 &2063141436
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2860,17 +2944,17 @@ PrefabInstance:
     - target: {fileID: 4540504239292491077, guid: 5571536d24a233a49a1eb223e7387627,
         type: 3}
       propertyPath: m_Radius
-      value: 0.9
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 4540504239292491077, guid: 5571536d24a233a49a1eb223e7387627,
         type: 3}
       propertyPath: m_Center.x
-      value: -1.25
+      value: -0.64
       objectReference: {fileID: 0}
     - target: {fileID: 4540504239292491077, guid: 5571536d24a233a49a1eb223e7387627,
         type: 3}
       propertyPath: m_Center.z
-      value: -0.76
+      value: -1.33
       objectReference: {fileID: 0}
     - target: {fileID: 4540504239292491077, guid: 5571536d24a233a49a1eb223e7387627,
         type: 3}
@@ -3038,7 +3122,7 @@ PrefabInstance:
     - target: {fileID: 7494733541712630487, guid: 9d3d102869b4ce34bb2e17848722d2c3,
         type: 3}
       propertyPath: trebuchetCooldown
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7494733541712630487, guid: 9d3d102869b4ce34bb2e17848722d2c3,
         type: 3}

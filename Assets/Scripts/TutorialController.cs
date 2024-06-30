@@ -17,15 +17,14 @@ public class TutorialController : MonoBehaviour
         "Your job is to keep the wall in shape in the midst of an enemy siege.",
         "If you do your job well, the crossbowmen on the walls can do their job and eliminate the enemy army.",
         "Move with the left stick, Jump with A.",
-        "In order to repair a wall piece, you need stones. Pick them up from the masonry on the bottom right using [B]\n\nPress [Y] when you did so.",
-        "Mount the wall using L-Stick and [A] to jump until you reach a broken wall piece.\n\nPress [Y] when you did so.",
-        "Now stand in front of the damaged wall and repair it using the right shoulder Button [RB]]\n\nPress [Y] when you did so.",
-        "The Wooden Scaffolding works similarly. Go pick up wood from Wallter's shed on the botton left!]\n\nPress [Y] when you did so.",
-        "To get to any piece of the wall quickly, use the Catapult on the bottom center. Enter it with [B], aim with L-Stick and fire with [B]]\n\nPress [Y] when you did so.",
-        "Scaffolding is repaired using the left shoulder button [LB]]\n\nPress [Y] when you repaired a piece of scaffolding.",
-        "You can also repair wall pieces and scaffolding left, right and above you. Use R-Stick to select an adjacent wall piece and [RB]/[LB] to repair.",
+        "In order to repair a wall piece, you need stones. Pick them up from the masonry on the bottom right using [B]\n\nPress [Y] when you picked up some stones.",
+        "Mount the wall using L-Stick and [A] to jump until you reach a broken wall piece.\n\nPress [Y] when you reach the broken wall piece.",
+        "Now stand in front of the damaged wall and repair it using the right shoulder Button [RB]\n\nPress [Y] when you repaired it.",
+        "The Wooden Scaffolding works similarly. Go pick up wood from Wallter's shed on the botton left!]\n\nPress [Y] when you have some wooden planks on your back.",
+        "To get to any piece of the wall quickly, use the Catapult on the bottom center. Enter it with [B], aim with L-Stick and fire with [B]",
+        "Scaffolding is repaired using the left shoulder button [LB]\n\nPress [Y] when you repaired a piece of scaffolding.",
         "The puny crossbowmen will only reach their slot if the scaffolding on the way and their wall piece are in tiptop shape!",
-        "Also, take care! The wall gets damaged more than a certain amount you will lose and the enemy will take your city.",
+        "Also, take care! The wall gets damaged more than 50% you will lose and the enemy will take your city.",
         "Now you know everything you need to know, we will reset the level and let you play! Good luck! Don't let the wall falter!"
     };
 
