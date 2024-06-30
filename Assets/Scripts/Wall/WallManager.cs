@@ -27,9 +27,9 @@ namespace Wall
         }
 
         public static WallManager instance;
-
+        public PostProcessing postProcessing;
         public HighlightingMode highlightingMode;
-        public float loseThreshold = 20;
+        public float loseThreshold = 0.2f;
 
         public int wallRows;
         public int wallColumns;
@@ -86,6 +86,8 @@ namespace Wall
                 soldier.gameObject.SetActive(false);
                 _availableSoldiers.Enqueue(soldier);
             }
+
+            postProcessing.maxDestruction = loseThreshold;
             // InvokeRepeating(nameof(DamageRandomSegment), 0f, 2f);
         }
 
@@ -310,6 +312,7 @@ namespace Wall
             if (segment == null || !player.CanRepairStone()) return false;
             if (!segment.RepairWall()) return false;
             EventManager.RaiseOnRepairedStone();
+            UpdateWallHealth(1);
             return true;
         }
 
@@ -317,8 +320,7 @@ namespace Wall
         {
             if (segment == null || !segment.wallPiece.activeSelf) return;
             segment.DamageWall();
-            CheckGameOver();
-
+            UpdateWallHealth(-1);
         }
 
         private void DamageWallSegment(int index)
@@ -359,10 +361,15 @@ namespace Wall
             if (wallSegments.Count > index) DamageScaffoldingSegment(wallSegments[index]);
         }
 
-        private void CheckGameOver()
+        private void UpdateWallHealth(int value)
         {
-            _wallHealth -= 1;
-            if ((float) _wallHealth / _maxWallHealth < loseThreshold) {EventManager.RaiseGameOver();}
+            _wallHealth += value;
+            var percentage = (float)_wallHealth / _maxWallHealth;
+            if (percentage < loseThreshold)
+            {
+                EventManager.RaiseGameOver();
+            }
+            postProcessing.UpdateVignetteIntensity(percentage);
         }
     }
 }
