@@ -442,40 +442,25 @@ namespace Player
         {
             amount = Mathf.Min(woodCapacity, wood + amount);
             wood = amount;
+            
+            for (int i = 0; i < woodCapacity; i++)
+            {
+                backpackWood.GetChild(i).gameObject.SetActive(false);
+            }
             for (int i = 0; i < wood; i++)
             {
                 backpackWood.GetChild(i).gameObject.SetActive(true);
             }
-            /*while (woodReplenisher.childCount > 0 && amount > 0)
-            {
-                transform.parent = backpackWood;
-                var child = woodReplenisher.GetChild(woodReplenisher.childCount - 1);
-                child.SetParent(backpackWood, false);
-                child.localRotation = Quaternion.Euler(0, Random.Range(-10, 10), 0);
-                child.localPosition = Vector3.zero + new Vector3(0, Random.Range(-0.025f, 0.025f), 0.2f);
-                --amount;
-            }*/
-        }
-
-        private void HandleRepairedWood()
-        {
-            wood--;
-            for (int i = 0; i < stone; i++)
-            {
-                backpackStone.GetChild(i).gameObject.SetActive(false);
-            }
-            /*
-            var toRemove = backpackWood.GetChild(0);
-            toRemove.SetParent(woodReplenisher, false);
-            toRemove.localRotation = Quaternion.identity;
-            toRemove.localPosition = Vector3.zero + new Vector3(-0.8f, 0.07f * woodReplenisher.transform.childCount, 0);
-            wood--;*/
         }
 
         private void FillStone(int amount = 5)
         {
             amount = Mathf.Min(stoneCapacity, stone + amount);
             stone = amount;
+            for (int i = 0; i < stoneCapacity; i++)
+            {
+                backpackStone.GetChild(i).gameObject.SetActive(false);
+            }
             for (int i = 0; i < stone; i++)
             {
                 backpackStone.GetChild(i).gameObject.SetActive(true);
@@ -493,12 +478,37 @@ namespace Player
             }*/
         }
 
+        private void HandleRepairedWood()
+        {
+            wood--;
+            for (int i = 0; i < woodCapacity; i++)
+            {
+                backpackWood.GetChild(i).gameObject.SetActive(false);
+            }
+            for (int i = 0; i < wood; i++)
+            {
+                backpackWood.GetChild(i).gameObject.SetActive(true);
+            }
+            /*
+            var toRemove = backpackWood.GetChild(0);
+            toRemove.SetParent(woodReplenisher, false);
+            toRemove.localRotation = Quaternion.identity;
+            toRemove.localPosition = Vector3.zero + new Vector3(-0.8f, 0.07f * woodReplenisher.transform.childCount, 0);
+            wood--;*/
+        }
+
+        
+
         private void HandleRepairedStone()
         {
             stone--;
+            for (int i = 0; i < stoneCapacity; i++)
+            {
+                backpackWood.GetChild(i).gameObject.SetActive(false);
+            }
             for (int i = 0; i < stone; i++)
             {
-                backpackStone.GetChild(i).gameObject.SetActive(false);
+                backpackWood.GetChild(i).gameObject.SetActive(true);
             }
             /*var toRemove = backpackStone.GetChild(0);
             toRemove.SetParent(stoneReplenisher, false);
