@@ -94,7 +94,7 @@ namespace Wall
         }
 
         // Invoked by Soldier Animator after Death Animation has finished
-        private void FriendlySoldierDeath()
+        private void AnimEvent_Death()
         {
             //print("I dieded");
             gameObject.SetActive(false); // Destroy the soldier if the scaffolding is not walkable
