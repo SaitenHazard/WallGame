@@ -667,6 +667,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc3b5aff385af33489012f6eabf184d2, type: 3}
+--- !u!114 &963348480 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4692628046276259239, guid: 0d0fc9e96d3d7564f9536361df977ada,
+    type: 3}
+  m_PrefabInstance: {fileID: 1764019655}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26e54e5a728a9234ab24fcf1460ed8a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &963348482 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4692628046276259241, guid: 0d0fc9e96d3d7564f9536361df977ada,
@@ -809,6 +821,11 @@ PrefabInstance:
       propertyPath: width
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 7034121076448561292, guid: 197417fc520c3f24786b2e91e111f49a,
+        type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 963348480}
     - target: {fileID: 7034121076448561292, guid: 197417fc520c3f24786b2e91e111f49a,
         type: 3}
       propertyPath: wallRows
@@ -1108,6 +1125,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Height
       value: 8.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 6355947142325016848, guid: d87241f0c4f8bdb4b81c09f7e96c3fba,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6355947142325016848, guid: d87241f0c4f8bdb4b81c09f7e96c3fba,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6355947142325016848, guid: d87241f0c4f8bdb4b81c09f7e96c3fba,
+        type: 3}
+      propertyPath: m_Center.x
+      value: 3.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 6355947142325016848, guid: d87241f0c4f8bdb4b81c09f7e96c3fba,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6355947142325016848, guid: d87241f0c4f8bdb4b81c09f7e96c3fba,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -0.11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d87241f0c4f8bdb4b81c09f7e96c3fba, type: 3}
@@ -2114,6 +2156,11 @@ PrefabInstance:
       propertyPath: m_Height
       value: 9.86
       objectReference: {fileID: 0}
+    - target: {fileID: 5433697787969138910, guid: fb106c4c04e76a04abe04c7791047010,
+        type: 3}
+      propertyPath: m_Radius
+      value: 1.23
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb106c4c04e76a04abe04c7791047010, type: 3}
 --- !u!1 &2001343944
@@ -2606,7 +2653,7 @@ PrefabInstance:
     - target: {fileID: 4540504239292491077, guid: 5571536d24a233a49a1eb223e7387627,
         type: 3}
       propertyPath: m_Radius
-      value: 1.5
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 4540504239292491077, guid: 5571536d24a233a49a1eb223e7387627,
         type: 3}
