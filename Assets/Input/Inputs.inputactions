@@ -344,6 +344,17 @@
                     "action": "YPressed",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d0409de8-a1c8-4f3c-8ed4-216835a21d9d",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "YPressed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using AnimationControllers;
 using Input;
+using Interaction;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
@@ -113,6 +114,8 @@ namespace Player
         private readonly GUIStyle _style = new();
         private float _targetRotation;
         private float _verticalVelocity;
+
+        public bool inCatapult = false;
 
         private void Awake()
         {
@@ -343,6 +346,7 @@ namespace Player
 
         private void EnterCatapult(Transform catapultBowl)
         {
+            inCatapult = true;
             CancelVelocity();
             //Switch to Action map Catapult
             // _controller.enabled = false;
@@ -406,6 +410,7 @@ namespace Player
             _currentState = PlayerState.Normal;
             _controller.SimpleMove(_launchPath[_launchPathLength - 1] - _launchPath[_launchPathLength - 2]);
             _animController.Launching(false);
+            inCatapult = false;
         }
 
         /// <summary>
@@ -433,11 +438,15 @@ namespace Player
             _currentState = PlayerState.Normal;
         }
 
-        private void FillWood(int amount = 3)
+        private void FillWood(int amount = 5)
         {
             amount = Mathf.Min(woodCapacity, wood + amount);
             wood = amount;
-            while (woodReplenisher.childCount > 0 && amount > 0)
+            for (int i = 0; i < wood; i++)
+            {
+                backpackWood.GetChild(i).gameObject.SetActive(true);
+            }
+            /*while (woodReplenisher.childCount > 0 && amount > 0)
             {
                 transform.parent = backpackWood;
                 var child = woodReplenisher.GetChild(woodReplenisher.childCount - 1);
@@ -445,22 +454,33 @@ namespace Player
                 child.localRotation = Quaternion.Euler(0, Random.Range(-10, 10), 0);
                 child.localPosition = Vector3.zero + new Vector3(0, Random.Range(-0.025f, 0.025f), 0.2f);
                 --amount;
-            }
+            }*/
         }
 
         private void HandleRepairedWood()
         {
+            wood--;
+            for (int i = 0; i < stone; i++)
+            {
+                backpackStone.GetChild(i).gameObject.SetActive(false);
+            }
+            /*
             var toRemove = backpackWood.GetChild(0);
             toRemove.SetParent(woodReplenisher, false);
             toRemove.localRotation = Quaternion.identity;
             toRemove.localPosition = Vector3.zero + new Vector3(-0.8f, 0.07f * woodReplenisher.transform.childCount, 0);
-            wood--;
+            wood--;*/
         }
 
-        private void FillStone(int amount = 3)
+        private void FillStone(int amount = 5)
         {
             amount = Mathf.Min(stoneCapacity, stone + amount);
             stone = amount;
+            for (int i = 0; i < stone; i++)
+            {
+                backpackStone.GetChild(i).gameObject.SetActive(true);
+            }
+            /* Leon's Implementation
             while (stoneReplenisher.childCount > 0 && amount > 0)
             {
                 transform.parent = backpackStone;
@@ -470,16 +490,21 @@ namespace Player
                 child.localPosition =
                     Vector3.zero + new Vector3(-0.13f + Random.Range(-0.05f, 0.05f), 0, 0.16f * amount);
                 --amount;
-            }
+            }*/
         }
 
         private void HandleRepairedStone()
         {
-            var toRemove = backpackStone.GetChild(0);
+            stone--;
+            for (int i = 0; i < stone; i++)
+            {
+                backpackStone.GetChild(i).gameObject.SetActive(false);
+            }
+            /*var toRemove = backpackStone.GetChild(0);
             toRemove.SetParent(stoneReplenisher, false);
             toRemove.localRotation = Quaternion.Euler(0, Random.Range(-5, 5), 0);
             toRemove.localPosition = Vector3.zero + new Vector3(2.7f, 0.55f, Random.Range(-0.6f, 0.6f));
-            stone--;
+            stone--;*/
         }
 
         public bool CanRepairWood()

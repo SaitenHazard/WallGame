@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3437707315088391355}
   m_LocalRotation: {x: 0.6792045, y: -0.013127583, z: 0.012152019, w: 0.73373103}
-  m_LocalPosition: {x: 0.109, y: 0.91, z: 0.47}
+  m_LocalPosition: {x: 0.109, y: 0.765, z: 0.411}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 4
-  _boltFlightTime: 2
+  boltFlightTime: 2
   boltPrefab: {fileID: 5389204621949537239, guid: d71adfc458043864185bf726505c5cac,
     type: 3}
   releasePoint: {fileID: 1060913806599392314}
