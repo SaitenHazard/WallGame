@@ -6,7 +6,11 @@ namespace Wall
 {
     public class WallSegment : MonoBehaviour
     {
-        [Header("_____ Wall _____")]
+        [Header("__________ Upgrades __________")]
+        [Tooltip(">1 --> increased chance to be hit\n=1 --> normal chance to be hit\n<1 --> decreased chance to be hit")]
+        public float probabilityModifier = 1.0f;
+
+        [Header("__________ Wall __________")]
         public int wallMaxHealth = 3;
         [Space]
         public int wallHealth;
@@ -19,7 +23,7 @@ namespace Wall
         public Mesh damagedWall;
         public Mesh destroyedWall;
 
-        [Header("_____ Scaffolding _____")]
+        [Header("__________ Scaffolding __________")]
         public int scaffoldingMaxHealth = 3;
         [Space]
         public int scaffoldingHealth;
@@ -33,7 +37,7 @@ namespace Wall
         public Mesh damagedScaffolding;
         public Mesh brokenScaffolding;
 
-        [Header("_____ Soldier Boy _____")]
+        [Header("__________ Soldier Boy __________")]
         public FriendlySoldier soldier;
         public bool soldierRequested;
         public bool isSoldierPresent;
