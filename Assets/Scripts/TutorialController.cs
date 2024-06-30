@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Enemies;
 using Input;
 using TMPro;
 using UnityEngine;
@@ -24,7 +25,7 @@ public class TutorialController : MonoBehaviour
         "Scaffolding is repaired using the left shoulder button [LB]]\n\nPress [Y] when you repaired a piece of scaffolding.",
         "You can also repair wall pieces and scaffolding left, right and above you. Use R-Stick to select an adjacent wall piece and [RB]/[LB] to repair.",
         "The puny crossbowmen will only reach their slot if the scaffolding on the way and their wall piece are in tiptop shape!",
-        "Also, take care! If a wall piece is completely destroyed and gets targetet again by a trebuchet, the shot will fly through the wall, ending the game.",
+        "Also, take care! The wall gets damaged more than a certain amount you will lose and the enemy will take your city.",
         "Now you know everything you need to know, we will reset the level and let you play! Good luck! Don't let the wall falter!"
     };
 
@@ -49,6 +50,10 @@ public class TutorialController : MonoBehaviour
         Invoke(nameof(AbleToContinue), 1.0f);
 
         currentIndex++;
+        if (currentIndex == 5)
+        {
+            ArmyController.instance.SetTargetingScheme(TargetingScheme.Random_NoWallTwice);
+        }
         if (currentIndex == _texts.Count)
         {
             SceneManager.LoadScene("Tobi");

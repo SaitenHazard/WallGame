@@ -201,6 +201,11 @@ namespace Enemies
 
         private void LaunchFireArrows()
         {
+            if (targetingScheme == TargetingScheme.HoldFire)
+            {
+                Invoke(nameof(LaunchFireArrows), fireArrowsCooldown);
+                return;
+            }
             var parts = bowmen.count / _columns;
             var remainder = bowmen.count % _columns;
             var horizSpacing = (bowmen.spawnAreaUpperRight.x - bowmen.spawnAreaLowerLeft.x) / bowmen.count;
@@ -228,6 +233,11 @@ namespace Enemies
             }
 
             Invoke(nameof(LaunchFireArrows), fireArrowsCooldown);
+        }
+
+        public void SetTargetingScheme(TargetingScheme scheme)
+        {
+            targetingScheme = scheme;
         }
 
         private static IEnumerator InvokeAfterDelay<T>(float delay, Action<T> method, T parameter)
@@ -509,7 +519,7 @@ namespace Enemies
     }
 
     
-    internal enum TargetingScheme
+    public enum TargetingScheme
     {
         Random,
         /* The target wall gets picket randomly */
