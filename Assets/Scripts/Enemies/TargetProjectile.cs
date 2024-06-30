@@ -43,8 +43,8 @@ namespace Enemies
                 {
                     GameObject particles = Instantiate(onHitParticles, _destination, Quaternion.identity);
                     particlesSpawned = true;
-                    Destroy(gameObject); // Wait 1 sec for the trail to disappear
                 }
+                Destroy(gameObject); // Wait 1 sec for the trail to disappear
             }
             else
             {
